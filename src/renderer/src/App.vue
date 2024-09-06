@@ -1,26 +1,47 @@
 <script setup lang="ts">
-import Versions from './components/Versions.vue'
+import Nav from './components/Nav.vue'
+import Content from './components/Content.vue'
+import MusicPlayer from './components/MusicPlayer.vue';
 
-const ipcHandle = () => window.electron.ipcRenderer.send('ping')
 </script>
 
 <template>
-  <img alt="logo" class="logo" src="./assets/electron.svg" />
-  <div class="creator">Powered by electron-vite</div>
-  <div class="text">
-    Build an Electron app with
-    <span class="vue">Vue</span>
-    and
-    <span class="ts">TypeScript</span>
-  </div>
-  <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-  <div class="actions">
-    <div class="action">
-      <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
+  <div class="main">
+    <div class="main-box">
+      <Nav class="nav"></Nav>
+      <Content class="content"></Content>
     </div>
-    <div class="action">
-      <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
-    </div>
+    <MusicPlayer></MusicPlayer>
   </div>
-  <Versions />
 </template>
+
+<style scoped>
+.content {
+  flex: 1;
+}
+
+.nav,
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--color-window-bg);
+}
+
+.main-box {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  align-items: stretch;
+}
+
+.main:has(.bottom-music-player) .main-box {
+  height: calc(100vh - 5rem - 0.1rem);
+}
+</style>
