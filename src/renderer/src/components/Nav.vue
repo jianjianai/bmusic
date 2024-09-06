@@ -1,20 +1,35 @@
 <script lang="ts" setup>
-import Search from './svg/Search.vue'
+import { ContentState } from '../states/ContentState';
+import SearchIcon  from './svg/Search.vue'
+import Recommend from './contents/Recommend.vue';
+import Search from './contents/Search.vue';
+
+const navItems = [
+    {
+        title: '搜索',
+        component: Search,
+        icon: SearchIcon
+    },
+    {
+        title: '发现音乐',
+        component: Recommend,
+        icon: SearchIcon
+    }
+]
 
 </script>
 <template>
     <div class="nav">
-
-        <div class="nav-item">
-            <Search class="icon"></Search>
-            <div class="title">搜索</div>
+        <div 
+        v-for="item in navItems" 
+        :key="item.title" 
+        class="nav-item" 
+        :class="{selected:ContentState.displayComponent===item.component}"
+        @click="ContentState.displayComponent=item.component"
+        >
+            <component :is="item.icon" class="icon"></component>
+            <div class="title">{{ item.title }}</div>
         </div>
-
-        <div class="nav-item">
-            <Search class="icon"></Search>
-            <div class="title">发现音乐</div>
-        </div>
-
     </div>
 </template>
 <style scoped>
