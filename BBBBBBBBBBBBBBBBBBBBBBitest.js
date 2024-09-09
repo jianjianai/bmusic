@@ -28,6 +28,18 @@ function setPlaybackProgress(progress){
     }));
 }
 
+/****
+ * 当播放进度发生改变时
+ */
+function regOnPlaybackProgressChange(){
+    const current = document.querySelector('.bpx-player-ctrl-time-current');
+    new MutationObserver((mutationsList)=>{
+        console.log(current.innerHTML);
+    }).observe(current, {childList: true, subtree: false,attributes: false});
+}
+
+
+
 
 
 
