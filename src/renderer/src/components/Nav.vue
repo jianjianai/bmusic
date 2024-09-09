@@ -3,17 +3,18 @@ import { ContentState } from '../states/ContentState';
 import SearchIcon  from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
+import { markRaw } from 'vue';
 
 const navItems = [
     {
         title: '搜索',
-        component: Search,
-        icon: SearchIcon
+        component: markRaw(Search),
+        icon: markRaw(SearchIcon)
     },
     {
         title: '发现音乐',
-        component: Recommend,
-        icon: SearchIcon
+        component: markRaw(Recommend),
+        icon: markRaw(SearchIcon)
     }
 ]
 

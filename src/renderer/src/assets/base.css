@@ -10,11 +10,29 @@ html, body {
 :root{
   --color-window-bg: #f5f5f6;
 
+  /** 底部播放器 */
   --color-music-player-bg: #f7f7f7;
   --color-music-player-border: #dddddd;
 
+  /** 左侧导航栏 */
   --color-lav-bg: #e9ecee;
   --color-nav-scrollbar-thumb: #d3d3d3;
   --color-nav-font: #494949;
   --color-nav-item-hover-bg: #dee1e6;
+
+  /** 播放进度条 */
+  --color-contr-line-bg:#d5d5d5;
+  --color-contr-line-current-bg:#ff5151;
+  --color-contr-line-btn-bg:#ffffff;
+  --color-contr-line-btn-shadow:#cccccc;
+  /* 播放器进度条左右的小字 */
+  --color-contr-line-text:#929292;
+  /* 播放器暂停播放按钮颜色 */
+  --color-contr-play-btn:#ff5151;
+  --color-contr-play-btn-hover:#ff7575;
+  /* 中间文字颜色 */
+  --color-contr-play-btn-text:#ffffff;
+  /* 上一首和下一首按钮颜色 */
+  --color-contr-prev-next-btn:#5e5e5e;
+  --color-contr-prev-next-btn-hover:#343434;
 }

@@ -1,4 +1,4 @@
-import { DefineComponent, reactive } from "vue";
+import { DefineComponent, reactive,markRaw } from "vue";
 import Recommend from "../components/contents/Recommend.vue";
 
 /**
@@ -10,5 +10,5 @@ export const ContentState = reactive<{
      */
     displayComponent:DefineComponent<any,any,any>
 }>({
-    displayComponent:Recommend
+    displayComponent:markRaw(Recommend)
 });
