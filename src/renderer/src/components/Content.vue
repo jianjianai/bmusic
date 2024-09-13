@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ContentState } from '../states/ContentState';
+import { contentState } from '../states/contentState';
 
 </script>
 <template>
     <div class="content">
-        <component :is="ContentState.displayComponent"></component>
+        <component :is="contentState.displayComponent"></component>
     </div>
 </template>
 <style scoped>

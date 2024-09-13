@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ContentState } from '../states/ContentState';
+import { contentState } from '../states/contentState';
 import SearchIcon  from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
@@ -25,8 +25,8 @@ const navItems = [
         v-for="item in navItems" 
         :key="item.title" 
         class="nav-item" 
-        :class="{selected:ContentState.displayComponent===item.component}"
-        @click="ContentState.displayComponent=item.component"
+        :class="{selected:contentState.displayComponent===item.component}"
+        @click="contentState.displayComponent=item.component"
         >
             <component :is="item.icon" class="icon"></component>
             <div class="title">{{ item.title }}</div>

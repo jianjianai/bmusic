@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Nav from './components/Nav.vue'
 import Content from './components/Content.vue'
-import MusicPlayer from './components/MusicPlayer.vue';
+import MusicPlayerBar from './components/MusicPlayerBar.vue';
 
 </script>
 
@@ -11,7 +11,7 @@ import MusicPlayer from './components/MusicPlayer.vue';
       <Nav class="nav"></Nav>
       <Content class="content"></Content>
     </div>
-    <MusicPlayer></MusicPlayer>
+    <MusicPlayerBar></MusicPlayerBar>
   </div>
 </template>
 

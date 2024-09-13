@@ -1,61 +1,76 @@
 <!-- 一个音乐播放控制组件，控制音乐播放暂停进度条，上一首下一首，播放模式，等.. -->
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-import { MusicPlayerState } from '../states/MusicPlayerState';
-import ControllerSVG from './svg/Controller.vue';
-import PauseSVG from './svg/Pause.vue';
-import PlaySVG from './svg/Play.vue';
+import { computed, ref } from 'vue'
+import { musicPlayerController, musicPlayerState } from '../states/musicPlayerStates'
+import ControllerSVG from './svg/Controller.vue'
+import PauseSVG from './svg/Pause.vue'
+import PlaySVG from './svg/Play.vue'
 
-/**当前音乐播放到的百分比 0~1 之间的数字用于显示 */
-const currentPercentage = ref(0.2);
+/**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
+const dragCurrentPercentage = ref(0.2);
+/** 真实播放进度百分比 */
+const currentPercentage = computed(() => musicPlayerState.currentTime / Math.max(1, musicPlayerState.duration));
 const lineCilckEl = ref();
 
 /** 拖动进度条 */
 const isMosueDown = ref(false);
+/** 用于当前显示的进度条百分比 */
+const shwoCurrentPercentage = computed(() => isMosueDown.value ? dragCurrentPercentage.value : currentPercentage.value);
+
+/**
+ * 计算出应该跳转到的时间并更新
+ * */
+function updateCurrentTime() {
+  musicPlayerController.value.requestCurrentTime(musicPlayerState.duration * dragCurrentPercentage.value);
+}
+
 function updateCurrentPercentage(event: MouseEvent){
     const rect = (lineCilckEl.value as HTMLElement).getBoundingClientRect();
     const x = event.clientX - rect.left;
     const width = rect.width;
-    currentPercentage.value = Math.min(1, Math.max(0, x / width));
-}
-function mosueDown(event: MouseEvent) {
-    isMosueDown.value = true;
-    updateCurrentPercentage(event);
+    dragCurrentPercentage.value = Math.min(1, Math.max(0, x / width));
 }
 function mosueMove(event: MouseEvent) {
-    if (!isMosueDown.value) return;
     updateCurrentPercentage(event);
 }
 function mosueUp(event: MouseEvent) {
-    if (!isMosueDown.value) return;
     isMosueDown.value = false;
+    window.removeEventListener('mousemove', mosueMove);
+    window.removeEventListener('mouseup', mosueUp);
+    updateCurrentPercentage(event);
+    updateCurrentTime();
+}
+function mosueDown(event: MouseEvent) {
+    isMosueDown.value = true;
+    window.addEventListener('mousemove', mosueMove);
+    window.addEventListener('mouseup', mosueUp);
     updateCurrentPercentage(event);
 }
 
-onMounted(() => {
-    window.addEventListener('mousemove', mosueMove);
-    window.addEventListener('mouseup', mosueUp);
-});
-onUnmounted(() => {
-    window.removeEventListener('mousemove', mosueMove);
-    window.removeEventListener('mouseup', mosueUp);
-});
 
+/** 将毫秒为时间的单位转换为 mm:ss 的形式 */
+function formatTime(time: number) {
+    const min = Math.floor(time / 60000);
+    const sec = Math.floor(time / 1000) % 60;
+    return `${min}:${sec < 10 ? '0' + sec : sec}`;
+}
 
 </script>
 <template>
     <div class="control-main">
         <div class="control-top">
             <ControllerSVG class="previous-btn"></ControllerSVG>
-            <div class="playback-btn">
-                <!-- <PauseSVG class="btn"></PauseSVG> -->
-                <PlaySVG class="btn"></PlaySVG>
+            <div class="playback-btn" v-show="musicPlayerState.playing" @click="musicPlayerController.requestPause()">
+                <PauseSVG  class="btn"></PauseSVG>
+            </div>
+            <div class="playback-btn" v-show="!musicPlayerState.playing" @click="musicPlayerController.requestPlay()">
+              <PlaySVG class="btn"></PlaySVG>
             </div>
             <ControllerSVG class="controller-btn"></ControllerSVG>
         </div>
         <div class="control-line">
             <!-- 进度条 -->
-            <div class="line-current">{{ MusicPlayerState.currentTime }}</div>
+            <div class="line-current">{{ formatTime(musicPlayerState.currentTime) }}</div>
             <div class="line-cilck" :class="{mosueuse:isMosueDown}" @mousedown="mosueDown" ref="lineCilckEl">
                 <div class="line-box">
                     <!-- 完整进度条 -->
@@ -66,7 +81,7 @@ onUnmounted(() => {
                     <div class="line-box-button"></div>
                 </div>
             </div>
-            <div class="line-duration">{{ MusicPlayerState.duration }}</div>
+            <div class="line-duration">{{ formatTime(musicPlayerState.duration) }}</div>
         </div>
     </div>
 </template>
@@ -124,7 +139,7 @@ onUnmounted(() => {
 .line-box-button {
     opacity: 0;
     position: absolute;
-    left: v-bind("`${currentPercentage*100}%`");
+    left: v-bind("`${shwoCurrentPercentage*100}%`");
     top: 50%;
     transform: translate(-50%, -50%);
     width: 0.8rem;
@@ -139,7 +154,7 @@ onUnmounted(() => {
     left: 0;
     top: 0;
     height: 100%;
-    width: v-bind("`${currentPercentage*100}%`");
+    width: v-bind("`${shwoCurrentPercentage*100}%`");
     background-color: var(--color-contr-line-current-bg);
     border-radius: 1rem;
 }

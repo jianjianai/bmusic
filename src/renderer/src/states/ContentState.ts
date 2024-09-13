@@ -4,7 +4,7 @@ import Recommend from "../components/contents/Recommend.vue";
 /**
  * 内容状态
  */
-export const ContentState = reactive<{
+export const contentState = reactive<{
     /**
      * 内容显示组件
      */
