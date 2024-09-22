@@ -1,6 +1,6 @@
 import {
-  getMusicLength,
-  pause, play,
+  fullScreen,
+  pause, play, regOnPlaybackLengthChange,
   regOnPlaybackProgressChange,
   regOnPlaybackStateChange,
   setPlaybackProgress
@@ -23,7 +23,9 @@ export function BilibiliMusicPlayerInit(){
     });
 }
 function onLoaded() {
-  window.parent.postMessage({type: 'onPlaybackLengthChange', value: getMusicLength()}, '*');
+  regOnPlaybackLengthChange((length) => {
+    window.parent.postMessage({type: 'onPlaybackLengthChange', value: length}, '*');
+  });
   regOnPlaybackProgressChange((progress) => {
     window.parent.postMessage({type: 'onPlaybackProgressChange', value: progress}, '*');
   });
@@ -41,6 +43,7 @@ function onLoaded() {
       play();
     }
   });
+  fullScreen();  //自动网页全屏
 }
 
 

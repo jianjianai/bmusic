@@ -67,6 +67,16 @@ export function getPlaybackState():boolean{
   return !playBtn.classList.contains('bpx-state-paused');
 }
 
+/**
+ * 当音乐长度发生改变时
+ * */
+export function regOnPlaybackLengthChange(func: (length: number)=>void){
+  const total = document.querySelector('.bpx-player-ctrl-time-duration');
+  func(timeToMillisecond(total.innerText));
+  new MutationObserver(()=>{
+    func(timeToMillisecond(total.innerText));
+  }).observe(total, {childList: true, subtree: false,attributes: false});
+}
 
 /**
  * 获取音乐长度
@@ -83,7 +93,7 @@ export function pause(){
   if (!getPlaybackState()) {
     return;
   }
-  const playBtn = document.querySelector('.bpx-player-ctrl-btn');
+  const playBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-play');
   playBtn.dispatchEvent(new MouseEvent('click', {
     view: window,
     bubbles: true,
@@ -98,8 +108,20 @@ export function play(){
   if (getPlaybackState()) {
     return;
   }
-  const playBtn = document.querySelector('.bpx-player-ctrl-btn');
+  const playBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-play');
   playBtn.dispatchEvent(new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true
+  }));
+}
+
+/**
+ * 网页全屏
+ * */
+export function fullScreen(){
+  const fullScreenBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-web');
+  fullScreenBtn.dispatchEvent(new MouseEvent('click', {
     view: window,
     bubbles: true,
     cancelable: true
