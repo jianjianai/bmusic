@@ -20,8 +20,8 @@ function test(){
   currentMusic.value = {
     musicName: "测试音乐",
     musicAuthor: "测试作者",
-    playerName: "TestMusicPlayer1",
-    playerData: "ertert"+Math.random()
+    playerName: "BilibiliMusicPlayer",
+    playerData: "test"
   }
 }
 

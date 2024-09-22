@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { getMusicPlayer } from './musicPlayers'
-import { currentMusic , musicPlayerState , musicPlayerController } from '../../states/musicPlayerStates'
+import {
+  currentMusic,
+  musicPlayerState,
+  musicPlayerController,
+  newDefaultMusicControllerObj
+} from '../../states/musicPlayerStates'
 
 import { MusicController } from './PlayerProps'
 import { ref, watch } from 'vue'
@@ -29,14 +34,16 @@ const musicController:MusicController = {
   },
 }
 
-const musicPlayerComponentKey = ref<string>();
+const musicPlayerComponentData = ref<string>(currentMusic.value.playerData);
 watch(
   ()=>currentMusic.value.playerData,
   ()=>{
+    //重置所有状态
     musicPlayerState.duration = 0;
     musicPlayerState.currentTime = 0;
     musicPlayerState.playing = false;
-    musicPlayerComponentKey.value = currentMusic.value.playerData;
+    musicPlayerController.value = newDefaultMusicControllerObj();
+    musicPlayerComponentData.value = currentMusic.value.playerData;
   }
 );
 
@@ -44,8 +51,8 @@ watch(
 
 <template>
   <component :is="getMusicPlayer(currentMusic.playerName)"
-             :key="currentMusic.playerData"
-             :data="currentMusic.playerData"
+             :key="musicPlayerComponentData"
+             :data="musicPlayerComponentData"
              :musicController="musicController"
   ></component>
 </template>
