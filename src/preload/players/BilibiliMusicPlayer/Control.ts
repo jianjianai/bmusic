@@ -127,3 +127,21 @@ export function fullScreen(){
     cancelable: true
   }));
 }
+
+/**
+ * 验证码出现时关闭验证码
+ * */
+export function autoCloseCaptcha(){
+  new MutationObserver((c)=>{
+    console.log("find captcha");
+    for (let mutationRecord of c) {
+      if(
+        mutationRecord.previousSibling?.classList?.contains("geetest_panel") &&
+        mutationRecord.previousSibling?.classList?.contains("geetest_wind")
+      ){
+        let div = document.createElement('div');
+        div.appendChild(mutationRecord.previousSibling);
+      }
+    }
+  }).observe(document.body, {childList: true, subtree: false,attributes: false});
+}

@@ -1,4 +1,5 @@
 import {
+  autoCloseCaptcha,
   fullScreen,
   pause, play, regOnPlaybackLengthChange,
   regOnPlaybackProgressChange,
@@ -44,6 +45,7 @@ function onLoaded() {
     }
   });
   fullScreen();  //自动网页全屏
+  autoCloseCaptcha();  //自动关闭验证码
 }
 
 
