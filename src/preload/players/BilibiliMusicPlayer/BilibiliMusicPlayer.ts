@@ -28,7 +28,10 @@ async function onLoaded() {
   });
   ipcRenderer.on("play",(_event,..._args:any[])=>{
     play();
-    fullScreen();  //自动网页全屏
+    fullScreen(); 
+  });
+  ipcRenderer.on("fullScreen",(_event,..._args:any[])=>{
+    fullScreen();
   });
   fullScreen();  //自动网页全屏
   autoCloseCaptcha();  //自动关闭验证码

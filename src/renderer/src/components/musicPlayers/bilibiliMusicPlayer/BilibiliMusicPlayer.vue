@@ -2,6 +2,7 @@
 import { WebviewTag } from 'electron';
 import { PlayerProps } from '../PlayerProps';
 import { ref, watch } from 'vue';
+import { musicPlayerSize } from '@renderer/states/musicPlayerStates';
 
 const props = defineProps<PlayerProps>();
 const iframeRef = ref<WebviewTag | null>(null);
@@ -17,6 +18,10 @@ props.musicController.onRequestCurrentTime((currentTime: number) => {
   iframeRef.value?.send("setPlaybackProgress",currentTime);
 });
 
+watch(musicPlayerSize,()=>{
+  iframeRef.value?.send("fullScreen",musicPlayerSize.value);
+});
+
 function onMessage(msg:string,...args:any[]) {
   if (msg == "onPlaybackProgressChange") {
     props.musicController.setCurrentTime(args[0]);
@@ -27,7 +32,7 @@ function onMessage(msg:string,...args:any[]) {
   }
 }
 
-watch(() => iframeRef.value, () => {
+watch(iframeRef, () => {
   iframeRef.value?.addEventListener("dom-ready", () => {
     iframeRef.value?.openDevTools();
     iframeRef.value?.addEventListener("ipc-message",(event)=>{

@@ -1,6 +1,9 @@
-import { reactive, ref } from 'vue'
+import { computed, readonly, ref } from 'vue'
+
 
 export type Music = {
+  /** 音乐长度，单位毫秒 */
+  duration: number,
   /** 音乐名 */
   musicName?: string,
   /** 音乐作者 */
@@ -11,58 +14,106 @@ export type Music = {
   playerData?: string
 }
 
-export type MusicPlayer = {
-  /** 音乐长度，单位毫秒 */
-  duration: number,
-  /** 音乐当前播放位置，单位毫秒 */
-  currentTime: number,
-  /** 音乐播放状态,正在播放或者暂停 */
-  playing: boolean,
-  /** 音量 */
-  volume: number,
-}
+const currentMusic = ref<Music>({
+  duration: 0,
+  musicName: "测试音乐",
+  musicAuthor: "测试作者",
+  playerName: "TestMusicPlayer",
+  playerData: ""
+});
+
+/** 音乐当前播放位置，单位毫秒 */
+const currentTime = ref(0);
+
+/** 音乐播放状态,正在播放或者暂停 */
+const playing = ref(false);
+
+/** 音量,0~1之间的小数 */
+const volume = ref(1);
 
 /** 播放器尺寸 */
 export const musicPlayerSize = ref<"buttom" | "max">("buttom");
 
-/** 正在播放的音乐 */
-export const currentMusic = ref<Music>({
-    musicName: "测试音乐",
-    musicAuthor: "测试作者",
-    playerName: "TestMusicPlayer",
-    playerData: ""
-});
-
-/** 音乐播放器状态 */
-export const musicPlayerState = reactive<MusicPlayer>({
-  duration: 0,
-  currentTime: 0,
-  playing: false,
-  volume: 0.5,
-});
-
-export type MusicController = {
+export type MusicPlayerLink = {
   /** 当音乐播放时 */
-  requestPlay:()=>void,
+  onRequestPlay: () => void,
   /** 当音乐暂停时 */
-  requestPause:()=>void,
+  onRequestPause: () => void,
   /** 当音乐音量改变时 */
-  requestVolume:(volume:number)=>void,
+  onRequestVolume: (volume: number) => void,
   /** 当音乐播放位置改变时 */
-  requestCurrentTime:(currentTime:number)=>void,
+  onRequestCurrentTime: (currentTime: number) => void,
+
+  get setCurrentTime():(currentTime:number)=>void
+  get setPlaying():(playing:boolean)=>void
+  get setVolume():(volume:number)=>void
 }
 
-export function newDefaultMusicControllerObj():MusicController{
+const setCurrentTime:(currentTime:number)=>void = (thecurrentTime:number)=>{
+  currentTime.value = thecurrentTime;
+};
+
+const setPlaying:(playing:boolean)=>void = (theplaying:boolean)=>{
+  playing.value = theplaying;
+};
+
+const setVolume:(volume:number)=>void = (thevolume:number)=>{
+  volume.value = thevolume;
+};  
+
+function newDefaultMusicPlayerLinkObj(): MusicPlayerLink {
   return {
-    requestPlay : ()=>console.log('onRequestPlay no register'),
-    requestPause : ()=>console.log('onRequestPause no register'),
-    requestVolume : ()=>console.log('onRequestVolume no register'),
-    requestCurrentTime : ()=>console.log('onRequestCurrentTime no register'),
+    onRequestPlay: () => console.log('onRequestPlay no register'),
+    onRequestPause: () => console.log('onRequestPause no register'),
+    onRequestVolume: () => console.log('onRequestVolume no register'),
+    onRequestCurrentTime: () => console.log('onRequestCurrentTime no register'),
+    get setCurrentTime(){return setCurrentTime},
+    get setPlaying(){return setPlaying},
+    get setVolume(){return setVolume}
   }
 }
 
-/** 音乐播放控制 */
-export const musicPlayerController = ref<MusicController>(newDefaultMusicControllerObj());
+/** 音乐播放器链接，用于个各种播放器进行连接 MusicPlayer 需要使用 MusicPlayerLink 和真实的播放器交互 */
+export const musicPlayerLink = ref<MusicPlayerLink>(newDefaultMusicPlayerLinkObj());
+
+
+/** 音乐播放器,所有音乐操作都通过这个 */
+export const musicPlayer = readonly({
+  /** 音乐当前播放位置，单位毫秒 */
+  currentTime: readonly(currentTime),
+  /** 音乐播放状态,正在播放或者暂停 */
+  playing: readonly(playing),
+  /** 音量 */
+  volume: readonly(volume),
+
+  /** 正在播放的音乐 */
+  currentMusic: computed(() => currentMusic.value),
+
+  /** 播放器尺寸 */
+  musicPlayerSize: musicPlayerSize,
+
+  /**设置正在播放的音乐 */
+  setCurrentMusic(music: Music) {
+    // 重置音乐播放器链接
+    musicPlayerLink.value = newDefaultMusicPlayerLinkObj();
+    // 设置音乐
+    currentMusic.value = music;
+  },
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

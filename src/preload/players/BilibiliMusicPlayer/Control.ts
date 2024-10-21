@@ -5,10 +5,13 @@
 export function setPlaybackProgress(progress: number){
   const line = document.querySelector('.bpx-player-progress-wrap') as HTMLElement;
   const lineLength = document.querySelector('.bpx-player-control-entity') as HTMLElement;
-  if(lineLength){
+  const lineLengthShwo = lineLength.style.display != 'none';
+  
+  if(!lineLengthShwo){
     // 屏幕太小会隐藏进度条导致无法设置进度，强行显示进度条
     lineLength.style.display = 'block';
   }
+
   const xAdd = line.getBoundingClientRect().left;
   const width = line.getBoundingClientRect().width;
   const pr =  width*Math.max(0, Math.min(1, progress/getMusicLength()));
@@ -29,6 +32,11 @@ export function setPlaybackProgress(progress: number){
     clientX: x,
     clientY: 0
   }));
+
+  if(!lineLengthShwo){
+    // 如果强行显示了进度条，那么隐藏进度条
+    lineLength.style.display = 'none';
+  }
 }
 
 /**将 mm:ss 转换为毫秒 */
