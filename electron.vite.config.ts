@@ -7,7 +7,15 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build:{
+      rollupOptions:{
+        input:{
+          index: resolve(__dirname, 'src/preload/index.ts'),
+          BilibiliMusicPlayer: resolve(__dirname, 'src/preload/players/BilibiliMusicPlayer/BilibiliMusicPlayer.ts')
+        }
+      }
+    }
   },
   renderer: {
     resolve: {

@@ -41,7 +41,7 @@ import MusicPlayerBar from './components/MusicPlayerBar.vue';
   align-items: stretch;
 }
 
-.main:has(.bottom-music-player) .main-box {
-  height: calc(100vh - 5rem - 0.1rem);
+.main:has(.music-player) .main-box {
+  height: calc(100vh - 5rem);
 }
 </style>

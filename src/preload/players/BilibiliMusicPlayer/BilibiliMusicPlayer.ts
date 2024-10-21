@@ -6,50 +6,47 @@ import {
   regOnPlaybackStateChange,
   setPlaybackProgress
 } from './Control'
-export function BilibiliMusicPlayerInit(){
-    if (window.location.hostname !== 'www.bilibili.com') {
-        return;
-    }
-    window.addEventListener('load', ()=>{
-      function findPlayer(){
-        console.log('findPlayer')
-        const player = document.querySelector('.bpx-player-ctrl-time-label');
-        if(!player){
-          setTimeout(findPlayer, 500);
-          return;
-        }
-        onLoaded();
-      }
-      setTimeout(findPlayer, 500);
-    });
-}
-function onLoaded() {
+import { ipcRenderer } from 'electron'
+
+
+async function onLoaded() {
   regOnPlaybackLengthChange((length) => {
-    window.parent.postMessage({type: 'onPlaybackLengthChange', value: length}, '*');
+    ipcRenderer.sendToHost("onPlaybackLengthChange",length);
   });
   regOnPlaybackProgressChange((progress) => {
-    window.parent.postMessage({type: 'onPlaybackProgressChange', value: progress}, '*');
+    ipcRenderer.sendToHost('onPlaybackProgressChange', progress);
   });
   regOnPlaybackStateChange((playing) => {
     console.log(playing)
-    window.parent.postMessage({type: 'onPlaybackStateChange', value: playing}, '*');
+    ipcRenderer.sendToHost('onPlaybackStateChange', playing);
   });
-  window.addEventListener('message', (event) => {
-    const data = event.data;
-    if (data.type === 'setPlaybackProgress') {
-      setPlaybackProgress(data.value);
-    }else if (data.type === 'pause') {
-      pause();
-    }else if (data.type === 'play') {
-      play();
-    }
+  ipcRenderer.on("setPlaybackProgress",(_event,...args:any[])=>{
+    setPlaybackProgress(args[0]);
+  });
+  ipcRenderer.on("pause",(_event,..._args:any[])=>{
+    pause();
+  });
+  ipcRenderer.on("play",(_event,..._args:any[])=>{
+    play();
+    fullScreen();  //自动网页全屏
   });
   fullScreen();  //自动网页全屏
   autoCloseCaptcha();  //自动关闭验证码
 }
 
 
-
+window.addEventListener('load', () => {
+  function findPlayer() {
+    console.log('findPlayer')
+    const player = document.querySelector('.bpx-player-ctrl-time-label');
+    if (!player) {
+      setTimeout(findPlayer, 500);
+      return;
+    }
+    onLoaded();
+  }
+  setTimeout(findPlayer, 500);
+});
 
 
 

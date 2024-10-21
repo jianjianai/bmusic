@@ -1,49 +1,56 @@
 <script setup lang="ts">
+import { WebviewTag } from 'electron';
 import { PlayerProps } from '../PlayerProps';
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref, watch } from 'vue';
 
 const props = defineProps<PlayerProps>();
-const iframeRef = ref<HTMLIFrameElement | null>(null);
+const iframeRef = ref<WebviewTag | null>(null);
 
 props.musicController.onRequestPlay(() => {
-  iframeRef.value?.contentWindow?.postMessage({type:"play"}, "*");
+  iframeRef.value?.send("play");
 });
 props.musicController.onRequestPause(() => {
-  iframeRef.value?.contentWindow?.postMessage({type:"pause"}, "*");
+  iframeRef.value?.send("pause");
 });
 
 props.musicController.onRequestCurrentTime((currentTime: number) => {
-  iframeRef.value?.contentWindow?.postMessage({type:"setPlaybackProgress", value: currentTime}, "*");
+  iframeRef.value?.send("setPlaybackProgress",currentTime);
 });
 
-function onMessage(event: MessageEvent) {
-  const data = event.data;
-  if(data.type=="onPlaybackProgressChange"){
-    props.musicController.setCurrentTime(data.value);
-  }else if(data.type=="onPlaybackLengthChange"){
-    props.musicController.setDuration(data.value);
-  }else if (data.type=="onPlaybackStateChange"){
-    props.musicController.setPlaying(data.value);
+function onMessage(msg:string,...args:any[]) {
+  if (msg == "onPlaybackProgressChange") {
+    props.musicController.setCurrentTime(args[0]);
+  } else if (msg == "onPlaybackLengthChange") {
+    props.musicController.setDuration(args[0]);
+  } else if (msg == "onPlaybackStateChange") {
+    props.musicController.setPlaying(args[0]);
   }
 }
 
-onMounted(()=>{
-  window.addEventListener('message', onMessage);
+watch(() => iframeRef.value, () => {
+  iframeRef.value?.addEventListener("dom-ready", () => {
+    iframeRef.value?.openDevTools();
+    iframeRef.value?.addEventListener("ipc-message",(event)=>{
+      onMessage(event.channel, ...event.args);
+    });
+  });
 });
 
-onUnmounted(()=>{
-  window.removeEventListener('message', onMessage);
+
+//获取preload文件路径
+const bilibiliMusicPlayer__filePath = ref<string>();
+window.api.ipcAPI.BilibiliMusicPlayer__filePath().then((res: string) => {
+  bilibiliMusicPlayer__filePath.value = res;
 });
-
-
 
 
 </script>
 <template>
-  <iframe ref="iframeRef" class="b-iframe" src="https://www.bilibili.com/video/BV1sy4y187Vu" sandbox="allow-scripts allow-same-origin" ></iframe>
+  <webview v-if="bilibiliMusicPlayer__filePath" ref="iframeRef" class="b-iframe" src="https://www.bilibili.com/video/BV1sy4y187Vu"
+    :preload="bilibiliMusicPlayer__filePath" allowpopups nodeintegration></webview>
 </template>
 <style scoped>
-.b-iframe{
+.b-iframe {
   width: 100%;
   height: 100%;
 }

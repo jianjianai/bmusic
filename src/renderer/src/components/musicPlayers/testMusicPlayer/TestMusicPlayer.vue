@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PlayerProps } from '../PlayerProps';
 import { currentMusic } from '../../../states/musicPlayerStates'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const props = defineProps<PlayerProps>();
 
@@ -25,14 +25,20 @@ function test(){
   }
 }
 
-onMounted(() => {
+const count = ref(3);
+
+onMounted(async () => {
     console.log('TestMusicPlayer mounted');
+    for (; count.value > 1; count.value--) {
+        await new Promise((resolve) => {setTimeout(() => {resolve(0);}, 1000);});
+    }
+    test();
 });
 
 </script>
 <template>
     <div>
-        <button @click="test">test</button>
+        <button @click="test">{{ count }}</button>
     </div>
 </template>
 <style scoped>

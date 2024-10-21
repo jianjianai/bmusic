@@ -34,7 +34,7 @@ const musicController:MusicController = {
   },
 }
 
-const musicPlayerComponentData = ref<string>(currentMusic.value.playerData);
+const musicPlayerComponentData = ref<string | undefined>(currentMusic.value.playerData);
 watch(
   ()=>currentMusic.value.playerData,
   ()=>{

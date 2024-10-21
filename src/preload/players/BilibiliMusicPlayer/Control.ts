@@ -3,8 +3,8 @@
  * @param progress 当前播放到的时间，单位毫秒
  */
 export function setPlaybackProgress(progress: number){
-  const line = document.querySelector('.bpx-player-progress-wrap');
-  const lineLength = document.querySelector('.bpx-player-control-entity');
+  const line = document.querySelector('.bpx-player-progress-wrap') as HTMLElement;
+  const lineLength = document.querySelector('.bpx-player-control-entity') as HTMLElement;
   if(lineLength){
     // 屏幕太小会隐藏进度条导致无法设置进度，强行显示进度条
     lineLength.style.display = 'block';
@@ -41,7 +41,7 @@ function timeToMillisecond(time:string):number{
  * 当播放进度发生改变时
  */
 export function regOnPlaybackProgressChange(func: (progress: number)=>void){
-  const current = document.querySelector('.bpx-player-ctrl-time-current');
+  const current = document.querySelector('.bpx-player-ctrl-time-current') as HTMLElement;
   func(timeToMillisecond(current.innerText));
   new MutationObserver(()=>{
     func(timeToMillisecond(current.innerText));
@@ -52,7 +52,7 @@ export function regOnPlaybackProgressChange(func: (progress: number)=>void){
  * 当暂停或播放时
  * */
 export function regOnPlaybackStateChange(func: (playing: boolean)=>void){
-  const playBtn = document.querySelector('.bpx-player-container');
+  const playBtn = document.querySelector('.bpx-player-container')!;
   func(!playBtn.classList.contains('bpx-state-paused'));
   new MutationObserver(()=>{
     func(!playBtn.classList.contains('bpx-state-paused'));
@@ -63,7 +63,7 @@ export function regOnPlaybackStateChange(func: (playing: boolean)=>void){
  * 获取音乐播放暂停状态
  */
 export function getPlaybackState():boolean{
-  const playBtn = document.querySelector('.bpx-player-container');
+  const playBtn = document.querySelector('.bpx-player-container')!;
   return !playBtn.classList.contains('bpx-state-paused');
 }
 
@@ -71,7 +71,7 @@ export function getPlaybackState():boolean{
  * 当音乐长度发生改变时
  * */
 export function regOnPlaybackLengthChange(func: (length: number)=>void){
-  const total = document.querySelector('.bpx-player-ctrl-time-duration');
+  const total = document.querySelector('.bpx-player-ctrl-time-duration') as HTMLElement;
   func(timeToMillisecond(total.innerText));
   new MutationObserver(()=>{
     func(timeToMillisecond(total.innerText));
@@ -82,8 +82,20 @@ export function regOnPlaybackLengthChange(func: (length: number)=>void){
  * 获取音乐长度
  * */
 export function getMusicLength():number{
-  const total = document.querySelector('.bpx-player-ctrl-time-duration');
+  const total = document.querySelector('.bpx-player-ctrl-time-duration') as HTMLElement;
   return timeToMillisecond(total.innerText);
+}
+
+/**
+ * 点击播放暂停按钮
+ */
+export function clickPlay(){
+  const playBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-play')!;
+  playBtn.dispatchEvent(new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true
+  }));
 }
 
 /**
@@ -93,12 +105,7 @@ export function pause(){
   if (!getPlaybackState()) {
     return;
   }
-  const playBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-play');
-  playBtn.dispatchEvent(new MouseEvent('click', {
-    view: window,
-    bubbles: true,
-    cancelable: true
-  }));
+  clickPlay();
 }
 
 /**
@@ -108,8 +115,16 @@ export function play(){
   if (getPlaybackState()) {
     return;
   }
-  const playBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-play');
-  playBtn.dispatchEvent(new MouseEvent('click', {
+  clickPlay();
+}
+
+
+/**
+ * 点击网页全屏按钮
+ * */
+export function clickFullScreen(){
+  const fullScreenBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-web')!;
+  fullScreenBtn.dispatchEvent(new MouseEvent('click', {
     view: window,
     bubbles: true,
     cancelable: true
@@ -117,16 +132,33 @@ export function play(){
 }
 
 /**
+ * 是否网页全屏
+ * */
+export function isFullScreen():boolean{
+  const playerEl = document.getElementById("bilibili-player")!;
+  return playerEl.classList.contains('mode-webscreen');
+}
+
+/**
  * 网页全屏
  * */
 export function fullScreen(){
-  const fullScreenBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-web');
-  fullScreenBtn.dispatchEvent(new MouseEvent('click', {
-    view: window,
-    bubbles: true,
-    cancelable: true
-  }));
+  if(isFullScreen()){
+    return;
+  }
+  clickFullScreen();
 }
+
+/**
+ * 取消网页全屏
+ * */
+export function cancelFullScreen(){
+  if(!isFullScreen()){
+    return;
+  }
+  clickFullScreen();
+}
+
 
 /**
  * 验证码出现时关闭验证码
@@ -136,12 +168,13 @@ export function autoCloseCaptcha(){
     console.log("find captcha");
     for (let mutationRecord of c) {
       if(
-        mutationRecord.previousSibling?.classList?.contains("geetest_panel") &&
-        mutationRecord.previousSibling?.classList?.contains("geetest_wind")
+        (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_panel") &&
+        (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_wind")
       ){
         let div = document.createElement('div');
-        div.appendChild(mutationRecord.previousSibling);
+        div.appendChild((mutationRecord.previousSibling as HTMLElement));
       }
     }
   }).observe(document.body, {childList: true, subtree: false,attributes: false});
 }
+

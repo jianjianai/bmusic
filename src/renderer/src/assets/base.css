@@ -35,4 +35,10 @@ html, body {
   /* 上一首和下一首按钮颜色 */
   --color-contr-prev-next-btn:#5e5e5e;
   --color-contr-prev-next-btn-hover:#343434;
+  
+  /* 播放器放大状态顶部功能按钮颜色 */
+  --color-contr-top-btn-border:#c0c0c050;
+  --color-contr-top-btn-bgc:#5555552f;
+  --color-contr-top-btn-bgc-hover:#363636ab;
+  --color-contr-top-btn-text:#ffffffa8;
 }
