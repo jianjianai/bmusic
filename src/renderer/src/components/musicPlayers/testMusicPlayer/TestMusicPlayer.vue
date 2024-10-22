@@ -18,7 +18,7 @@ function test() {
         musicName: "测试音乐",
         musicAuthor: "测试作者",
         playerName: "BilibiliMusicPlayer",
-        playerData: "test"
+        playerData: `{"bvId":"BV19G411H7DY"}`
     });
 }
 
