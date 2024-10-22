@@ -20,7 +20,7 @@ const currentMusic = ref<Music>({
 });
 
   /** 音乐长度，单位毫秒 */
-const duration = ref(0);``
+const duration = ref(0);
 
 /** 音乐当前播放位置，单位毫秒 */
 const currentTime = ref(0);
@@ -32,10 +32,13 @@ const playing = ref(false);
 const volume = ref(1);
 
 /* 加载中 */
-export const loading = ref(true);
+const loading = ref(true);
 
 /** 播放器尺寸 */
 export const musicPlayerSize = ref<"buttom" | "max">("buttom");
+
+/** 是否播放完毕 */
+const ended = ref(false);
 
 type EventListens = {
   onRequestPlay: () => void,
@@ -53,14 +56,15 @@ function createEventListens(): EventListens {
   }
 }
 
-let eventListens: EventListens = createEventListens();
+/** 请求事件监听 */
+let onRequestEventListens: EventListens = createEventListens();
 
 /** 音乐播放器链接，用于个各种播放器进行连接 MusicPlayer 需要使用 MusicPlayerLink 和真实的播放器交互 */
 export const musicPlayerLink = readonly({
-  onRequestPlay: (listen: () => void) => eventListens.onRequestPlay = listen,
-  onRequestPause: (listen: () => void) => eventListens.onRequestPause = listen,
-  onRequestVolume: (listen: (volume: number) => void) => eventListens.onRequestVolume = listen,
-  onRequestCurrentTime: (listen: (currentTime: number) => void) => eventListens.onRequestCurrentTime = listen,
+  onRequestPlay: (listen: () => void) => onRequestEventListens.onRequestPlay = listen,
+  onRequestPause: (listen: () => void) => onRequestEventListens.onRequestPause = listen,
+  onRequestVolume: (listen: (volume: number) => void) => onRequestEventListens.onRequestVolume = listen,
+  onRequestCurrentTime: (listen: (currentTime: number) => void) => onRequestEventListens.onRequestCurrentTime = listen,
   /** 更新当前播放位置 */
   updateCurrentTime(thecurrentTime: number) {
     currentTime.value = thecurrentTime;
@@ -81,7 +85,10 @@ export const musicPlayerLink = readonly({
   updateLoading(theloading: boolean) {
     loading.value = theloading;
   },
-  
+  /** 更新播放完毕状态 */
+  updateEnded(isEnded: boolean) {
+    ended.value = isEnded;
+  },
   /** 当前音量,初始化时需要使用 */
   volume: volume,
 });
@@ -99,7 +106,8 @@ export const musicPlayer = readonly({
   duration: duration,
   /** 加载中 */
   loading: loading,
-
+  /** 是否播放完毕 */
+  ended: ended,
   /** 正在播放的音乐 */
   currentMusic: currentMusic,
 
@@ -109,30 +117,31 @@ export const musicPlayer = readonly({
   /**设置正在播放的音乐 */
   setCurrentMusic(music: Music) {
     // 重置音乐播放器链接
-    eventListens = createEventListens();
+    onRequestEventListens = createEventListens();
     loading.value = true;
     duration.value = 0;
     currentTime.value = 0;
     playing.value = true;
+    ended.value = false;
     // 设置音乐
     currentMusic.value = music;
   },
   /** 请求播放 */
   requestPlay() {
-    eventListens.onRequestPlay();
+    onRequestEventListens.onRequestPlay();
   },
   /** 请求暂停 */
   requestPause() {
-    eventListens.onRequestPause();
+    onRequestEventListens.onRequestPause();
   },
   /** 请求音量 */
   requestVolume(volume: number) {
-    eventListens.onRequestVolume(volume);
+    onRequestEventListens.onRequestVolume(volume);
   },
   /** 请求当前播放位置 */
   requestCurrentTime(currentTime: number) {
-    eventListens.onRequestCurrentTime(currentTime);
-  },
+    onRequestEventListens.onRequestCurrentTime(currentTime);
+  }
 });
 
 // @ts-ignore 测试用，方便调试，正式发布时删除

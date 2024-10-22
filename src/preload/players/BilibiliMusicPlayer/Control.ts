@@ -45,6 +45,17 @@ function timeToMillisecond(time:string):number{
   return (parseInt(t[0])*60 + parseInt(t[1]))*1000;
 }
 
+/***
+ * 注册状态缓冲改变时
+ */
+export function regBpxStateBuff(func: (buff: boolean)=>void){
+  const playBtn = document.querySelector('.bpx-player-container')!;
+  func(playBtn.classList.contains('bpx-state-buff'));
+  new MutationObserver(()=>{
+    func(playBtn.classList.contains('bpx-state-buff'));
+  }).observe(playBtn, {childList: false, subtree: false,attributes: true});
+}
+
 /****
  * 当播放进度发生改变时
  */

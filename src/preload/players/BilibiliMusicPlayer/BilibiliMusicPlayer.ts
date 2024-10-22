@@ -1,7 +1,7 @@
 import {
   autoCloseCaptcha,
   fullScreen,
-  pause, play, regOnPlaybackLengthChange,
+  pause, play, regBpxStateBuff, regOnPlaybackLengthChange,
   regOnPlaybackProgressChange,
   regOnPlaybackStateChange,
   setPlaybackProgress
@@ -17,8 +17,10 @@ async function onLoaded() {
     ipcRenderer.sendToHost('onPlaybackProgressChange', progress);
   });
   regOnPlaybackStateChange((playing) => {
-    console.log(playing)
     ipcRenderer.sendToHost('onPlaybackStateChange', playing);
+  });
+  regBpxStateBuff((buff)=>{
+    ipcRenderer.sendToHost('onBpxStateBuff', buff);
   });
   ipcRenderer.on("setPlaybackProgress",(_event,...args:any[])=>{
     setPlaybackProgress(args[0]);
