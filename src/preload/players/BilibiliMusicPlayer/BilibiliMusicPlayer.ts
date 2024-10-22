@@ -8,31 +8,43 @@ import {
 } from './Control'
 import { ipcRenderer } from 'electron'
 
-
 async function onLoaded() {
-  regOnPlaybackLengthChange((length) => {
-    ipcRenderer.sendToHost("onPlaybackLengthChange",length);
+  let length = 0;
+  let ended = false;
+  regOnPlaybackLengthChange((_length) => {
+    length = _length;
+    ipcRenderer.sendToHost("onPlaybackLengthChange", length);
   });
   regOnPlaybackProgressChange((progress) => {
     ipcRenderer.sendToHost('onPlaybackProgressChange', progress);
+    if(progress>=length){
+      ended = true;
+      ipcRenderer.sendToHost('onPlaybackEnded', true);
+      setPlaybackProgress(0);
+    }else if(ended){
+      pause();
+    }else{
+      ipcRenderer.sendToHost('onPlaybackEnded', false);
+    }
   });
   regOnPlaybackStateChange((playing) => {
     ipcRenderer.sendToHost('onPlaybackStateChange', playing);
   });
-  regBpxStateBuff((buff)=>{
+  regBpxStateBuff((buff) => {
     ipcRenderer.sendToHost('onBpxStateBuff', buff);
   });
-  ipcRenderer.on("setPlaybackProgress",(_event,...args:any[])=>{
+  ipcRenderer.on("setPlaybackProgress", (_event, ...args: any[]) => {
     setPlaybackProgress(args[0]);
   });
-  ipcRenderer.on("pause",(_event,..._args:any[])=>{
+  ipcRenderer.on("pause", (_event, ..._args: any[]) => {
     pause();
   });
-  ipcRenderer.on("play",(_event,..._args:any[])=>{
+  ipcRenderer.on("play", (_event, ..._args: any[]) => {
+    ended = false;
     play();
-    fullScreen(); 
+    fullScreen();
   });
-  ipcRenderer.on("fullScreen",(_event,..._args:any[])=>{
+  ipcRenderer.on("fullScreen", (_event, ..._args: any[]) => {
     fullScreen();
   });
   fullScreen();  //自动网页全屏

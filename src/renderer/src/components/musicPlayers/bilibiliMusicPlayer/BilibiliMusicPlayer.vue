@@ -49,6 +49,8 @@ function onMessage(msg: string, ...args: any[]) {
     musicPlayerLink.updateLoading(false);
   } else if (msg == "onBpxStateBuff"){
     musicPlayerLink.updateLoading(args[0]);
+  } else if (msg == "onPlaybackEnded"){
+    musicPlayerLink.updateEnded(args[0]);
   }
 }
 
