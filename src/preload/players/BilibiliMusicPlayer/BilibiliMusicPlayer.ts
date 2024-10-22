@@ -34,6 +34,7 @@ async function onLoaded() {
     ipcRenderer.sendToHost('onBpxStateBuff', buff);
   });
   ipcRenderer.on("setPlaybackProgress", (_event, ...args: any[]) => {
+    ended = false;
     setPlaybackProgress(args[0]);
   });
   ipcRenderer.on("pause", (_event, ..._args: any[]) => {
