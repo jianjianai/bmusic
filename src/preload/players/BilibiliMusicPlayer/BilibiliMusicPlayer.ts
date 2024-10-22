@@ -45,12 +45,12 @@ window.addEventListener('load', () => {
     console.log('findPlayer')
     const player = document.querySelector('.bpx-player-ctrl-time-label');
     if (!player) {
-      setTimeout(findPlayer, 500);
+      setTimeout(findPlayer, 100);
       return;
     }
     onLoaded();
   }
-  setTimeout(findPlayer, 500);
+  setTimeout(findPlayer, 100);
 });
 
 

@@ -17,7 +17,7 @@ const musicData: Ref<BilibiliMusicData> = computed(() => JSON.parse(musicPlayer.
 
 // https://www.bilibili.com/video/BV19G411H7DY/?share_source=copy_web&vd_source=8ec9a462acb529345bef8d4422990df9&t=17
 
-const bilibiliUrl = ref<string>(`https://www.bilibili.com/video/${musicData.value.bvId}`);
+const bilibiliUrl = ref<string>(`https://www.bilibili.com/video/${musicData.value.bvId}/?t=0.01`);
 
 
 
