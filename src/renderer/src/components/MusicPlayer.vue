@@ -3,7 +3,7 @@ import MusicPlayerContr from './MusicPlayerContr.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue'
 import { musicPlayerSize } from '../states/musicPlayerStates';
 import DownSvg from './svg/Down.vue';
-import PlayerButton from './allSmall/playerButton.vue';
+import PlayerButton from './allSmall/PlayerButton.vue';
 
 
 
@@ -23,11 +23,69 @@ import PlayerButton from './allSmall/playerButton.vue';
         </div>
         <!-- 下方控制栏 -->
         <div class="player-bottom-control">
+            <div class="left-control player-control-grep">
+                <div class="player-music-info">
+                    <div class="music-info">
+                        <span class="music-name">歌曲名</span>
+                        <span class="music-line"> - </span>
+                        <span class="music-singer">歌手啊大苏打大苏打阿三大苏打飒飒的撒旦</span>
+                    </div>
+                    <div class="user-buttons">
+                        adasdasd
+                    </div>
+                </div>
+            </div>
             <MusicPlayerContr class="player-control-grep"></MusicPlayerContr>
+            <div class="right-control player-control-grep">
+
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
+.music-singer{
+    color: var(--color-music-player-music-singer);
+    font-size: 0.9rem;
+}
+.music-line{
+    color: var(--color-music-player-music-line);
+    font-size: 1rem;
+}
+.music-name{
+    font-size: 1rem;
+    color: var(--color-music-player-music-name);
+    font-weight: bolder;
+}
+.music-info{
+
+}
+.player-music-info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 0.5rem;
+    flex: 1;
+}
+.music-player.player-min .left-control::before {
+    width: 9rem;
+}
+
+.left-control::before {
+    content: "";
+    width: 0;
+}
+
+.left-control {
+    display: flex;
+}
+
+.left-control,
+.right-control {
+    flex: 1;
+    width: 0;
+}
+
 /* 缩小状态遮罩 */
 .player-min-mask:hover {
     background-color: rgba(0, 0, 0, 0.036);
@@ -52,6 +110,8 @@ import PlayerButton from './allSmall/playerButton.vue';
     height: 4rem;
     border-top: 0.1rem solid var(--color-music-player-border);
     padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 

@@ -41,4 +41,9 @@ html, body {
   --color-contr-top-btn-bgc:#5555552f;
   --color-contr-top-btn-bgc-hover:#363636ab;
   --color-contr-top-btn-text:#ffffffa8;
+
+  /* 播放器左下角字体颜色 */
+  --color-music-player-music-name:#000000;
+  --color-music-player-music-line:#000000;
+  --color-music-player-music-singer:#1d1d1d;
 }
