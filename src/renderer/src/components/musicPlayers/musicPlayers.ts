@@ -1,12 +1,12 @@
 import { DefineComponent, toRaw } from "vue";
-import { PlayerProps } from "./PlayerProps";
 import TestMusicPlayer from "./testMusicPlayer/TestMusicPlayer.vue";
 import NotExist from "./notExist/NotExist.vue"
 import BilibiliMusicPlayer from './bilibiliMusicPlayer/BilibiliMusicPlayer.vue'
 
+
 const NotExistRaw = toRaw(NotExist);
 
-type DefinePlayerComponent = DefineComponent<PlayerProps, any, any>;
+type DefinePlayerComponent = DefineComponent<any, any, any>;
 
 /**
  * 播放器组件

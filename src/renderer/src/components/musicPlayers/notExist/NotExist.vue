@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { PlayerProps } from '../PlayerProps';
-
-const props = defineProps<PlayerProps>()
-
 
 </script>
 <template>

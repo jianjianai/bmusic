@@ -1,15 +1,16 @@
 <!-- 一个音乐播放控制组件，控制音乐播放暂停进度条，上一首下一首，播放模式，等.. -->
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { musicPlayerController, musicPlayerState } from '../states/musicPlayerStates'
+import { musicPlayer } from '../states/musicPlayerStates'
 import ControllerSVG from './svg/Controller.vue'
 import PauseSVG from './svg/Pause.vue'
 import PlaySVG from './svg/Play.vue'
+import LoadingSvg from './svg/Loading.vue';
 
 /**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
 const dragCurrentPercentage = ref(0.2);
 /** 真实播放进度百分比 */
-const currentPercentage = computed(() => musicPlayerState.currentTime / Math.max(1, musicPlayerState.duration));
+const currentPercentage = computed(() => musicPlayer.currentTime / Math.max(1, musicPlayer.duration));
 const lineCilckEl = ref();
 
 /** 拖动进度条 */
@@ -21,10 +22,10 @@ const shwoCurrentPercentage = computed(() => isMosueDown.value ? dragCurrentPerc
  * 计算出应该跳转到的时间并更新
  * */
 function updateCurrentTime() {
-  musicPlayerController.value.requestCurrentTime(musicPlayerState.duration * dragCurrentPercentage.value);
+    musicPlayer.requestCurrentTime(musicPlayer.duration * dragCurrentPercentage.value);
 }
 
-function updateCurrentPercentage(event: MouseEvent){
+function updateCurrentPercentage(event: MouseEvent) {
     const rect = (lineCilckEl.value as HTMLElement).getBoundingClientRect();
     const x = event.clientX - rect.left;
     const width = rect.width;
@@ -60,18 +61,23 @@ function formatTime(time: number) {
     <div class="control-main">
         <div class="control-top">
             <ControllerSVG class="previous-btn"></ControllerSVG>
-            <div class="playback-btn" v-show="musicPlayerState.playing" @click="musicPlayerController.requestPause()">
-                <PauseSVG  class="btn"></PauseSVG>
+            <div class="playback-btn" v-show="musicPlayer.playing && musicPlayer.loading"
+                @click="musicPlayer.requestPause()">
+                <LoadingSvg class="btn playback-btn-Loading"></LoadingSvg>
             </div>
-            <div class="playback-btn" v-show="!musicPlayerState.playing" @click="musicPlayerController.requestPlay()">
-              <PlaySVG class="btn"></PlaySVG>
+            <div class="playback-btn" v-show="musicPlayer.playing && !musicPlayer.loading"
+                @click="musicPlayer.requestPause()">
+                <PauseSVG class="btn"></PauseSVG>
+            </div>
+            <div class="playback-btn" v-show="!musicPlayer.playing" @click="musicPlayer.requestPlay()">
+                <PlaySVG class="btn"></PlaySVG>
             </div>
             <ControllerSVG class="controller-btn"></ControllerSVG>
         </div>
         <div class="control-line">
             <!-- 进度条 -->
-            <div class="line-current">{{ formatTime(musicPlayerState.currentTime) }}</div>
-            <div class="line-cilck" :class="{mosueuse:isMosueDown}" @mousedown="mosueDown" ref="lineCilckEl">
+            <div class="line-current">{{ formatTime(musicPlayer.currentTime) }}</div>
+            <div class="line-cilck" :class="{ mosueuse: isMosueDown }" @mousedown="mosueDown" ref="lineCilckEl">
                 <div class="line-box">
                     <!-- 完整进度条 -->
                     <div class="line-box-duration"></div>
@@ -81,11 +87,25 @@ function formatTime(time: number) {
                     <div class="line-box-button"></div>
                 </div>
             </div>
-            <div class="line-duration">{{ formatTime(musicPlayerState.duration) }}</div>
+            <div class="line-duration">{{ formatTime(musicPlayer.duration) }}</div>
         </div>
     </div>
 </template>
 <style scoped>
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.playback-btn-Loading {
+    animation: spin 1s linear infinite;
+}
+
 .previous-btn {
     transform: rotate(180deg);
 }
@@ -109,7 +129,7 @@ function formatTime(time: number) {
     color: var(--color-contr-play-btn-text);
 }
 
-.playback-btn:hover{
+.playback-btn:hover {
     transform: scale(1.05);
     background-color: var(--color-contr-play-btn-hover);
 }
@@ -132,14 +152,14 @@ function formatTime(time: number) {
 }
 
 .line-cilck:hover .line-box-button,
-.line-cilck.mosueuse  .line-box-button{
+.line-cilck.mosueuse .line-box-button {
     opacity: 1;
 }
 
 .line-box-button {
     opacity: 0;
     position: absolute;
-    left: v-bind("`${shwoCurrentPercentage*100}%`");
+    left: v-bind("`${shwoCurrentPercentage * 100}%`");
     top: 50%;
     transform: translate(-50%, -50%);
     width: 0.8rem;
@@ -154,7 +174,7 @@ function formatTime(time: number) {
     left: 0;
     top: 0;
     height: 100%;
-    width: v-bind("`${shwoCurrentPercentage*100}%`");
+    width: v-bind("`${shwoCurrentPercentage * 100}%`");
     background-color: var(--color-contr-line-current-bg);
     border-radius: 1rem;
 }
@@ -174,7 +194,8 @@ function formatTime(time: number) {
     height: 0.25rem;
     position: relative;
 }
-.line-cilck{
+
+.line-cilck {
     height: 0.5rem;
     margin: 0 0.5rem;
     display: flex;
