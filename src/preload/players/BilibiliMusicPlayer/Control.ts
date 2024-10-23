@@ -1,3 +1,48 @@
+
+/**
+ * 设置音量
+ * @param volume 音量 0~1
+ */
+export function setVolume(volume:number){
+  const volumeBar = document.querySelector('.bpx-player-ctrl-volume-box') as HTMLElement;
+  const volumeLine = document.querySelector('.bpx-player-ctrl-volume-box .bui-area') as HTMLElement;
+  volumeBar.style.display = 'block';
+  
+  const xAdd = volumeLine.getBoundingClientRect().bottom;
+  const height = volumeLine.getBoundingClientRect().height;
+  const pr = height * Math.max(0, Math.min(1, volume));
+  const y = xAdd - pr;
+
+  volumeLine.dispatchEvent(new MouseEvent('mousedown', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+    clientX: 0,
+    clientY: y
+  }));
+
+  volumeLine.dispatchEvent(new MouseEvent('mouseup', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+    clientX: 0,
+    clientY: y
+  }));
+
+  volumeBar.style.display = "";
+}
+
+/***
+ * 当音量发生改变时
+ */
+export function regOnVolumeChange(func: (volume: number) => void) {
+  const volumeNum = document.querySelector('.bpx-player-ctrl-volume-box .bpx-player-ctrl-volume-number') as HTMLElement;
+  new MutationObserver(() => {
+    func(parseFloat(volumeNum.innerText)/100);
+  }).observe(volumeNum, { childList: true, subtree: false, attributes: false });
+}
+
+
 /***
  * 控制播放器进度
  * @param progress 当前播放到的时间，单位毫秒
