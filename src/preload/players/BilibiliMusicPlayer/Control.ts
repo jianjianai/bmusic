@@ -3,11 +3,20 @@
  * 设置音量
  * @param volume 音量 0~1
  */
-export function setVolume(volume:number){
+export function setVolume(volume: number) {
+  const lineLength = document.querySelector('.bpx-player-control-entity') as HTMLElement;
+  const lineLengthShwo = lineLength.style.display != 'none';
+
+  if (!lineLengthShwo) {
+    // 屏幕太小会隐藏进度条导致无法设置进度，强行显示进度条
+    lineLength.style.display = 'block';
+  }
+
   const volumeBar = document.querySelector('.bpx-player-ctrl-volume-box') as HTMLElement;
   const volumeLine = document.querySelector('.bpx-player-ctrl-volume-box .bui-area') as HTMLElement;
+
   volumeBar.style.display = 'block';
-  
+
   const xAdd = volumeLine.getBoundingClientRect().bottom;
   const height = volumeLine.getBoundingClientRect().height;
   const pr = height * Math.max(0, Math.min(1, volume));
@@ -30,6 +39,11 @@ export function setVolume(volume:number){
   }));
 
   volumeBar.style.display = "";
+
+  if (!lineLengthShwo) {
+    // 如果强行显示了进度条，那么隐藏进度条
+    lineLength.style.display = 'none';
+  }
 }
 
 /***
@@ -38,7 +52,7 @@ export function setVolume(volume:number){
 export function regOnVolumeChange(func: (volume: number) => void) {
   const volumeNum = document.querySelector('.bpx-player-ctrl-volume-box .bpx-player-ctrl-volume-number') as HTMLElement;
   new MutationObserver(() => {
-    func(parseFloat(volumeNum.innerText)/100);
+    func(parseFloat(volumeNum.innerText) / 100);
   }).observe(volumeNum, { childList: true, subtree: false, attributes: false });
 }
 

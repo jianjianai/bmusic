@@ -9,6 +9,39 @@ import Volume0Svg from './svg/Volume0.vue';
 import Volume1Svg from './svg/Volume1.vue';
 import Volume2Svg from './svg/Volume2.vue';
 import Volume3Svg from './svg/Volume3.vue';
+import { ref } from 'vue';
+
+// 音量拖动条
+const lineCilckEl = ref();
+function updateVolumeLevel(event: MouseEvent) {
+    const rect = (lineCilckEl.value as HTMLElement).getBoundingClientRect();
+    const y = event.clientY - rect.top;
+    const height = rect.height;
+    musicPlayer.requestVolume(Math.min(1, Math.max(0, 1 - y / height)));
+}
+function mosueMove(event: MouseEvent) {
+    updateVolumeLevel(event);
+}
+function mosueUp(event: MouseEvent) {
+    window.removeEventListener('mousemove', mosueMove);
+    window.removeEventListener('mouseup', mosueUp);
+    updateVolumeLevel(event);
+}
+function mosueDown(event: MouseEvent) {
+    window.addEventListener('mousemove', mosueMove);
+    window.addEventListener('mouseup', mosueUp);
+    updateVolumeLevel(event);
+}
+// 关闭开启声音
+const lastVolume = ref(1);
+function clickVolume() {
+    if (musicPlayer.volume > 0) {
+        lastVolume.value = musicPlayer.volume;
+        musicPlayer.requestVolume(0);
+    } else {
+        musicPlayer.requestVolume(lastVolume.value);
+    }
+}
 
 </script>
 <template>
@@ -47,16 +80,21 @@ import Volume3Svg from './svg/Volume3.vue';
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
                 <!-- 音量按钮 -->
                 <div class="right-button volume">
-                    <Volume3Svg class="volume-icon" v-if="musicPlayer.volume>0.8"></volume3Svg>
-                    <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume>0.4"></volume2Svg>
-                    <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume>0"></volume1Svg>
-                    <Volume0Svg class="volume-icon" v-else></volume0Svg>
+                    <!-- 放到后面防止鼠标移动出去一点点就消失 -->
+                    <div class="volume-bc"></div>
+                    <!-- 图标 -->
+                    <div class="volume-icon-box" @click="clickVolume">
+                        <Volume3Svg class="volume-icon" v-if="musicPlayer.volume > 0.8"></volume3Svg>
+                        <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume > 0.4"></volume2Svg>
+                        <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume > 0"></volume1Svg>
+                        <Volume0Svg class="volume-icon" v-else></volume0Svg>
+                    </div>
                     <!-- 音量拖动条 -->
-                    <div class="volume-line-box">
+                    <div class="volume-line-box" @mousedown="mosueDown">
                         <!-- 音量显示 -->
-                        <div class="volume-num">{{ Math.floor(musicPlayer.volume*100) }}</div>
+                        <div class="volume-num">{{ Math.floor(musicPlayer.volume * 100) }}</div>
                         <!-- 拖动条 -->
-                        <div class="volume-line">
+                        <div class="volume-line" ref="lineCilckEl">
                             <!-- 完整条 -->
                             <div class="volume-line-all"></div>
                             <!-- 填充条 -->
@@ -73,7 +111,7 @@ import Volume3Svg from './svg/Volume3.vue';
     </div>
 </template>
 <style scoped>
-.volume-line-drag-button{
+.volume-line-drag-button {
     width: 0.6rem;
     height: 0.6rem;
     background-color: var(--color-music-player-volume-line-drag-button);
@@ -82,18 +120,21 @@ import Volume3Svg from './svg/Volume3.vue';
     left: 50%;
     transform: translate(-50%, 50%);
     box-shadow: 0 0 0.1rem 0.1rem var(--color-music-player-volume-line-drag-button-shadow);
-    bottom: v-bind("`${musicPlayer.volume*100}%`");
+    bottom: v-bind("`${musicPlayer.volume * 100}%`");
 }
-.volume-line-all{
+
+.volume-line-all {
     background-color: var(--color-music-player-volume-line-all);
     height: 100%;
 }
-.volume-line-full{
+
+.volume-line-full {
     background-color: var(--color-music-player-volume-line-full);
-    height: v-bind("`${musicPlayer.volume*100}%`");
+    height: v-bind("`${musicPlayer.volume * 100}%`");
 }
+
 .volume-line-all,
-.volume-line-full{
+.volume-line-full {
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
@@ -101,19 +142,39 @@ import Volume3Svg from './svg/Volume3.vue';
     position: absolute;
     border-radius: 1rem;
 }
-.volume-line{
-    cursor: pointer;
+
+.volume-line {
     flex: 1;
     height: 0rem;
     position: relative;
     margin-bottom: 0.5rem;
 }
-.volume-num{
+
+.volume-num {
     color: var(--color-music-player-volume-num);
     font-size: 0.7rem;
     margin: 0.5rem 0;
 }
-.volume-line-box{
+
+.volume-bc {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4rem;
+    height: 11rem;
+    display: none;
+}
+
+.volume:hover .volume-bc {
+    display: block;
+}
+
+.volume:hover .volume-line-box {
+    display: flex;
+}
+
+.volume-line-box {
     left: 50%;
     transform: translateX(-50%);
     top: -8.5rem;
@@ -123,30 +184,42 @@ import Volume3Svg from './svg/Volume3.vue';
     background-color: var(--color-music-player-volume-line-box);
     box-shadow: 0 0 0.5rem 0.1rem var(--color-music-player-volume-line-box-shadow);
     border-radius: 0.5rem;
-    display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
+    display: none;
 }
-.right-button.volume{
+
+.right-button.volume {
     position: relative;
     cursor: default;
+    user-select: none;
 }
-.volume-icon{
+
+.volume-icon-box {
     width: 100%;
     height: 100%;
     cursor: pointer;
+    position: relative;
 }
 
-.right-button:hover{
+.volume-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.right-button:hover {
     color: var(--color-music-player-right-button-hover);
 }
-.right-button{
+
+.right-button {
     width: 1.5rem;
     height: 1.5rem;
     color: var(--color-music-player-right-button);
     cursor: pointer;
 }
-.right-control{
+
+.right-control {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -154,17 +227,18 @@ import Volume3Svg from './svg/Volume3.vue';
     padding-right: 1.5rem;
 }
 
-.user-button{
+.user-button {
     width: 1.2rem;
     height: 1.2rem;
     color: var(--color-music-player-user-button);
     cursor: pointer;
 }
-.user-button:hover{
+
+.user-button:hover {
     color: var(--color-music-player-user-button-hover);
 }
 
-.user-button-greap{
+.user-button-greap {
     height: 1.2rem;
     display: flex;
     gap: 0.5rem;

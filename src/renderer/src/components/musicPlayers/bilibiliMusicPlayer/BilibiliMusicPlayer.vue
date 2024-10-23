@@ -30,9 +30,11 @@ musicPlayerLink.onRequestPlay(() => {
 musicPlayerLink.onRequestPause(() => {
   iframeRef.value?.send("pause");
 });
-
 musicPlayerLink.onRequestCurrentTime((currentTime: number) => {
   iframeRef.value?.send("setPlaybackProgress", currentTime);
+})
+musicPlayerLink.onRequestVolume((volume: number) => {
+  iframeRef.value?.send("setVolume", volume);
 })
 
 watch(musicPlayerSize, () => {

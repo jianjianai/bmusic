@@ -5,7 +5,8 @@ import {
   regOnPlaybackProgressChange,
   regOnPlaybackStateChange,
   regOnVolumeChange,
-  setPlaybackProgress
+  setPlaybackProgress,
+  setVolume
 } from './Control'
 import { ipcRenderer } from 'electron'
 
@@ -36,6 +37,9 @@ async function onLoaded() {
   });
   regOnVolumeChange((volume)=>{
     ipcRenderer.sendToHost('onVolumeChange', volume);
+  });
+  ipcRenderer.on("setVolume", (_event, ...args: any[]) => {
+    setVolume(args[0]);
   });
   ipcRenderer.on("setPlaybackProgress", (_event, ...args: any[]) => {
     ended = false;
