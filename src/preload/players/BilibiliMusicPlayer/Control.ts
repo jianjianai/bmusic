@@ -213,8 +213,8 @@ export function clickFullScreen() {
  * 是否网页全屏
  * */
 export function isFullScreen(): boolean {
-  const playerEl = document.getElementById("bilibili-player")!;
-  return playerEl.classList.contains('mode-webscreen');
+  const fullScreenBtn = document.querySelector('.bpx-player-ctrl-btn.bpx-player-ctrl-web')!;
+  return fullScreenBtn.classList.contains('bpx-state-entered');
 }
 
 /**
