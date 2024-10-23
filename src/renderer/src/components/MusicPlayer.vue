@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import MusicPlayerContr from './MusicPlayerContr.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue'
-import { musicPlayerSize } from '../states/musicPlayerStates';
+import { musicPlayer, musicPlayerSize } from '../states/musicPlayerStates';
 import DownSvg from './svg/Down.vue';
 import PlayerButton from './allSmall/PlayerButton.vue';
-
+import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
 
 
 
@@ -23,19 +23,24 @@ import PlayerButton from './allSmall/PlayerButton.vue';
         </div>
         <!-- 下方控制栏 -->
         <div class="player-bottom-control">
+            <!-- 左边 -->
             <div class="left-control player-control-grep">
                 <div class="player-music-info">
                     <div class="music-info">
-                        <span class="music-name">歌曲名</span>
+                        <span class="music-name">{{ musicPlayer.currentMusic.musicName || "未知" }}</span>
                         <span class="music-line"> - </span>
-                        <span class="music-singer">歌手啊大苏打大苏打阿三大苏打飒飒的撒旦</span>
+                        <span class="music-singer">{{ musicPlayer.currentMusic.musicAuthor || "未知歌手" }}</span>
                     </div>
-                    <div class="user-buttons">
-                        adasdasd
+                    <div class="user-button-greap">
+                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
+                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
+                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
                     </div>
                 </div>
             </div>
+            <!-- 中间播放控制器 -->
             <MusicPlayerContr class="player-control-grep"></MusicPlayerContr>
+            <!-- 右边 -->
             <div class="right-control player-control-grep">
 
             </div>
@@ -43,37 +48,64 @@ import PlayerButton from './allSmall/PlayerButton.vue';
     </div>
 </template>
 <style scoped>
-.music-singer{
+.user-button{
+    width: 1.2rem;
+    height: 1.2rem;
+    color: var(--color-music-player-user-button);
+    cursor: pointer;
+}
+.user-button:hover{
+    color: var(--color-music-player-user-button-hover);
+}
+
+.user-button-greap{
+    height: 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.music-singer {
     color: var(--color-music-player-music-singer);
     font-size: 0.9rem;
 }
-.music-line{
+
+.music-line {
     color: var(--color-music-player-music-line);
     font-size: 1rem;
 }
-.music-name{
+
+.music-name {
     font-size: 1rem;
     color: var(--color-music-player-music-name);
     font-weight: bolder;
 }
-.music-info{
 
+.music-info {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    text-overflow: ellipsis;
 }
-.player-music-info{
+
+.player-music-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-around;
     padding-left: 0.5rem;
     flex: 1;
+    width: 0;
 }
+
 .music-player.player-min .left-control::before {
     width: 9rem;
 }
 
 .left-control::before {
     content: "";
-    width: 0;
+    width: 0.5rem;
+    transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 .left-control {

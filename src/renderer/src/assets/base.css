@@ -46,4 +46,8 @@ html, body {
   --color-music-player-music-name:#000000;
   --color-music-player-music-line:#000000;
   --color-music-player-music-singer:#1d1d1d;
+
+  /* 播放器左下角按钮颜色 */
+  --color-music-player-user-button: #646464;
+  --color-music-player-user-button-hover: #2c2c2c;
 }
