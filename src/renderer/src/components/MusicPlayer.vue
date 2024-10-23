@@ -5,6 +5,10 @@ import { musicPlayer, musicPlayerSize } from '../states/musicPlayerStates';
 import DownSvg from './svg/Down.vue';
 import PlayerButton from './allSmall/PlayerButton.vue';
 import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
+import Volume0Svg from './svg/Volume0.vue';
+import Volume1Svg from './svg/Volume1.vue';
+import Volume2Svg from './svg/Volume2.vue';
+import Volume3Svg from './svg/Volume3.vue';
 
 
 
@@ -43,7 +47,17 @@ import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
             <!-- 右边 -->
             <div class="right-control player-control-grep">
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
-                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
+                <!-- 音量按钮 -->
+                <div class="right-button volume">
+                    <Volume0Svg class="volume-icon" v-if="musicPlayer.volume<=0"></volume0Svg>
+                    <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume<=25"></volume1Svg>
+                    <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume<=50"></volume2Svg>
+                    <Volume3Svg class="volume-icon" v-else-if="musicPlayer.volume<=75"></volume3Svg>
+                    <!-- 音量拖动条 -->
+                    <div class="volume-line-box">
+
+                    </div>
+                </div>
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
             </div>
@@ -51,6 +65,27 @@ import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
     </div>
 </template>
 <style scoped>
+.volume-line-box{
+    left: 50%;
+    transform: translateX(-50%);
+    top: -8.5rem;
+    position: absolute;
+    height: 8rem;
+    width: 2rem;
+    background-color: var(--color-music-player-volume-line-box);
+    box-shadow: 0 0 0.5rem 0.1rem var(--color-music-player-volume-line-box-shadow);
+    border-radius: 0.5rem;
+}
+.right-button.volume{
+    position: relative;
+    cursor: default;
+}
+.volume-icon{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
 .right-button:hover{
     color: var(--color-music-player-right-button-hover);
 }
