@@ -10,8 +10,6 @@ import Volume1Svg from './svg/Volume1.vue';
 import Volume2Svg from './svg/Volume2.vue';
 import Volume3Svg from './svg/Volume3.vue';
 
-
-
 </script>
 <template>
     <div class="music-player" :class="{ 'player-min': musicPlayerSize === 'buttom' }">
@@ -49,13 +47,23 @@ import Volume3Svg from './svg/Volume3.vue';
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
                 <!-- 音量按钮 -->
                 <div class="right-button volume">
-                    <Volume0Svg class="volume-icon" v-if="musicPlayer.volume<=0"></volume0Svg>
-                    <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume<=25"></volume1Svg>
-                    <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume<=50"></volume2Svg>
-                    <Volume3Svg class="volume-icon" v-else-if="musicPlayer.volume<=75"></volume3Svg>
+                    <Volume3Svg class="volume-icon" v-if="musicPlayer.volume>0.8"></volume3Svg>
+                    <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume>0.4"></volume2Svg>
+                    <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume>0"></volume1Svg>
+                    <Volume0Svg class="volume-icon" v-else></volume0Svg>
                     <!-- 音量拖动条 -->
                     <div class="volume-line-box">
-
+                        <!-- 音量显示 -->
+                        <div class="volume-num">{{ Math.floor(musicPlayer.volume*100) }}</div>
+                        <!-- 拖动条 -->
+                        <div class="volume-line">
+                            <!-- 完整条 -->
+                            <div class="volume-line-all"></div>
+                            <!-- 填充条 -->
+                            <div class="volume-line-full"></div>
+                            <!-- 拖动按钮 -->
+                            <div class="volume-line-drag-button"></div>
+                        </div>
                     </div>
                 </div>
                 <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
@@ -65,6 +73,46 @@ import Volume3Svg from './svg/Volume3.vue';
     </div>
 </template>
 <style scoped>
+.volume-line-drag-button{
+    width: 0.6rem;
+    height: 0.6rem;
+    background-color: var(--color-music-player-volume-line-drag-button);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    box-shadow: 0 0 0.1rem 0.1rem var(--color-music-player-volume-line-drag-button-shadow);
+    bottom: v-bind("`${musicPlayer.volume*100}%`");
+}
+.volume-line-all{
+    background-color: var(--color-music-player-volume-line-all);
+    height: 100%;
+}
+.volume-line-full{
+    background-color: var(--color-music-player-volume-line-full);
+    height: v-bind("`${musicPlayer.volume*100}%`");
+}
+.volume-line-all,
+.volume-line-full{
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 0.3rem;
+    position: absolute;
+    border-radius: 1rem;
+}
+.volume-line{
+    cursor: pointer;
+    flex: 1;
+    height: 0rem;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+.volume-num{
+    color: var(--color-music-player-volume-num);
+    font-size: 0.7rem;
+    margin: 0.5rem 0;
+}
 .volume-line-box{
     left: 50%;
     transform: translateX(-50%);
@@ -75,6 +123,9 @@ import Volume3Svg from './svg/Volume3.vue';
     background-color: var(--color-music-player-volume-line-box);
     box-shadow: 0 0 0.5rem 0.1rem var(--color-music-player-volume-line-box-shadow);
     border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .right-button.volume{
     position: relative;

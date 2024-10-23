@@ -4,6 +4,7 @@ import {
   pause, play, regBpxStateBuff, regOnPlaybackLengthChange,
   regOnPlaybackProgressChange,
   regOnPlaybackStateChange,
+  regOnVolumeChange,
   setPlaybackProgress
 } from './Control'
 import { ipcRenderer } from 'electron'
@@ -32,6 +33,9 @@ async function onLoaded() {
   });
   regBpxStateBuff((buff) => {
     ipcRenderer.sendToHost('onBpxStateBuff', buff);
+  });
+  regOnVolumeChange((volume)=>{
+    ipcRenderer.sendToHost('onVolumeChange', volume);
   });
   ipcRenderer.on("setPlaybackProgress", (_event, ...args: any[]) => {
     ended = false;
