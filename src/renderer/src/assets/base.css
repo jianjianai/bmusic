@@ -50,4 +50,8 @@ html, body {
   /* 播放器左下角按钮颜色 */
   --color-music-player-user-button: #646464;
   --color-music-player-user-button-hover: #2c2c2c;
+
+  /* 播放器右下角按钮颜色 */
+  --color-music-player-right-button: #646464;
+  --color-music-player-right-button-hover: #2c2c2c;
 }

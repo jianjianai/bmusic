@@ -42,12 +42,32 @@ import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
             <MusicPlayerContr class="player-control-grep"></MusicPlayerContr>
             <!-- 右边 -->
             <div class="right-control player-control-grep">
-
+                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
+                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
+                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
+                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
+.right-button:hover{
+    color: var(--color-music-player-right-button-hover);
+}
+.right-button{
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-music-player-right-button);
+    cursor: pointer;
+}
+.right-control{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1rem;
+    padding-right: 1.5rem;
+}
+
 .user-button{
     width: 1.2rem;
     height: 1.2rem;
