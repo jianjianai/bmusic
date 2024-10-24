@@ -28,6 +28,29 @@ watch(currentMusic, () => {
     }
 });
 
+
+
+// 如果音乐播放完毕则播放下一首
+watch(()=>musicPlayer.ended, (ended) => {
+    if (ended && currentIndex.value >= 0) {
+        if (playMode.value === "RepeatOne") {
+            musicPlayer.requestPlay();
+        } else if (playMode.value === "RepeatAll") {
+            currentIndex.value = (currentIndex.value + 1) % list.value.length;
+            musicPlayer.requestPlay();
+        } else if (playMode.value === "SequentialPlay") {
+            if (currentIndex.value < list.value.length - 1) {
+                currentIndex.value++;
+                musicPlayer.requestPlay();
+            }
+        } else if (playMode.value === "ShufflePlay") {
+            currentIndex.value = Math.floor(Math.random() * list.value.length);
+            musicPlayer.requestPlay();
+        }
+    }
+});
+
+
 export const playList = readonly({
     open: playListOpen,
     list: list,
