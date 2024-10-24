@@ -67,4 +67,8 @@ html, body {
   /* 右侧播放列表颜色 */
   --color-play-list-window-bg: var(--color-window-bg);
   --color-play-list-window-shadow: #49494998;
+  --color-play-list-item-hover: #eeeeee;
+  --color-play-list-item-time: #646464;
+  --color-play-list-item-name: #000000;
+  --color-play-list-item-author : #646464;
 }
