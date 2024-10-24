@@ -2,6 +2,22 @@
 import { playListOpen, playList } from '@renderer/states/playListState';
 import PlaySvg from './svg/Play.vue';
 import PauseSvg from './svg/Pause.vue';
+import { Music, musicPlayer } from '@renderer/states/musicPlayerStates';
+
+function clickItemIcon(index:number) {
+    // 如果点击的不是当前的音乐，就切换音乐
+    if(playList.currentIndex != index){
+        playList.setCurrentIndex(index);
+        return;
+    }
+    // 如果是当前音乐则播放或者暂停
+    if(musicPlayer.playing){
+        musicPlayer.requestPause();
+    }else{
+        musicPlayer.requestPlay();
+    }
+}
+
 </script>
 <template>
     <div>
@@ -17,17 +33,17 @@ import PauseSvg from './svg/Pause.vue';
             <!-- 列表 -->
             <div class="list">
                 <!-- 列表中的每个项 -->
-                <div class="item-box" v-for="music of playList.list">
+                <div class="item-box" :class="{paying:index==playList.currentIndex}" v-for="music,index of playList.list" :key="music.playerData">
                     <!-- 图标 -->
-                    <div class="icon">
+                    <div class="icon" @click="clickItemIcon(index)">
                         <!-- TODO 图片显示 -->
                         <div class="icon-img" :style="`background-image: url(${music.iconUrl});`"></div>
                         <!-- hover -->
                         <div class="item-icon-hover"></div>
-                        <!-- 播放图标 -->
-                        <PlaySvg class="item-icon-svg"></PlaySvg>
                         <!-- 暂停图标 -->
-                        <PauseSvg class="item-icon-svg"></PauseSvg>
+                        <PauseSvg class="item-icon-svg" v-if="index==playList.currentIndex && musicPlayer.playing"></PauseSvg>
+                        <!-- 播放图标 -->
+                        <PlaySvg class="item-icon-svg" v-else></PlaySvg>
                     </div>
                     <div class="name-and-author">
                         <div class="name">{{ music.musicName }}</div>
@@ -47,6 +63,8 @@ import PauseSvg from './svg/Pause.vue';
     background-size: cover;
 }
 
+.item-box.paying .item-icon-hover,
+.item-box.paying .item-icon-svg,
 .item-box:hover .item-icon-hover,
 .item-box:hover .item-icon-svg {
     display: block;
@@ -82,6 +100,7 @@ import PauseSvg from './svg/Pause.vue';
     border-radius: 0.5rem;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .item {
@@ -123,7 +142,6 @@ import PauseSvg from './svg/Pause.vue';
     display: flex;
     align-items: center;
     padding: 0.5rem 0.5rem 0.5rem 1rem;
-    cursor: pointer;
 }
 
 .list {
@@ -149,6 +167,7 @@ import PauseSvg from './svg/Pause.vue';
     display: flex;
     align-items: center;
     justify-content: space-between;
+    user-select: none;
 }
 
 .play-list-bc {
