@@ -10,6 +10,8 @@ import Volume1Svg from './svg/Volume1.vue';
 import Volume2Svg from './svg/Volume2.vue';
 import Volume3Svg from './svg/Volume3.vue';
 import { ref } from 'vue';
+import PlayListLineSvg from './svg/PlayListLine.vue';
+import { playListOpen } from '@renderer/states/playListState';
 
 // 音量拖动条
 const lineCilckEl = ref();
@@ -77,7 +79,8 @@ function clickVolume() {
             <MusicPlayerContr class="player-control-grep"></MusicPlayerContr>
             <!-- 右边 -->
             <div class="right-control player-control-grep">
-                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
+                <!-- 播放列表 -->
+                <PlayListLineSvg class="right-button" @click="playListOpen = !playListOpen"></PlayListLineSvg>
                 <!-- 音量按钮 -->
                 <div class="right-button volume">
                     <!-- 放到后面防止鼠标移动出去一点点就消失 -->

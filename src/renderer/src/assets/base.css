@@ -63,4 +63,8 @@ html, body {
   --color-music-player-volume-line-full: #ff5151;
   --color-music-player-volume-line-drag-button: #ffffff;
   --color-music-player-volume-line-drag-button-shadow: #d6d6d6;
+
+  /* 右侧播放列表颜色 */
+  --color-play-list-window-bg: var(--color-window-bg);
+  --color-play-list-window-shadow: #49494998;
 }

@@ -2,16 +2,20 @@
 import Nav from './components/Nav.vue'
 import Content from './components/Content.vue'
 import MusicPlayer from './components/MusicPlayer.vue';
-
+import PlayList from './components/PlayList.vue';
 </script>
 
 <template>
   <div class="main">
+    <!-- 音乐页面 -->
     <div class="main-box">
       <Nav class="nav"></Nav>
       <Content class="content"></Content>
     </div>
+    <!-- 下方播放器主体 -->
     <MusicPlayer></MusicPlayer>
+    <!-- 右侧播放列表 -->
+    <PlayList></PlayList>
   </div>
 </template>
 
