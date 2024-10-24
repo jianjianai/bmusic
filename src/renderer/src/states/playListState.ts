@@ -2,6 +2,9 @@ import { computed, readonly, Ref, ref, watch } from "vue";
 import { Music, musicPlayer } from "./musicPlayerStates";
 
 export const playListOpen = ref(false);
+// 播放模式 RepeatOne: 单曲循环 RepeatAll: 列表循环 SequentialPlay: 顺序播放 ShufflePlay: 随机播放
+export type PlayMode = "RepeatOne"|"RepeatAll"|"SequentialPlay"|"ShufflePlay";
+const playMode = ref<PlayMode>("RepeatAll");
 
 // 当前播放音乐
 const currentIndex = ref(-1);
@@ -30,12 +33,16 @@ export const playList = readonly({
     list: list,
     currentIndex: currentIndex,
     currentMusic: currentMusic,
+    playMode: playMode,
     setCurrentIndex(index: number) {
         currentIndex.value = index;
     },
     setList(musicList: Music[]) {
         currentIndex.value = -1;
         list.value = musicList;
+    },
+    setPlayMode(mode: PlayMode) {
+        playMode.value = mode;
     }
 });
 

@@ -8,6 +8,11 @@ import PlaySVG from './svg/Play.vue'
 import LoadingSvg from './svg/Loading.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue'
 import IcFavoriteBorderSvg from './svg/IcFavoriteBorder.vue'
+import RepeatAllSvg from './svg/RepeatAll.vue'
+import RepeatOneSvg from './svg/RepeatOne.vue'
+import SequentialPlaySvg from './svg/SequentialPlay.vue'
+import ShufflePlaySvg from './svg/ShufflePlay.vue'
+import { playList } from '@renderer/states/playListState'
 
 /**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
 const dragCurrentPercentage = ref(0.2);
@@ -81,7 +86,22 @@ function formatTime(time: number) {
             <!-- 下一曲 -->
             <ControllerSVG class="controller-btn"></ControllerSVG>
             <!-- 歌曲播放顺序设置按钮 -->
-
+            <div v-if="playList.playMode == 'RepeatAll'" @click="playList.setPlayMode('RepeatOne')"
+                class="play-mode-btn" title="列表循环">
+                <RepeatAllSvg class="play-mode-icon"></RepeatAllSvg>
+            </div>
+            <div v-if="playList.playMode == 'RepeatOne'" @click="playList.setPlayMode('SequentialPlay')"
+                class="play-mode-btn" title="单曲循环">
+                <RepeatOneSvg class="play-mode-icon"></RepeatOneSvg>
+            </div>
+            <div v-if="playList.playMode == 'SequentialPlay'" @click="playList.setPlayMode('ShufflePlay')"
+                class="play-mode-btn" title="顺序播放">
+                <SequentialPlaySvg class="play-mode-icon"></SequentialPlaySvg>
+            </div>
+            <div v-if="playList.playMode == 'ShufflePlay'" @click="playList.setPlayMode('RepeatAll')"
+                class="play-mode-btn" title="随机播放">
+                <ShufflePlaySvg class="play-mode-icon"></ShufflePlaySvg>
+            </div>
         </div>
         <!-- 进度条 -->
         <div class="control-line">
@@ -103,12 +123,25 @@ function formatTime(time: number) {
     </div>
 </template>
 <style scoped>
-.like-button{
+.play-mode-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+.play-mode-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.like-button {
     color: var(--color-contr-like-btn);
 }
-.likeed-button{
+
+.likeed-button {
     color: var(--color-contr-likeed-btn);
 }
+
 .like-button,
 .likeed-button {
     width: 1.5rem;
