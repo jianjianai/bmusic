@@ -35,6 +35,10 @@ html, body {
   /* 上一首和下一首按钮颜色 */
   --color-contr-prev-next-btn:#5e5e5e;
   --color-contr-prev-next-btn-hover:#343434;
+  /* 添加到我喜欢的按钮颜色 */
+  --color-contr-like-btn: var(--color-contr-prev-next-btn);
+  /* 已经喜欢按钮颜色 */
+  --color-contr-likeed-btn:#ff5151;
   
   /* 播放器放大状态顶部功能按钮颜色 */
   --color-contr-top-btn-border:#c0c0c050;

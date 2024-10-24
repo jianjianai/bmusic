@@ -6,6 +6,8 @@ import ControllerSVG from './svg/Controller.vue'
 import PauseSVG from './svg/Pause.vue'
 import PlaySVG from './svg/Play.vue'
 import LoadingSvg from './svg/Loading.vue';
+import IcFavoriteSvg from './svg/IcFavorite.vue'
+import IcFavoriteBorderSvg from './svg/IcFavoriteBorder.vue'
 
 /**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
 const dragCurrentPercentage = ref(0.2);
@@ -60,22 +62,30 @@ function formatTime(time: number) {
 <template>
     <div class="control-main">
         <div class="control-top">
+            <!-- 添加到我喜欢的按钮 -->
+            <IcFavoriteSvg v-if="false" class="likeed-button"></IcFavoriteSvg>
+            <IcFavoriteBorderSvg v-else class="like-button"></IcFavoriteBorderSvg>
+            <!-- 上一曲 -->
             <ControllerSVG class="previous-btn"></ControllerSVG>
-            <div class="playback-btn" v-show="musicPlayer.playing && musicPlayer.loading"
+            <!-- 播放和暂停 -->
+            <div class="playback-btn" v-if="musicPlayer.playing && musicPlayer.loading"
                 @click="musicPlayer.requestPause()">
                 <LoadingSvg class="btn playback-btn-Loading"></LoadingSvg>
             </div>
-            <div class="playback-btn" v-show="musicPlayer.playing && !musicPlayer.loading"
-                @click="musicPlayer.requestPause()">
+            <div class="playback-btn" v-else-if="musicPlayer.playing" @click="musicPlayer.requestPause()">
                 <PauseSVG class="btn"></PauseSVG>
             </div>
-            <div class="playback-btn" v-show="!musicPlayer.playing" @click="musicPlayer.requestPlay()">
+            <div class="playback-btn" v-else @click="musicPlayer.requestPlay()">
                 <PlaySVG class="btn"></PlaySVG>
             </div>
+            <!-- 下一曲 -->
             <ControllerSVG class="controller-btn"></ControllerSVG>
+            <!-- 歌曲播放顺序设置按钮 -->
+
         </div>
+        <!-- 进度条 -->
         <div class="control-line">
-            <!-- 进度条 -->
+            <!-- 左边的时间 -->
             <div class="line-current">{{ formatTime(musicPlayer.currentTime) }}</div>
             <div class="line-cilck" :class="{ mosueuse: isMosueDown }" @mousedown="mosueDown" ref="lineCilckEl">
                 <div class="line-box">
@@ -87,11 +97,25 @@ function formatTime(time: number) {
                     <div class="line-box-button"></div>
                 </div>
             </div>
+            <!-- 右边的时间 -->
             <div class="line-duration">{{ formatTime(musicPlayer.duration) }}</div>
         </div>
     </div>
 </template>
 <style scoped>
+.like-button{
+    color: var(--color-contr-like-btn);
+}
+.likeed-button{
+    color: var(--color-contr-likeed-btn);
+}
+.like-button,
+.likeed-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
