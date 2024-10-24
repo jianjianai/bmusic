@@ -21,7 +21,7 @@ import PauseSvg from './svg/Pause.vue';
                     <!-- 图标 -->
                     <div class="icon">
                         <!-- TODO 图片显示 -->
-                        <img :src="music.iconUrl" :alt="music.musicName" />
+                        <div class="icon-img" :style="`background-image: url(${music.iconUrl});`"></div>
                         <!-- hover -->
                         <div class="item-icon-hover"></div>
                         <!-- 播放图标 -->
@@ -40,6 +40,13 @@ import PauseSvg from './svg/Pause.vue';
     </div>
 </template>
 <style scoped>
+.icon-img {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
 .item-box:hover .item-icon-hover,
 .item-box:hover .item-icon-svg {
     display: block;
