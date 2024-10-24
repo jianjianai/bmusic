@@ -3,15 +3,27 @@ import { playListOpen } from '@renderer/states/playListState';
 
 </script>
 <template>
-    <div class="play-list" :class="{open:playListOpen}">
+    <div>
+        <div class="play-list-bc" v-show="playListOpen" @click="playListOpen=false"></div>
+        <div class="play-list-box" :class="{ open: playListOpen }">
 
+        </div>
     </div>
 </template>
 <style scoped>
-.play-list.open{
+.play-list-bc{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.play-list-box.open {
     right: 0;
 }
-.play-list{
+
+.play-list-box {
     position: fixed;
     right: -30rem;
     top: 2rem;
