@@ -256,3 +256,5 @@ export function autoCloseCaptcha() {
   }).observe(document.body, { childList: true, subtree: false, attributes: false });
 }
 
+
+

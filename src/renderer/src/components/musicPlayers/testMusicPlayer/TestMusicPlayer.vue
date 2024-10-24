@@ -15,6 +15,9 @@ musicPlayerLink.onRequestPause(() => {
 musicPlayerLink.onRequestCurrentTime((currentTime: number) => {
     musicPlayerLink.updateCurrentTime(currentTime);
 });
+musicPlayerLink.onRequestVolume((volume: number) => {
+    musicPlayerLink.updateVolume(volume);
+});
 
 const count = ref(0);
 

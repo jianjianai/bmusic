@@ -8,7 +8,7 @@ import {
   setPlaybackProgress,
   setVolume
 } from './Control'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer } from 'electron';
 
 async function onLoaded() {
   let length = 0;
@@ -19,13 +19,13 @@ async function onLoaded() {
   });
   regOnPlaybackProgressChange((progress) => {
     ipcRenderer.sendToHost('onPlaybackProgressChange', progress);
-    if(progress>=length){
+    if (progress >= length) {
       ended = true;
       ipcRenderer.sendToHost('onPlaybackEnded', true);
       setPlaybackProgress(0);
-    }else if(ended){
+    } else if (ended) {
       pause();
-    }else{
+    } else {
       ipcRenderer.sendToHost('onPlaybackEnded', false);
     }
   });
@@ -35,7 +35,7 @@ async function onLoaded() {
   regBpxStateBuff((buff) => {
     ipcRenderer.sendToHost('onBpxStateBuff', buff);
   });
-  regOnVolumeChange((volume)=>{
+  regOnVolumeChange((volume) => {
     ipcRenderer.sendToHost('onVolumeChange', volume);
   });
   ipcRenderer.on("setVolume", (_event, ...args: any[]) => {
@@ -56,22 +56,24 @@ async function onLoaded() {
   ipcRenderer.on("fullScreen", (_event, ..._args: any[]) => {
     fullScreen();
   });
+  //初始化音量
+  ipcRenderer.sendToHost("reqInitVolume");
   fullScreen();  //自动网页全屏
   autoCloseCaptcha();  //自动关闭验证码
 }
 
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   function findPlayer() {
     console.log('findPlayer')
     const player = document.querySelector('.bpx-player-ctrl-time-label');
     if (!player) {
-      setTimeout(findPlayer, 100);
+      setTimeout(findPlayer, 10);
       return;
     }
     onLoaded();
   }
-  setTimeout(findPlayer, 100);
+  setTimeout(findPlayer, 10);
 });
 
 

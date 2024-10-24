@@ -55,6 +55,8 @@ function onMessage(msg: string, ...args: any[]) {
     musicPlayerLink.updateEnded(args[0]);
   } else if (msg == "onVolumeChange"){
     musicPlayerLink.updateVolume(args[0]);
+  } else if(msg == "reqInitVolume"){
+    iframeRef.value?.send("setVolume", musicPlayer.volume);
   }
 }
 
