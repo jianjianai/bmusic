@@ -2,6 +2,8 @@ import { readonly, ref } from 'vue'
 
 
 export type Music = {
+  /** 图标 */
+  iconUrl?: string,
   /** 音乐名 */
   musicName?: string,
   /** 音乐作者 */

@@ -20,6 +20,7 @@ function createWindow(): void {
       sandbox: false,
       webviewTag: true,
       contextIsolation: false,
+      webSecurity: false,
     }
   })
 

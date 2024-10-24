@@ -1,11 +1,7 @@
 <script lang="ts" setup>
-import { playListOpen } from '@renderer/states/playListState';
+import { playListOpen, playList } from '@renderer/states/playListState';
 import PlaySvg from './svg/Play.vue';
 import PauseSvg from './svg/Pause.vue';
-const test = [0];
-for (let i = 0; i < 100; i++) {
-    test.push(i);
-}
 </script>
 <template>
     <div>
@@ -21,10 +17,11 @@ for (let i = 0; i < 100; i++) {
             <!-- 列表 -->
             <div class="list">
                 <!-- 列表中的每个项 -->
-                <div class="item-box" v-for="a of test">
+                <div class="item-box" v-for="music of playList.list">
                     <!-- 图标 -->
                     <div class="icon">
                         <!-- TODO 图片显示 -->
+                        <img :src="music.iconUrl" :alt="music.musicName" />
                         <!-- hover -->
                         <div class="item-icon-hover"></div>
                         <!-- 播放图标 -->
@@ -33,8 +30,8 @@ for (let i = 0; i < 100; i++) {
                         <PauseSvg class="item-icon-svg"></PauseSvg>
                     </div>
                     <div class="name-and-author">
-                        <div class="name">音乐名称</div>
-                        <div class="author">音乐作者</div>
+                        <div class="name">{{ music.musicName }}</div>
+                        <div class="author">{{ music.musicAuthor }}</div>
                     </div>
                     <div class="item">1:29</div>
                 </div>
@@ -44,10 +41,11 @@ for (let i = 0; i < 100; i++) {
 </template>
 <style scoped>
 .item-box:hover .item-icon-hover,
-.item-box:hover .item-icon-svg{
+.item-box:hover .item-icon-svg {
     display: block;
 }
-.item-icon-svg{
+
+.item-icon-svg {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -57,15 +55,18 @@ for (let i = 0; i < 100; i++) {
     color: var(--color-play-list-item-icon-svg);
     display: none;
 }
-.item-icon-hover{
+
+.item-icon-hover {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background-color: var(--color-play-list-item-icon-hover);
+    opacity: 0.5;
     display: none;
 }
+
 .icon {
     width: 3rem;
     height: 3rem;
