@@ -71,20 +71,24 @@ function formatTime(time: number) {
             <IcFavoriteSvg v-if="false" class="likeed-button"></IcFavoriteSvg>
             <IcFavoriteBorderSvg v-else class="like-button"></IcFavoriteBorderSvg>
             <!-- 上一曲 -->
-            <ControllerSVG class="previous-btn"></ControllerSVG>
+            <div class="previous-btn" title="上一曲" @click="playList.prev()">
+                <ControllerSVG class="previous-icon" />
+            </div>
             <!-- 播放和暂停 -->
             <div class="playback-btn" v-if="musicPlayer.playing && musicPlayer.loading"
-                @click="musicPlayer.requestPause()">
+                @click="musicPlayer.requestPause()" title="加载中">
                 <LoadingSvg class="btn playback-btn-Loading"></LoadingSvg>
             </div>
-            <div class="playback-btn" v-else-if="musicPlayer.playing" @click="musicPlayer.requestPause()">
+            <div class="playback-btn" v-else-if="musicPlayer.playing" @click="musicPlayer.requestPause()" title="播放暂停">
                 <PauseSVG class="btn"></PauseSVG>
             </div>
-            <div class="playback-btn" v-else @click="musicPlayer.requestPlay()">
+            <div class="playback-btn" v-else @click="musicPlayer.requestPlay()" title="播放暂停">
                 <PlaySVG class="btn"></PlaySVG>
             </div>
             <!-- 下一曲 -->
-            <ControllerSVG class="controller-btn"></ControllerSVG>
+            <div class="controller-btn" title="下一曲" @click="playList.next()">
+                <ControllerSVG class="controller-icon" />
+            </div>
             <!-- 歌曲播放顺序设置按钮 -->
             <div v-if="playList.playMode == 'RepeatAll'" @click="playList.setPlayMode('RepeatOne')"
                 class="play-mode-btn" title="列表循环">
@@ -170,6 +174,12 @@ function formatTime(time: number) {
 .previous-btn:hover,
 .controller-btn:hover {
     color: var(--color-contr-prev-next-btn-hover);
+}
+
+.previous-icon,
+.controller-icon {
+    width: 100%;
+    height: 100%;
 }
 
 .previous-btn,
