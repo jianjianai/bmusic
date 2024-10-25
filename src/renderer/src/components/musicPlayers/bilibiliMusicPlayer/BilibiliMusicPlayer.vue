@@ -7,6 +7,7 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/components/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/components/svg/MousePointer.vue';
 import CopyOutlineSvg from '@renderer/components/svg/CopyOutline.vue';
+import { ipcBilibiliApi } from '@renderer/ipcAPI';
 
 type BilibiliMusicData = {
   bvId: string;
@@ -71,7 +72,7 @@ watch(iframeRef, () => {
 
 //获取preload文件路径
 const bilibiliMusicPlayer__filePath = ref<string>();
-window.api.ipcAPI.BilibiliMusicPlayer__filePath().then((res: string) => {
+  ipcBilibiliApi.getPreloadJsFilePath().then((res: string) => {
   bilibiliMusicPlayer__filePath.value = res;
 });
 
