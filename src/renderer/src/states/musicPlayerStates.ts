@@ -14,6 +14,19 @@ export type Music = {
   playerData: string
 }
 
+/** 比较两个音乐是否是同一首 */
+export function compareMusic(music1: Music, music2: Music) {
+  return (
+    music1.playerName === music2.playerName &&
+    music1.playerData === music2.playerData 
+  )
+}
+
+/** 计算一首音乐的key */
+export function musicKey(music: Music) {
+  return `${music.playerName}_${music.playerData}`;
+}
+
 const currentMusic = ref<Music>({
   musicName: "测试音乐",
   musicAuthor: "测试作者",
