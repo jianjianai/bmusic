@@ -4,7 +4,7 @@ import Recommend from "../components/contents/Recommend.vue";
 /** 显示组件 */
 const display = shallowRef<DefineComponent<any,any,any>>(Recommend);
 /** 内容数据 */
-const data = ref(null);
+const data = ref<unknown>(null);
 
 /**
  * 内容状态

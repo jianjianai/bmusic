@@ -83,4 +83,12 @@ html, body {
   --color-play-list-item-icon: #f5dada;
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
+
+
+  /* 歌单顶部信息栏 */
+  --color-pay-list-header-title-font: #000000;
+  --color-pay-list-header-description-font: #4f4f4f;
+  --color-pay-list-header-author-font: #4f4f4f;
+  --color-play-button-bg: #ff5151;
+  --color-play-button-font: #ffffff;
 }

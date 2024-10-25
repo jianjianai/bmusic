@@ -53,7 +53,8 @@ const setDisplay = contentState.setDisplay;
   background-color: var(--color-nav-item-selected-bg);
   color: var(--color-nav-item-selected-font);
 }
-.paylist-item{
+
+.paylist-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -65,14 +66,21 @@ const setDisplay = contentState.setDisplay;
   color: var(--color-nav-paylist-font);
   cursor: pointer;
 }
-.paylist-item .title{
+
+.paylist-item .title {
   flex: 1;
   width: 0;
   font-size: 0.8rem;
   text-overflow: ellipsis;
   overflow: hidden;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  user-select: none;
 }
-.paylist-item .icon{
+
+.paylist-item .icon {
   width: 2rem;
   height: 2rem;
   background-color: rgb(255, 214, 222);
