@@ -11,6 +11,34 @@ import { join } from "path";
 
 // ipcPlayListsApi 歌单
 (() => {
+    /** 构建文件名 */
+    function buildFileName(name: string, index: number) {
+        return `${index}.${name}.json`;
+    }
+    /** 从文件名解name称和index */
+    function parseFileName(fileName: string) {
+        const lastdIndex = fileName.lastIndexOf(".");
+        const sp = fileName.substring(0, lastdIndex);
+        const falstdIndex = sp.indexOf(".");
+        if (falstdIndex === -1) {
+            return {
+                name: sp,
+                index: 0
+            };
+        }
+        const index = parseInt(sp.substring(0, falstdIndex));
+        if (isNaN(index)) {
+            return {
+                name: sp,
+                index: 0
+            };
+        }
+        return {
+            name: sp.substring(falstdIndex + 1),
+            index: index
+        };
+    }
+
     const playListPath = "./PlayLists";
     // 如果文件夹不存在就创建
     if (!existsSync(playListPath)) mkdirSync(playListPath);
@@ -22,14 +50,14 @@ import { join } from "path";
         /** 文件名称 */
         fileName: string,
     };
+    
+    // 读取歌单列表
     const playLists: PlayList[] = readdirSync(playListPath)
         .filter(n => n.endsWith(".json"))
         .map(n => {
-            const sp  = n.substring(0, n.length - 5).split(".");
             return {
-                fileName: n,
-                name: sp[0],
-                index: sp[1] ? (parseInt(sp[1]) || 0) : 0
+                ...parseFileName(n),
+                fileName: n
             }
         });
 
@@ -42,8 +70,8 @@ import { join } from "path";
         const index = playLists.findIndex(n => n.name === arg.name);
         if (index === -1) return false;
         const thePlayList = playLists[index];
-        const newFileName = `${thePlayList.name}.${arg.index}.json`;
-        renameSync(join(playListPath, thePlayList.fileName),join(playListPath, newFileName));
+        const newFileName = buildFileName(thePlayList.name, arg.index);
+        renameSync(join(playListPath, thePlayList.fileName), join(playListPath, newFileName));
         thePlayList.index = arg.index;
         thePlayList.fileName = newFileName;
         return true;
@@ -53,8 +81,8 @@ import { join } from "path";
         const index = playLists.findIndex(n => n.name === arg.oldName);
         if (index === -1) return false;
         const thePlayList = playLists[index];
-        const newFileName = `${arg.newName}.${thePlayList.index}.json`;
-        renameSync(join(playListPath, thePlayList.fileName),join(playListPath, newFileName));
+        const newFileName = buildFileName(arg.newName, thePlayList.index);
+        renameSync(join(playListPath, thePlayList.fileName), join(playListPath, newFileName));
         thePlayList.name = arg.newName;
         thePlayList.fileName = newFileName;
         return true;
@@ -62,16 +90,16 @@ import { join } from "path";
     // 保存歌单数据,如果歌单不存在则创建一个
     ipcMain.handle('ipcPlayListsApi__savePlaylistData', async (_event, arg: { name: string, data: string }) => {
         const index = playLists.findIndex(n => n.name === arg.name);
-        let thePlayList:PlayList;
-        if(index === -1){
-            const newFileName = `${arg.name}.${playLists.length}.json`;
+        let thePlayList: PlayList;
+        if (index === -1) {
+            const newFileName = buildFileName(arg.name, playLists.length);
             thePlayList = {
                 name: arg.name,
                 index: playLists.length,
                 fileName: newFileName
             };
             playLists.push(thePlayList);
-        }else{
+        } else {
             thePlayList = playLists[index];
         }
         const filePath = join(playListPath, thePlayList.fileName);

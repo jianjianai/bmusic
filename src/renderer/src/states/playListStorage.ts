@@ -30,7 +30,12 @@ export const playListStorage = readonly({
     },
     /** 读取一个播放列表 */
     async readPlayList(name: string): Promise<Music[]> {
-        return JSON.parse(await ipcPlayListsApi.readPlaylistData(name) || "[]");
+        try {
+            return JSON.parse(await ipcPlayListsApi.readPlaylistData(name) || "[]")
+        }catch(e){
+            console.error(e);
+            return [];
+        }
     },
     /** 删除一个播放列表 */
     async deletePlayList(name: string) {

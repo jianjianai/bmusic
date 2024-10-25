@@ -17,8 +17,13 @@ html, body {
   /** 左侧导航栏 */
   --color-lav-bg: #e9ecee;
   --color-nav-scrollbar-thumb: #d3d3d3;
-  --color-nav-font: #494949;
+  --color-nav-font: #545454;
   --color-nav-item-hover-bg: #dee1e6;
+  --color-nav-item-selected-bg: #ff5454;
+  --color-nav-item-selected-font: #ffffff;
+  --color-nav-dividing-line: #dddddd;
+  --color-nav-line-title: #808080;
+  --color-nav-paylist-font: #4b4b4b;
 
   /** 播放进度条 */
   --color-contr-line-bg:#d5d5d5;

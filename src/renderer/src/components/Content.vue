@@ -4,7 +4,7 @@ import { contentState } from '../states/contentState';
 </script>
 <template>
     <div class="content">
-        <component :is="contentState.displayComponent"></component>
+        <component :is="contentState.display"></component>
     </div>
 </template>
 <style scoped>
