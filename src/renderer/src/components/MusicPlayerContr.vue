@@ -68,8 +68,12 @@ function formatTime(time: number) {
     <div class="control-main">
         <div class="control-top">
             <!-- 添加到我喜欢的按钮 -->
-            <IcFavoriteSvg v-if="false" class="likeed-button"></IcFavoriteSvg>
-            <IcFavoriteBorderSvg v-else class="like-button"></IcFavoriteBorderSvg>
+            <div v-if="false" class="likeed-button" title="喜欢">
+                <IcFavoriteSvg class="likeed-icon" />
+            </div>
+            <div v-else class="like-button" title="喜欢">
+                <IcFavoriteBorderSvg class="like-icon" />
+            </div>
             <!-- 上一曲 -->
             <div class="previous-btn" title="上一曲" @click="playList.prev()">
                 <ControllerSVG class="previous-icon" />
@@ -177,7 +181,9 @@ function formatTime(time: number) {
 }
 
 .previous-icon,
-.controller-icon {
+.controller-icon,
+.like-icon,
+.likeed-icon {
     width: 100%;
     height: 100%;
 }
