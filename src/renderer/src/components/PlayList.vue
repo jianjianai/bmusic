@@ -47,7 +47,10 @@ function clickItemIcon(index:number) {
                     </div>
                     <div class="name-and-author">
                         <div class="name">{{ music.musicName }}</div>
-                        <div class="author">{{ music.musicAuthor }}</div>
+                        <div class="author">
+                            <div class="author-player">{{ music.playerName }}</div>
+                            <div class="author-author">{{ music.musicAuthor }}</div>
+                        </div>
                     </div>
                     <div class="item">1:29</div>
                 </div>
@@ -108,19 +111,38 @@ function clickItemIcon(index:number) {
     font-size: 0.8rem;
     color: var(--color-play-list-item-time);
 }
-
-.author {
+.author-player{
+    color: var(--color-pay-list-line-content-info-item-paly-font);
+    border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
+    border-radius: 0.2rem;
+    height: 0.9rem;
+    font-size: 0.6rem;
+    padding: 0 0.1rem;
+    line-height: 0.9rem;
+    font-weight: bolder;
+}
+.author-author{
     color: var(--color-play-list-item-author);
     font-size: 0.8rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    flex: 1;
+    width: 0;
 }
-
+.author {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex: 1;
+    height: 0;
+}
+.item-box.paying .name {
+    color: var(--color-play-list-item-name-paying);
+}
 .name {
     color: var(--color-play-list-item-name);
     font-size: 1rem;
-    text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -131,7 +153,7 @@ function clickItemIcon(index:number) {
     width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    height: 3rem;
 }
 
 .item-box:hover {

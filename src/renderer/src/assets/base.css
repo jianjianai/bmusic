@@ -83,6 +83,7 @@ html, body {
   --color-play-list-item-icon: #f5dada;
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
+  --color-play-list-item-name-paying: #ff5151;
 
 
   /* 歌单顶部信息栏 */
@@ -91,4 +92,18 @@ html, body {
   --color-pay-list-header-author-font: #4f4f4f;
   --color-play-button-bg: #ff5151;
   --color-play-button-font: #ffffff;
+  --color-pay-list-search-bg: #ffffff;
+  --color-pay-list-search-border : #e5e5e5;
+
+  /* 歌单列表 */
+  --color-pay-list-line-title-border: #e8e8e8;
+  --color-pay-list-line-content-info-name-font: #000000;
+  --color-pay-list-line-content-info-author-font: #646464;
+  --color-pay-list-line-content-info-item-paly-font: #ffbb00;
+  --color-pay-list-line-content-index-font: #646464;
+  --color-pay-list-line-content-favorite-icon: #646464;
+  --color-pay-list-line-content-hover-bg: #f0f0f0;
+  --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
+  --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
+  --color-pay-list-line-content-info-name-font-playing: #ff5151;
 }

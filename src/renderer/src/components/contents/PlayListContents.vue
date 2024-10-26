@@ -3,6 +3,10 @@ import { contentState } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { shallowRef, toRef, watch } from 'vue';
 import PlaySvg from '../svg/Play.vue';
+import SearchSvg from '../svg/Search.vue';
+import IcFavoriteBorderSvg from '../svg/IcFavoriteBorder.vue';
+import PauseSvg from '../svg/Pause.vue';
+import { musicPlayer,compareMusic } from '@renderer/states/musicPlayerStates';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = shallowRef<ReturnType<typeof useMusicPlayList>>(useMusicPlayList(musicName.value as string));
@@ -50,28 +54,257 @@ watch(musicName, (newVal) => {
                         <div class="tab">歌曲列表</div>
                     </div>
                     <!-- 右边搜索框 -->
-                    <div class="search">
-                        搜索框
-                    </div>
+                    <label class="search" for="pay-list-search-imput">
+                        <SearchSvg class="icon"></SearchSvg>
+                        <input id="pay-list-search-imput" class="imput" type="text" placeholder="搜索" />
+                    </label>
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <div></div>
+            <div class="pay-list">
+                <div class="line line-title">
+                    <div class="index">#</div>
+                    <div class="info">歌曲</div>
+                    <div class="like">喜欢</div>
+                </div>
+                <div class="line line-content" :class="{playing:compareMusic(musicPlayer.currentMusic,music)}" v-for="music, index of musicPlayList.musicList.list">
+                    <!-- 序号 -->
+                    <div class="index">{{ index }}</div>
+                    <!-- 音乐信息 -->
+                    <div class="info">
+                        <!-- 图标 -->
+                        <div class="info-icon" :style="`background-image: url(${music.iconUrl});`">
+                            <!-- 遮罩 -->
+                            <div class="info-icon-mask">
+                                <!-- 播放暂停按钮 -->
+                                <PauseSvg class="icon" v-if="compareMusic(musicPlayer.currentMusic,music) && musicPlayer.playing" />
+                                <PlaySvg class="icon" v-else/>
+                            </div>
+                        </div>
+                        <!-- 内容 -->
+                        <div class="info-content">
+                            <!-- 名称 -->
+                            <div class="info-name">{{ music.musicName }}</div>
+                            <!-- 名称下面一排 -->
+                            <div class="info-author">
+                                <!-- 播放器 -->
+                                <div class="item-paly">{{ music.playerName }}</div>
+                                <!-- 作者 -->
+                                <div class="item-author">{{ music.musicAuthor }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 喜欢 -->
+                    <div class="like">
+                        <IcFavoriteBorderSvg class="favorite-icon" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
-.content-button .text{
+.pay-list .line-content.playing .info-icon-mask .icon,
+.pay-list .line-content:hover .info-icon-mask .icon{
+    display: block;
+}
+.pay-list .line-content .info-icon-mask .icon{
+    width: 1.5rem;
+    height: 1.5rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-pay-list-line-content-info-icon-mask-icon);
+    display: none;
+}
+.pay-list .line-content.playing .info-icon-mask,
+.pay-list .line-content:hover .info-icon-mask{
+    display: block;
+}
+.pay-list .line-content .info-icon-mask{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-pay-list-line-content-info-icon-mask-bg);
+    display: none;
+}
+.pay-list .line-content:hover {
+    background-color: var(--color-pay-list-line-content-hover-bg);
+}
+.pay-list .line-content .info-author .item-paly {
+    color: var(--color-pay-list-line-content-info-item-paly-font);
+    border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
+    border-radius: 0.2rem;
+    height: 0.8rem;
+    font-size: 0.6rem;
+    padding: 0 0.1rem;
+    line-height: 0.8rem;
+    font-weight: bolder;
+}
+
+.pay-list .line-content .info-author .item-author {
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    width: 0;
+}
+
+.pay-list .line-content .info-author {
+    font-size: 0.7rem;
+    color: var(--color-pay-list-line-content-info-author-font);
+    display: flex;
+    align-items: center;
+    flex: 1;
+    height: 0;
+    gap: 0.2rem;
+}
+
+.pay-list .line-content.playing .info-name {
+    color: var(--color-pay-list-line-content-info-name-font-playing);
+}
+.pay-list .line-content .info-name {
+    font-size: 0.9rem;
+    color: var(--color-pay-list-line-content-info-name-font);
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pay-list .line-content .info-content {
+    flex: 1;
+    width: 0;
+    height: 2.5rem;
+    /* background-color: antiquewhite; */
+    display: flex;
+    flex-direction: column;
+}
+
+.pay-list .line-content .info-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    background-color: rgb(255, 210, 233);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.pay-list .line-content .info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.3rem;
+}
+
+.pay-list .line-content {
+    height: 3rem;
+    border-radius: 0.5rem;
+}
+
+.pay-list .line-content .index {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-pay-list-line-content-index-font);
+}
+
+.pay-list .line-content .favorite-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-pay-list-line-content-favorite-icon);
+}
+
+.pay-list .line-title .info {
+    text-align: left;
+}
+
+.pay-list .line.line-title {
+    text-align: center;
+    font-size: 0.8rem;
+    border-bottom: 0.1rem solid var(--color-pay-list-line-title-border);
+    padding: 0.5rem 0;
+    margin-bottom: 0.3rem;
+}
+
+.pay-list .line .length {
+    width: 4rem;
+}
+
+.pay-list .line .like {
+    width: 2rem;
+    position: relative;
+}
+
+.pay-list .line .info {
+    flex: 1;
+    width: 0;
+}
+
+.pay-list .line .index {
+    width: 2rem;
+}
+
+.pay-list .line {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0.5rem;
+    align-items: center;
+}
+
+.search .imput {
+    flex: 1;
+    width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.search .icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.search:has(.imput:focus) {
+    width: 8rem;
+}
+
+.search {
+    width: 4rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--color-pay-list-search-bg);
+    border: 0.1rem solid var(--color-pay-list-search-border);
+    border-radius: 1rem;
+    cursor: text;
+    transition: width 0.2s ease-in-out;
+    margin: 0 0.5rem 0 0;
+}
+
+.content-button .text {
     font-size: 0.9rem;
 }
-.content-button .icon{
+
+.content-button .icon {
     width: 1.5rem;
     height: 1.5rem;
 }
-.play-button{
+
+.play-button {
     background-color: var(--color-play-button-bg);
     color: var(--color-play-button-font);
 }
+
 .author-img {
     width: 2rem;
     height: 2rem;
