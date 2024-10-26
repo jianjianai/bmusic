@@ -89,11 +89,18 @@ function newMusicPlayList(fromName: string) {
     }
     load();
 
+    /** 重命名歌单 */
+    async function rename(newName: string) {
+        await playListStorage.renamePlayList(name.value, newName);
+        name.value = newName;
+    }
+
     return reactive({
         name: readonly(name),
         loaded: readonly(loaded),
         musicList,
         save,
+        rename,
     });
 }
 
