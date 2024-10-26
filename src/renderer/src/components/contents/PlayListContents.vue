@@ -6,13 +6,27 @@ import PlaySvg from '../svg/Play.vue';
 import SearchSvg from '../svg/Search.vue';
 import IcFavoriteBorderSvg from '../svg/IcFavoriteBorder.vue';
 import PauseSvg from '../svg/Pause.vue';
-import { musicPlayer,compareMusic } from '@renderer/states/musicPlayerStates';
+import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
+import { playList } from '@renderer/states/playListState';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = shallowRef<ReturnType<typeof useMusicPlayList>>(useMusicPlayList(musicName.value as string));
 watch(musicName, (newVal) => {
     musicPlayList.value = useMusicPlayList(newVal as string);
 });
+
+function chickMusicIcon(music: Music,index:number) {
+    if (compareMusic(musicPlayer.currentMusic, music)) {
+        if (musicPlayer.playing) {
+            musicPlayer.requestPause();
+        } else {
+            musicPlayer.requestPlay();
+        }
+    } else {
+        playList.setList(musicPlayList.value.musicList.list!);
+        playList.setCurrentIndex(index);
+    }
+}
 
 
 </script>
@@ -67,18 +81,20 @@ watch(musicName, (newVal) => {
                     <div class="info">歌曲</div>
                     <div class="like">喜欢</div>
                 </div>
-                <div class="line line-content" :class="{playing:compareMusic(musicPlayer.currentMusic,music)}" v-for="music, index of musicPlayList.musicList.list">
+                <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
+                    v-for="music, index of musicPlayList.musicList.list">
                     <!-- 序号 -->
                     <div class="index">{{ index }}</div>
                     <!-- 音乐信息 -->
                     <div class="info">
                         <!-- 图标 -->
-                        <div class="info-icon" :style="`background-image: url(${music.iconUrl});`">
+                        <div class="info-icon" @click="chickMusicIcon(music,index)" :style="`background-image: url(${music.iconUrl});`">
                             <!-- 遮罩 -->
                             <div class="info-icon-mask">
                                 <!-- 播放暂停按钮 -->
-                                <PauseSvg class="icon" v-if="compareMusic(musicPlayer.currentMusic,music) && musicPlayer.playing" />
-                                <PlaySvg class="icon" v-else/>
+                                <PauseSvg class="icon"
+                                    v-if="compareMusic(musicPlayer.currentMusic, music) && musicPlayer.playing" />
+                                <PlaySvg class="icon" v-else />
                             </div>
                         </div>
                         <!-- 内容 -->
@@ -105,10 +121,11 @@ watch(musicName, (newVal) => {
 </template>
 <style scoped>
 .pay-list .line-content.playing .info-icon-mask .icon,
-.pay-list .line-content:hover .info-icon-mask .icon{
+.pay-list .line-content:hover .info-icon-mask .icon {
     display: block;
 }
-.pay-list .line-content .info-icon-mask .icon{
+
+.pay-list .line-content .info-icon-mask .icon {
     width: 1.5rem;
     height: 1.5rem;
     position: absolute;
@@ -118,11 +135,13 @@ watch(musicName, (newVal) => {
     color: var(--color-pay-list-line-content-info-icon-mask-icon);
     display: none;
 }
+
 .pay-list .line-content.playing .info-icon-mask,
-.pay-list .line-content:hover .info-icon-mask{
+.pay-list .line-content:hover .info-icon-mask {
     display: block;
 }
-.pay-list .line-content .info-icon-mask{
+
+.pay-list .line-content .info-icon-mask {
     position: absolute;
     left: 0;
     top: 0;
@@ -131,9 +150,11 @@ watch(musicName, (newVal) => {
     background-color: var(--color-pay-list-line-content-info-icon-mask-bg);
     display: none;
 }
+
 .pay-list .line-content:hover {
     background-color: var(--color-pay-list-line-content-hover-bg);
 }
+
 .pay-list .line-content .info-author .item-paly {
     color: var(--color-pay-list-line-content-info-item-paly-font);
     border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
@@ -166,6 +187,7 @@ watch(musicName, (newVal) => {
 .pay-list .line-content.playing .info-name {
     color: var(--color-pay-list-line-content-info-name-font-playing);
 }
+
 .pay-list .line-content .info-name {
     font-size: 0.9rem;
     color: var(--color-pay-list-line-content-info-name-font);
@@ -192,6 +214,7 @@ watch(musicName, (newVal) => {
     background-size: cover;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .pay-list .line-content .info {
