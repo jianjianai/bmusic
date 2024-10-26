@@ -74,6 +74,7 @@ function newMusicPlayList(fromName: string) {
     const name = ref(fromName);
     let loaded = ref(false);
     let musicList = ref<MusicPlayList>({});
+    let deleteed = ref(false);
 
     /** 保存修改 */
     async function save() {
@@ -95,12 +96,20 @@ function newMusicPlayList(fromName: string) {
         name.value = newName;
     }
 
+    /** 删除歌单 */
+    async function deleteThis() {
+        await playListStorage.deletePlayList(name.value);
+        deleteed.value = true;
+    }
+
     return reactive({
         name: readonly(name),
         loaded: readonly(loaded),
         musicList,
+        deleteed: readonly(deleteed),
         save,
         rename,
+        deleteThis,
     });
 }
 
