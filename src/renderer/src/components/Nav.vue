@@ -7,6 +7,7 @@ import { toRef } from 'vue';
 import { playListStorage,MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
+import { LOGO_URL } from '@renderer/imageUrls';
 
 const display = toRef(contentState, 'display');
 const data = toRef(contentState, 'data');
@@ -84,6 +85,8 @@ const setDisplay = contentState.setDisplay;
   height: 2rem;
   background-color: rgb(255, 214, 222);
   border-radius: 0.3rem;
+  background-position: center;
+  background-size: cover;
 }
 
 

@@ -8,6 +8,7 @@ import PauseSvg from '../svg/Pause.vue';
 import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
 import FavoriteButton from '../allSmall/FavoriteButton.vue';
+import { LOGO_URL } from '@renderer/imageUrls';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = shallowRef<ReturnType<typeof useMusicPlayList>>(useMusicPlayList(musicName.value as string));
@@ -38,7 +39,7 @@ function chickMusicIcon(music: Music, index: number) {
                 <!-- 内容，歌单名称简介等 -->
                 <div class="content">
                     <!-- 图片 -->
-                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl || musicPlayList.musicList?.list[0]?.iconUrl});`">
+                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl || musicPlayList.musicList?.list[0]?.iconUrl || LOGO_URL});`">
                     </div>
                     <!-- 右边内容 -->
                     <div class="content-main">
@@ -48,7 +49,7 @@ function chickMusicIcon(music: Music, index: number) {
                             <div class="description">{{ musicPlayList.musicList?.description || "没有简介" }}</div>
                             <div class="author">
                                 <div class="author-img"
-                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl});`"></div>
+                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl || LOGO_URL});`"></div>
                                 <div class="author-name">{{ musicPlayList.musicList?.author || "没有作者" }}</div>
                             </div>
                         </div>
@@ -89,7 +90,7 @@ function chickMusicIcon(music: Music, index: number) {
                     <div class="info">
                         <!-- 图标 -->
                         <div class="info-icon" @click="chickMusicIcon(music, index)"
-                            :style="`background-image: url(${music.iconUrl});`">
+                            :style="`background-image: url(${music.iconUrl || LOGO_URL});`">
                             <!-- 遮罩 -->
                             <div class="info-icon-mask">
                                 <!-- 播放暂停按钮 -->
