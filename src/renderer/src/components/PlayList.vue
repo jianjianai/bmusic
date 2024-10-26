@@ -2,18 +2,19 @@
 import { playListOpen, playList } from '@renderer/states/playListState';
 import PlaySvg from './svg/Play.vue';
 import PauseSvg from './svg/Pause.vue';
-import { Music, musicPlayer } from '@renderer/states/musicPlayerStates';
+import { musicPlayer } from '@renderer/states/musicPlayerStates';
+import FavoriteButton from './allSmall/FavoriteButton.vue';
 
-function clickItemIcon(index:number) {
+function clickItemIcon(index: number) {
     // 如果点击的不是当前的音乐，就切换音乐
-    if(playList.currentIndex != index){
+    if (playList.currentIndex != index) {
         playList.setCurrentIndex(index);
         return;
     }
     // 如果是当前音乐则播放或者暂停
-    if(musicPlayer.playing){
+    if (musicPlayer.playing) {
         musicPlayer.requestPause();
-    }else{
+    } else {
         musicPlayer.requestPlay();
     }
 }
@@ -33,7 +34,8 @@ function clickItemIcon(index:number) {
             <!-- 列表 -->
             <div class="list">
                 <!-- 列表中的每个项 -->
-                <div class="item-box" :class="{paying:index==playList.currentIndex}" v-for="music,index of playList.list" :key="music.playerData">
+                <div class="item-box" :class="{ paying: index == playList.currentIndex }"
+                    v-for="music, index of playList.list" :key="music.playerData">
                     <!-- 图标 -->
                     <div class="icon" @click="clickItemIcon(index)">
                         <!-- TODO 图片显示 -->
@@ -41,7 +43,8 @@ function clickItemIcon(index:number) {
                         <!-- hover -->
                         <div class="item-icon-hover"></div>
                         <!-- 暂停图标 -->
-                        <PauseSvg class="item-icon-svg" v-if="index==playList.currentIndex && musicPlayer.playing"></PauseSvg>
+                        <PauseSvg class="item-icon-svg" v-if="index == playList.currentIndex && musicPlayer.playing">
+                        </PauseSvg>
                         <!-- 播放图标 -->
                         <PlaySvg class="item-icon-svg" v-else></PlaySvg>
                     </div>
@@ -52,7 +55,8 @@ function clickItemIcon(index:number) {
                             <div class="author-author">{{ music.musicAuthor }}</div>
                         </div>
                     </div>
-                    <div class="item">1:29</div>
+                    <!-- 喜欢 -->
+                    <FavoriteButton class="like" :music="music"/>
                 </div>
             </div>
         </div>
@@ -106,12 +110,16 @@ function clickItemIcon(index:number) {
     cursor: pointer;
 }
 
-.item {
+.like {
     margin-left: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--color-play-list-item-time);
+    position: relative;
+    cursor: pointer;
+    width: 1rem;
 }
-.author-player{
+
+
+
+.author-player {
     color: var(--color-pay-list-line-content-info-item-paly-font);
     border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
     border-radius: 0.2rem;
@@ -121,7 +129,8 @@ function clickItemIcon(index:number) {
     line-height: 0.9rem;
     font-weight: bolder;
 }
-.author-author{
+
+.author-author {
     color: var(--color-play-list-item-author);
     font-size: 0.8rem;
     overflow: hidden;
@@ -130,6 +139,7 @@ function clickItemIcon(index:number) {
     flex: 1;
     width: 0;
 }
+
 .author {
     display: flex;
     align-items: center;
@@ -137,9 +147,11 @@ function clickItemIcon(index:number) {
     flex: 1;
     height: 0;
 }
+
 .item-box.paying .name {
     color: var(--color-play-list-item-name-paying);
 }
+
 .name {
     color: var(--color-play-list-item-name);
     font-size: 1rem;

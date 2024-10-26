@@ -1,13 +1,15 @@
-:root{
+:root {
   font-size: 16px;
 }
-html, body {
+
+html,
+body {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-:root{
+:root {
   --color-window-bg: #f5f5f6;
 
   /** 底部播放器 */
@@ -26,35 +28,35 @@ html, body {
   --color-nav-paylist-font: #4b4b4b;
 
   /** 播放进度条 */
-  --color-contr-line-bg:#d5d5d5;
-  --color-contr-line-current-bg:#ff5151;
-  --color-contr-line-btn-bg:#ffffff;
-  --color-contr-line-btn-shadow:#cccccc;
+  --color-contr-line-bg: #d5d5d5;
+  --color-contr-line-current-bg: #ff5151;
+  --color-contr-line-btn-bg: #ffffff;
+  --color-contr-line-btn-shadow: #cccccc;
   /* 播放器进度条左右的小字 */
-  --color-contr-line-text:#929292;
+  --color-contr-line-text: #929292;
   /* 播放器暂停播放按钮颜色 */
-  --color-contr-play-btn:#ff5151;
-  --color-contr-play-btn-hover:#ff7575;
+  --color-contr-play-btn: #ff5151;
+  --color-contr-play-btn-hover: #ff7575;
   /* 中间文字颜色 */
-  --color-contr-play-btn-text:#ffffff;
+  --color-contr-play-btn-text: #ffffff;
   /* 上一首和下一首按钮颜色 */
-  --color-contr-prev-next-btn:#5e5e5e;
-  --color-contr-prev-next-btn-hover:#343434;
+  --color-contr-prev-next-btn: #5e5e5e;
+  --color-contr-prev-next-btn-hover: #343434;
   /* 添加到我喜欢的按钮颜色 */
   --color-contr-like-btn: var(--color-contr-prev-next-btn);
   /* 已经喜欢按钮颜色 */
-  --color-contr-likeed-btn:#ff5151;
-  
+  --color-contr-likeed-btn: #ff5151;
+
   /* 播放器放大状态顶部功能按钮颜色 */
-  --color-contr-top-btn-border:#c0c0c050;
-  --color-contr-top-btn-bgc:#5555552f;
-  --color-contr-top-btn-bgc-hover:#363636ab;
-  --color-contr-top-btn-text:#ffffffa8;
+  --color-contr-top-btn-border: #c0c0c050;
+  --color-contr-top-btn-bgc: #5555552f;
+  --color-contr-top-btn-bgc-hover: #363636ab;
+  --color-contr-top-btn-text: #ffffffa8;
 
   /* 播放器左下角字体颜色 */
-  --color-music-player-music-name:#000000;
-  --color-music-player-music-line:#000000;
-  --color-music-player-music-singer:#1d1d1d;
+  --color-music-player-music-name: #000000;
+  --color-music-player-music-line: #000000;
+  --color-music-player-music-singer: #1d1d1d;
 
   /* 播放器左下角按钮颜色 */
   --color-music-player-user-button: #646464;
@@ -77,9 +79,8 @@ html, body {
   --color-play-list-window-bg: var(--color-window-bg);
   --color-play-list-window-shadow: #49494998;
   --color-play-list-item-hover: #eeeeee;
-  --color-play-list-item-time: #646464;
   --color-play-list-item-name: #000000;
-  --color-play-list-item-author : #646464;
+  --color-play-list-item-author: #646464;
   --color-play-list-item-icon: #f5dada;
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
@@ -93,7 +94,7 @@ html, body {
   --color-play-button-bg: #ff5151;
   --color-play-button-font: #ffffff;
   --color-pay-list-search-bg: #ffffff;
-  --color-pay-list-search-border : #e5e5e5;
+  --color-pay-list-search-border: #e5e5e5;
 
   /* 歌单列表 */
   --color-pay-list-line-title-border: #e8e8e8;
@@ -101,9 +102,13 @@ html, body {
   --color-pay-list-line-content-info-author-font: #646464;
   --color-pay-list-line-content-info-item-paly-font: #ffbb00;
   --color-pay-list-line-content-index-font: #646464;
-  --color-pay-list-line-content-favorite-icon: #646464;
   --color-pay-list-line-content-hover-bg: #f0f0f0;
   --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
   --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
   --color-pay-list-line-content-info-name-font-playing: #ff5151;
+
+
+  /* 全部的喜欢按钮 */
+  --color-pay-list-favorite-icon: #646464;
+  --color-pay-list-favorite-icon-liked: #ff5151;
 }

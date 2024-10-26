@@ -1,10 +1,10 @@
 import { ipcPlayListsApi } from "@renderer/ipcAPI"
-import { reactive, readonly, Ref, ref, toRefs } from "vue";
-import { type Music } from "./musicPlayerStates";
+import { computed, reactive, readonly, Ref, ref, toRefs, watch } from "vue";
+import { musicKey, type Music } from "./musicPlayerStates";
 
 /** 加载播放列表 */
 async function loadPlayList(): Promise<string[]> {
-    return (await ipcPlayListsApi.getPlaylist()).sort((a, b) => a.index - b.index).map(n => n.name);
+    return (await ipcPlayListsApi.getPlaylist()).filter((a)=>a.name !== MYLIKEED_PLAYLIST_NAME).sort((a, b) => a.index - b.index).map(n => n.name);
 }
 
 /** 播放列表列表 */
@@ -28,7 +28,7 @@ type MusicPlayList = {
     /** 作者头像 */
     authorIconUrl?: string,
     /** 列表 */
-    list?: Music[],
+    list: Music[],
     /** 列表图标url */
     iconUrl?: string,
 }
@@ -43,10 +43,14 @@ export const playListStorage = readonly({
     /** 读取一个播放列表 */
     async readPlayList(name: string): Promise<MusicPlayList> {
         try {
-            return JSON.parse(await ipcPlayListsApi.readPlaylistData(name) || "{}")
+            const data = JSON.parse(await ipcPlayListsApi.readPlaylistData(name) || "{}");
+            if(!Array.isArray(data.list)){
+                data.list = [];
+            }
+            return data;
         } catch (e) {
             console.error(e);
-            return {};
+            return {list:[]};
         }
     },
     /** 删除一个播放列表 */
@@ -73,7 +77,7 @@ export const playListStorage = readonly({
 function newMusicPlayList(fromName: string) {
     const name = ref(fromName);
     let loaded = ref(false);
-    let musicList = ref<MusicPlayList>({});
+    let musicList = ref<MusicPlayList>();
     let deleteed = ref(false);
 
     /** 保存修改 */
@@ -81,14 +85,14 @@ function newMusicPlayList(fromName: string) {
         if (!loaded) {
             return;
         }
-        await playListStorage.savePlayList(name.value, musicList.value);
+        await playListStorage.savePlayList(name.value, musicList.value!);
     }
 
     async function load() {
         musicList.value = await playListStorage.readPlayList(name.value);
         loaded.value = true;
     }
-    load();
+
 
     /** 重命名歌单 */
     async function rename(newName: string) {
@@ -105,6 +109,7 @@ function newMusicPlayList(fromName: string) {
     return reactive({
         name: readonly(name),
         loaded: readonly(loaded),
+        onLoaded: load(),
         musicList,
         deleteed: readonly(deleteed),
         save,
@@ -116,7 +121,7 @@ function newMusicPlayList(fromName: string) {
 /** 播放列表缓存 */
 const musicPlayLists: ReturnType<typeof newMusicPlayList>[] = [];
 /** 播放列表管理 */
-export function useMusicPlayList(fromName: string):ReturnType<typeof newMusicPlayList> {
+export function useMusicPlayList(fromName: string): ReturnType<typeof newMusicPlayList> {
     let has = musicPlayLists.find(a => a.name === fromName);
     if (has) {
         return has;
@@ -124,6 +129,80 @@ export function useMusicPlayList(fromName: string):ReturnType<typeof newMusicPla
     const newOne = newMusicPlayList(fromName);
     musicPlayLists.push(newOne);
     return newOne;
+}
+
+export const MYLIKEED_PLAYLIST_NAME = "我喜欢的";
+
+let likeedPlayList: ReturnType<typeof newLikeedPlayList> | null = null;
+
+function newLikeedPlayList() {
+    const likeed = useMusicPlayList(MYLIKEED_PLAYLIST_NAME);
+    const musicMap = reactive(new Map<string, number>());//key音乐key,value音乐在列表中的索引
+    likeed.onLoaded.then(() => {
+        if (!likeed.musicList!.description) {
+            likeed.musicList!.description = "我喜欢的音乐";
+        }
+        if (!likeed.musicList!.author) {
+            likeed.musicList!.author = "我";
+        }
+    });
+    
+    watch(() => likeed.musicList?.list, () => {
+        console.log("likeed.musicList?.list", likeed.musicList?.list);
+        musicMap.clear();
+        // 计算音乐索引
+        likeed.musicList?.list?.forEach((n, i) => {
+            musicMap.set(musicKey(n), i);
+        });
+    }, { immediate: true, deep:true });
+
+
+    // 判断音乐是否已经喜欢
+    function isLikeed(music: Music):boolean {
+        return musicMap.has(musicKey(music));
+    }
+
+    // 查找音乐索引
+    function findIndex(music: Music) {
+        return musicMap.get(musicKey(music));
+    }
+
+    // 添加音乐到喜欢列表
+    function addLikeed(music: Music) {
+        if (findIndex(music)!=undefined || !likeed.loaded) {
+            return;
+        }
+        likeed.musicList!.list!.push(music);
+        // musicMap.set(musicKey(music), likeed.musicList!.list!.length - 1);
+        likeed.save();
+    }
+
+    // 从喜欢列表删除
+    function removeLikeed(music: Music) {
+        const index = findIndex(music);
+        if (index === undefined || !likeed.loaded) {
+            return;
+        }
+        likeed.musicList!.list!.splice(index, 1);
+        likeed.save();
+    }
+
+    return reactive({
+        ...toRefs(likeed),
+        isLikeed,
+        findIndex,
+        addLikeed,
+        removeLikeed,
+    });
+}
+
+/** 我喜欢的音乐 */
+export function useLikeedPlayList() {
+    if (likeedPlayList) {
+        return likeedPlayList;
+    }
+    likeedPlayList = newLikeedPlayList();
+    return likeedPlayList;
 }
 
 

@@ -4,8 +4,7 @@ import SearchIcon from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
 import { toRef } from 'vue';
-import { playListStorage } from '@renderer/states/playListStorage';
-import Likeed from './contents/Likeed.vue';
+import { playListStorage,MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
 
@@ -31,7 +30,7 @@ const setDisplay = contentState.setDisplay;
     <div class="dividing-line"></div>
     <div class="line-title">我的</div>
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: display === Likeed }" @click="setDisplay(Likeed)">
+    <div class="nav-item" :class="{ selected: display === PlayListContents && data == MYLIKEED_PLAYLIST_NAME }" @click="setDisplay(PlayListContents,MYLIKEED_PLAYLIST_NAME)">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
     </div>

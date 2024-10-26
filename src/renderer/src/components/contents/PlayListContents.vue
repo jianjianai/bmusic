@@ -4,10 +4,10 @@ import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { shallowRef, toRef, watch } from 'vue';
 import PlaySvg from '../svg/Play.vue';
 import SearchSvg from '../svg/Search.vue';
-import IcFavoriteBorderSvg from '../svg/IcFavoriteBorder.vue';
 import PauseSvg from '../svg/Pause.vue';
 import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
+import FavoriteButton from '../allSmall/FavoriteButton.vue';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = shallowRef<ReturnType<typeof useMusicPlayList>>(useMusicPlayList(musicName.value as string));
@@ -15,7 +15,8 @@ watch(musicName, (newVal) => {
     musicPlayList.value = useMusicPlayList(newVal as string);
 });
 
-function chickMusicIcon(music: Music,index:number) {
+// 点击播放按钮,播放音乐
+function chickMusicIcon(music: Music, index: number) {
     if (compareMusic(musicPlayer.currentMusic, music)) {
         if (musicPlayer.playing) {
             musicPlayer.requestPause();
@@ -23,11 +24,10 @@ function chickMusicIcon(music: Music,index:number) {
             musicPlayer.requestPlay();
         }
     } else {
-        playList.setList(musicPlayList.value.musicList.list!);
+        playList.setList(musicPlayList.value.musicList!.list!);
         playList.setCurrentIndex(index);
     }
 }
-
 
 </script>
 <template>
@@ -38,18 +38,18 @@ function chickMusicIcon(music: Music,index:number) {
                 <!-- 内容，歌单名称简介等 -->
                 <div class="content">
                     <!-- 图片 -->
-                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList.iconUrl});`">
+                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl});`">
                     </div>
                     <!-- 右边内容 -->
                     <div class="content-main">
                         <!-- 文本内容 -->
                         <div class="content-main-c">
                             <div class="title">{{ musicPlayList.name }}</div>
-                            <div class="description">{{ musicPlayList.musicList.description || "没有简介" }}</div>
+                            <div class="description">{{ musicPlayList.musicList?.description || "没有简介" }}</div>
                             <div class="author">
                                 <div class="author-img"
-                                    :style="`background-image: url(${musicPlayList.musicList.authorIconUrl});`"></div>
-                                <div class="author-name">{{ musicPlayList.musicList.author || "没有作者" }}</div>
+                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl});`"></div>
+                                <div class="author-name">{{ musicPlayList.musicList?.author || "没有作者" }}</div>
                             </div>
                         </div>
                         <!-- 按钮组 -->
@@ -82,13 +82,14 @@ function chickMusicIcon(music: Music,index:number) {
                     <div class="like">喜欢</div>
                 </div>
                 <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-                    v-for="music, index of musicPlayList.musicList.list">
+                    v-for="music, index of musicPlayList.musicList?.list">
                     <!-- 序号 -->
                     <div class="index">{{ index }}</div>
                     <!-- 音乐信息 -->
                     <div class="info">
                         <!-- 图标 -->
-                        <div class="info-icon" @click="chickMusicIcon(music,index)" :style="`background-image: url(${music.iconUrl});`">
+                        <div class="info-icon" @click="chickMusicIcon(music, index)"
+                            :style="`background-image: url(${music.iconUrl});`">
                             <!-- 遮罩 -->
                             <div class="info-icon-mask">
                                 <!-- 播放暂停按钮 -->
@@ -111,9 +112,7 @@ function chickMusicIcon(music: Music,index:number) {
                         </div>
                     </div>
                     <!-- 喜欢 -->
-                    <div class="like">
-                        <IcFavoriteBorderSvg class="favorite-icon" />
-                    </div>
+                    <FavoriteButton class="like" :music="music" />
                 </div>
             </div>
         </div>
@@ -235,15 +234,6 @@ function chickMusicIcon(music: Music,index:number) {
     color: var(--color-pay-list-line-content-index-font);
 }
 
-.pay-list .line-content .favorite-icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color-pay-list-line-content-favorite-icon);
-}
 
 .pay-list .line-title .info {
     text-align: left;
@@ -263,7 +253,6 @@ function chickMusicIcon(music: Music,index:number) {
 
 .pay-list .line .like {
     width: 2rem;
-    position: relative;
 }
 
 .pay-list .line .info {
