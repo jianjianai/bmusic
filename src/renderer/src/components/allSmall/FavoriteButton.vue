@@ -4,16 +4,16 @@ import IcFavoriteSvg from '../svg/IcFavorite.vue';
 import { useLikeedPlayList } from '@renderer/states/playListStorage';
 import { Music } from '@renderer/states/musicPlayerStates';
 const likeedPlayList = useLikeedPlayList();
-defineProps<{
+const props = defineProps<{
     music: Music
 }>();
 
 </script>
 <template>
-    <div class="like" v-if="likeedPlayList.isLikeed(music)" @click="likeedPlayList.removeLikeed(music)">
+    <div class="like" v-if="likeedPlayList.isLikeed(props.music)" @click="likeedPlayList.removeLikeed(props.music)">
         <IcFavoriteSvg class="favorite-icon-liked" />
     </div>
-    <div class="like" v-else @click="likeedPlayList.addLikeed(music)">
+    <div class="like" v-else @click="likeedPlayList.addLikeed(props.music)">
         <IcFavoriteBorderSvg class="favorite-icon" />
     </div>
 </template>

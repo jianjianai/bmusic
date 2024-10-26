@@ -137,7 +137,14 @@ let likeedPlayList: ReturnType<typeof newLikeedPlayList> | null = null;
 
 function newLikeedPlayList() {
     const likeed = useMusicPlayList(MYLIKEED_PLAYLIST_NAME);
-    const musicMap = reactive(new Map<string, number>());//key音乐key,value音乐在列表中的索引
+    //key音乐key,value音乐在列表中的索引
+    const musicMap = computed<Map<string, number>>(()=>{
+        const map = new Map<string, number>();
+        likeed.musicList?.list?.forEach((n, i) => {
+            map.set(musicKey(n), i);
+        });
+        return map;
+    });
     likeed.onLoaded.then(() => {
         if (!likeed.musicList!.description) {
             likeed.musicList!.description = "我喜欢的音乐";
@@ -147,24 +154,14 @@ function newLikeedPlayList() {
         }
     });
     
-    watch(() => likeed.musicList?.list, () => {
-        console.log("likeed.musicList?.list", likeed.musicList?.list);
-        musicMap.clear();
-        // 计算音乐索引
-        likeed.musicList?.list?.forEach((n, i) => {
-            musicMap.set(musicKey(n), i);
-        });
-    }, { immediate: true, deep:true });
-
-
     // 判断音乐是否已经喜欢
     function isLikeed(music: Music):boolean {
-        return musicMap.has(musicKey(music));
+        return musicMap.value.has(musicKey(music));
     }
 
     // 查找音乐索引
     function findIndex(music: Music) {
-        return musicMap.get(musicKey(music));
+        return musicMap.value.get(musicKey(music));
     }
 
     // 添加音乐到喜欢列表

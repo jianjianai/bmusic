@@ -38,7 +38,7 @@ function chickMusicIcon(music: Music, index: number) {
                 <!-- 内容，歌单名称简介等 -->
                 <div class="content">
                     <!-- 图片 -->
-                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl});`">
+                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl || musicPlayList.musicList?.list[0]?.iconUrl});`">
                     </div>
                     <!-- 右边内容 -->
                     <div class="content-main">
