@@ -12,6 +12,7 @@ import Volume3Svg from './svg/Volume3.vue';
 import { ref } from 'vue';
 import PlayListLineSvg from './svg/PlayListLine.vue';
 import { playListOpen } from '@renderer/states/playListState';
+import { addToPlayList } from '@renderer/states/addToPlayListState';
 
 // 音量拖动条
 const lineCilckEl = ref();
@@ -69,9 +70,10 @@ function clickVolume() {
                         <span class="music-singer">{{ musicPlayer.currentMusic.musicAuthor || "未知歌手" }}</span>
                     </div>
                     <div class="user-button-greap">
-                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
-                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
-                        <AddMusicCollectionSvg class="user-button"></AddMusicCollectionSvg>
+                        <!-- 收藏到歌单 -->
+                        <div class="user-button" title="收藏到歌单" @click="addToPlayList(musicPlayer.currentMusic)">
+                            <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,13 +82,15 @@ function clickVolume() {
             <!-- 右边 -->
             <div class="right-control player-control-grep">
                 <!-- 播放列表 -->
-                <PlayListLineSvg class="right-button" @click="playListOpen = !playListOpen"></PlayListLineSvg>
+                <div class="right-button" @click="playListOpen = !playListOpen" title="播放列表">
+                    <PlayListLineSvg style="width: 100%;height: 100%;" />
+                </div>
                 <!-- 音量按钮 -->
                 <div class="right-button volume">
                     <!-- 放到后面防止鼠标移动出去一点点就消失 -->
                     <div class="volume-bc"></div>
                     <!-- 图标 -->
-                    <div class="volume-icon-box" @click="clickVolume">
+                    <div class="volume-icon-box" @click="clickVolume" title="音量">
                         <Volume3Svg class="volume-icon" v-if="musicPlayer.volume > 0.8"></volume3Svg>
                         <Volume2Svg class="volume-icon" v-else-if="musicPlayer.volume > 0.4"></volume2Svg>
                         <Volume1Svg class="volume-icon" v-else-if="musicPlayer.volume > 0"></volume1Svg>
@@ -107,8 +111,6 @@ function clickVolume() {
                         </div>
                     </div>
                 </div>
-                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
-                <AddMusicCollectionSvg class="right-button"></AddMusicCollectionSvg>
             </div>
         </div>
     </div>

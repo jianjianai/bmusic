@@ -5,6 +5,8 @@ import PauseSvg from './svg/Pause.vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates';
 import FavoriteButton from './allSmall/FavoriteButton.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
+import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
+import { addToPlayList } from '@renderer/states/addToPlayListState';
 
 function clickItemIcon(index: number) {
     // 如果点击的不是当前的音乐，就切换音乐
@@ -49,6 +51,7 @@ function clickItemIcon(index: number) {
                         <!-- 播放图标 -->
                         <PlaySvg class="item-icon-svg" v-else></PlaySvg>
                     </div>
+                    <!-- 音乐名称啥的 -->
                     <div class="name-and-author">
                         <div class="name">{{ music.musicName }}</div>
                         <div class="author">
@@ -56,14 +59,40 @@ function clickItemIcon(index: number) {
                             <div class="author-author">{{ music.musicAuthor }}</div>
                         </div>
                     </div>
+                    <!-- 按钮组 -->
+                    <div class="button-grep">
+                        <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
+                            <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                        </div>
+                    </div>
                     <!-- 喜欢 -->
-                    <FavoriteButton class="like" :music="music"/>
+                    <FavoriteButton class="like" :music="music" style="width: 1.2rem;height: 1.2rem;" />
                 </div>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
+.button-grep-button:hover {
+    color: var(--color-play-list-item-button-grep-button-hover);
+}
+.button-grep-button {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    color: var(--color-play-list-item-button-grep-button);
+}
+
+.item-box:hover .button-grep {
+    display: flex;
+}
+
+.button-grep {
+    display: none;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .icon-img {
     height: 100%;
     width: 100%;
@@ -177,6 +206,7 @@ function clickItemIcon(index: number) {
     display: flex;
     align-items: center;
     padding: 0.5rem 0.5rem 0.5rem 1rem;
+    user-select: none;
 }
 
 .list {

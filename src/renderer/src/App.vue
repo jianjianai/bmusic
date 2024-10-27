@@ -3,19 +3,24 @@ import Nav from './components/Nav.vue'
 import Content from './components/Content.vue'
 import MusicPlayer from './components/MusicPlayer.vue';
 import PlayList from './components/PlayList.vue';
+import AddToPlayList from './components/AddToPlayList.vue';
+import { addToPlayListMusic } from './states/addToPlayListState';
+
 </script>
 
 <template>
   <div class="main">
     <!-- 音乐页面 -->
-    <div class="main-box">
+    <div class="main-box-mask">
       <Nav class="nav"></Nav>
       <Content class="content"></Content>
     </div>
     <!-- 下方播放器主体 -->
-    <MusicPlayer></MusicPlayer>
+    <MusicPlayer />
     <!-- 右侧播放列表 -->
-    <PlayList></PlayList>
+    <PlayList />
+    <!-- 添加到播放列表 -->
+    <AddToPlayList v-if="addToPlayListMusic" />
   </div>
 </template>
 
@@ -38,7 +43,7 @@ import PlayList from './components/PlayList.vue';
   background-color: var(--color-window-bg);
 }
 
-.main-box {
+.main-box-mask {
   display: flex;
   flex-direction: row;
   height: 100vh;

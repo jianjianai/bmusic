@@ -6,13 +6,12 @@ import ControllerSVG from './svg/Controller.vue'
 import PauseSVG from './svg/Pause.vue'
 import PlaySVG from './svg/Play.vue'
 import LoadingSvg from './svg/Loading.vue';
-import IcFavoriteSvg from './svg/IcFavorite.vue'
-import IcFavoriteBorderSvg from './svg/IcFavoriteBorder.vue'
 import RepeatAllSvg from './svg/RepeatAll.vue'
 import RepeatOneSvg from './svg/RepeatOne.vue'
 import SequentialPlaySvg from './svg/SequentialPlay.vue'
 import ShufflePlaySvg from './svg/ShufflePlay.vue'
 import { playList } from '@renderer/states/playListState'
+import FavoriteButton from './allSmall/FavoriteButton.vue'
 
 /**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
 const dragCurrentPercentage = ref(0.2);
@@ -68,12 +67,7 @@ function formatTime(time: number) {
     <div class="control-main">
         <div class="control-top">
             <!-- 添加到我喜欢的按钮 -->
-            <div v-if="false" class="likeed-button" title="喜欢">
-                <IcFavoriteSvg class="likeed-icon" />
-            </div>
-            <div v-else class="like-button" title="喜欢">
-                <IcFavoriteBorderSvg class="like-icon" />
-            </div>
+            <FavoriteButton :music="musicPlayer.currentMusic" class="likeed-button" title="喜欢" />
             <!-- 上一曲 -->
             <div class="previous-btn" title="上一曲" @click="playList.prev()">
                 <ControllerSVG class="previous-icon" />

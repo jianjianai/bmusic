@@ -9,6 +9,8 @@ import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPla
 import { playList } from '@renderer/states/playListState';
 import FavoriteButton from '../allSmall/FavoriteButton.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
+import { addToPlayList } from '@renderer/states/addToPlayListState';
+import AddMusicCollectionSvg from '../svg/AddMusicCollection.vue';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = useMusicPlayList(musicName as Ref<string>);
@@ -22,7 +24,7 @@ function chickMusicIcon(music: Music, index: number) {
             musicPlayer.requestPlay();
         }
     } else {
-        playList.setList(musicPlayList.value.musicList!.list!);
+        playList.setList(musicPlayList.value!.musicList!.list!);
         playList.setCurrentIndex(index);
     }
 }
@@ -37,19 +39,19 @@ function chickMusicIcon(music: Music, index: number) {
                 <div class="content">
                     <!-- 图片 -->
                     <div class="content-img"
-                        :style="`background-image: url(${musicPlayList.musicListInconUrl || musicPlayList.musicList?.list[0]?.iconUrl || LOGO_URL});`">
+                        :style="`background-image: url(${musicPlayList!.musicListInconUrl || musicPlayList!.musicList?.list[0]?.iconUrl || LOGO_URL});`">
                     </div>
                     <!-- 右边内容 -->
                     <div class="content-main">
                         <!-- 文本内容 -->
                         <div class="content-main-c">
-                            <div class="title">{{ musicPlayList.name }}</div>
-                            <div class="description">{{ musicPlayList.musicList?.description || "没有简介" }}</div>
+                            <div class="title">{{ musicPlayList!.name }}</div>
+                            <div class="description">{{ musicPlayList!.musicList?.description || "没有简介" }}</div>
                             <div class="author">
                                 <div class="author-img"
-                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl || LOGO_URL});`">
+                                    :style="`background-image: url(${musicPlayList!.musicList?.authorIconUrl || LOGO_URL});`">
                                 </div>
-                                <div class="author-name">{{ musicPlayList.musicList?.author || "没有作者" }}</div>
+                                <div class="author-name">{{ musicPlayList!.musicList?.author || "没有作者" }}</div>
                             </div>
                         </div>
                         <!-- 按钮组 -->
@@ -82,7 +84,7 @@ function chickMusicIcon(music: Music, index: number) {
                     <div class="like">喜欢</div>
                 </div>
                 <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-                    v-for="music, index of musicPlayList.musicList?.list">
+                    v-for="music, index of musicPlayList!.musicList?.list">
                     <!-- 序号 -->
                     <div class="index">{{ index }}</div>
                     <!-- 音乐信息 -->
@@ -110,15 +112,44 @@ function chickMusicIcon(music: Music, index: number) {
                                 <div class="item-author">{{ music.musicAuthor }}</div>
                             </div>
                         </div>
+                        <!-- 按钮组 -->
+                        <div class="button-grep">
+                            <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
+                                <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                            </div>
+                        </div>
                     </div>
                     <!-- 喜欢 -->
-                    <FavoriteButton class="like" :music="music" />
+                    <div class="like">
+                        <FavoriteButton :music="music" style="width: 1.2rem;height: 1.2rem;" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
+.pay-list .line-content .button-grep-button:hover {
+    color: var(--color-play-list-item-button-grep-button-hover);
+}
+
+.pay-list .line-content .button-grep-button {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    color: var(--color-play-list-item-button-grep-button);
+}
+
+.pay-list .line-content:hover .button-grep {
+    display: flex;
+}
+
+.pay-list .line-content .button-grep {
+    display: none;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .pay-list .line-content.playing .info-icon-mask .icon,
 .pay-list .line-content:hover .info-icon-mask .icon {
     display: block;
@@ -226,6 +257,7 @@ function chickMusicIcon(music: Music, index: number) {
 .pay-list .line-content {
     height: 3rem;
     border-radius: 0.5rem;
+    user-select: none;
 }
 
 .pay-list .line-content .index {
@@ -253,6 +285,8 @@ function chickMusicIcon(music: Music, index: number) {
 
 .pay-list .line .like {
     width: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
 .pay-list .line .info {

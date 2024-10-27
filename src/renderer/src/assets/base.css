@@ -85,6 +85,8 @@ body {
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
   --color-play-list-item-name-paying: #ff5151;
+  --color-play-list-item-button-grep-button: #646464;
+  --color-play-list-item-button-grep-button-hover: #2c2c2c;
 
 
   /* 歌单顶部信息栏 */
@@ -111,4 +113,13 @@ body {
   /* 全部的喜欢按钮 */
   --color-pay-list-favorite-icon: #646464;
   --color-pay-list-favorite-icon-liked: #ff5151;
+
+
+  /* 添加到播放列表窗口 */
+  --color-add-to-play-list-box-bg: #ffffff;
+  --color-add-to-play-list-box-shadow: #49494998;
+  --color-add-to-play-list-box-title: #000000;
+  --color-add-to-play-list-box-list-hover-bg: #f0f0f0;
+  --color-add-to-play-list-box-loading-text: #454545;
+  --color-add-to-play-list-box-list-close: #3a3a3a;
 }

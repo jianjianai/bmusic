@@ -173,7 +173,7 @@ type Quote<T> = {
 /** 播放列表缓存,优化性能 */
 const musicPlayLists: Quote<ReturnType<typeof newMusicPlayList>>[] = [];
 /** 播放列表管理,优化性能，没有引用就卸载 */
-export function useMusicPlayList(fromName: Ref<string>): Ref<ReturnType<typeof newMusicPlayList>> {
+export function useMusicPlayList(fromName: Ref<string|undefined>): Ref<ReturnType<typeof newMusicPlayList>|undefined> {
     function findOrNew(name: string) {
         let has = musicPlayLists.find(a => a.t.name === name);
         if (has) {
@@ -194,15 +194,23 @@ export function useMusicPlayList(fromName: Ref<string>): Ref<ReturnType<typeof n
             }
         }
     }
-    const rRef = ref(findOrNew(fromName.value));
+    const rRef = ref(fromName.value?findOrNew(fromName.value):null);
     watch(fromName, (n) => {
-        reduceCitations(rRef.value);
-        rRef.value = findOrNew(n);
+        if(rRef.value){
+            reduceCitations(rRef.value);
+        }
+        if(n){
+            rRef.value = findOrNew(n);
+        }else{
+            rRef.value = null;
+        }
     });
     onUnmounted(() => {
-        reduceCitations(rRef.value);
+        if(rRef.value){
+            reduceCitations(rRef.value);
+        }
     });
-    return computed(() => rRef.value.t);
+    return computed(() => rRef.value?.t);
 }
 
 export const MYLIKEED_PLAYLIST_NAME = "我喜欢的";
@@ -211,12 +219,12 @@ export const MYLIKEED_PLAYLIST_NAME = "我喜欢的";
 /** 我喜欢的音乐 */
 export function useLikeedPlayList() {
     const likeed = useMusicPlayList(ref(MYLIKEED_PLAYLIST_NAME));
-    likeed.value.onLoaded.then(() => {
-        if (!likeed.value.musicList!.description) {
-            likeed.value.musicList!.description = "我喜欢的音乐";
+    likeed.value!.onLoaded.then(() => {
+        if (!likeed.value!.musicList!.description) {
+            likeed.value!.musicList!.description = "我喜欢的音乐";
         }
-        if (!likeed.value.musicList!.author) {
-            likeed.value.musicList!.author = "我";
+        if (!likeed.value!.musicList!.author) {
+            likeed.value!.musicList!.author = "我";
         }
     });
     return likeed;
