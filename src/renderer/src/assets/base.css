@@ -10,42 +10,71 @@ body {
 }
 
 :root {
-  --color-window-bg: #f5f5f6;
+  /* 主题色 */
+  --color-primary: #0069d9;
+  --color-primary2: #005bbf;
+
+  --color-primary-bg: white;
+  --color-primary-bg2: #f5f5f5;
+  --color-primary-text: black;
+  --color-primary-text2: #646464;
+  --color-primary-boder: #e5e5e5;
+  --color-primary-shadow: #d3d3d3;
+
+  /* 导航栏颜色 */
+  --color-primary-nav-hover-text: var(--color-primary-text);
+  --color-primary-nav-hover-bg: #ededed;
+  --color-primary-nav-active-text: #ffffff;
+  --color-primary-nav-active-bg: var(--color-primary);
+
+  /* 列表颜色 */
+  --color-primary-list-hover-bg: #f2f2f2;
+  --color-primary-list-hover-text: var(--color-primary-text);
+  --color-primary-list-active-text: var(--color-primary);
+
+  /* 按钮颜色 */
+  --color-primary-button: var(--color-primary);
+  --color-primary-button-text: #ffffff;
+  --color-primary-button-hover: var(--color-primary2);
+
+  /** 无字小按钮颜色 */
+  --color-primary-button-small: var(--color-primary-text2);
+  --color-primary-button-small-hover: var(--color-primary-text);
+
+
+  /* 窗口颜色 */
+  --color-window-bg: var(--color-primary-bg);
 
   /** 底部播放器 */
-  --color-music-player-bg: #f7f7f7;
-  --color-music-player-border: #dddddd;
+  --color-music-player-bg: var(--color-primary-bg);
+  --color-music-player-border: var(--color-primary-boder);
 
   /** 左侧导航栏 */
-  --color-lav-bg: #e9ecee;
-  --color-nav-scrollbar-thumb: #d3d3d3;
-  --color-nav-font: #545454;
-  --color-nav-item-hover-bg: #dee1e6;
-  --color-nav-item-selected-bg: #ff5454;
-  --color-nav-item-selected-font: #ffffff;
-  --color-nav-dividing-line: #dddddd;
-  --color-nav-line-title: #808080;
-  --color-nav-paylist-font: #4b4b4b;
+  --color-lav-bg: var(--color-primary-bg2);
+  --color-nav-scrollbar-thumb: var(--color-primary-boder);
+  --color-nav-font: var(--color-primary-text2);
+  --color-nav-item-hover-bg: var(--color-primary-nav-hover-bg);
+  --color-nav-item-selected-bg: var(--color-primary-nav-active-bg);
+  --color-nav-item-selected-font: var(--color-primary-nav-active-text);
+  --color-nav-dividing-line: var(--color-primary-boder);
+  --color-nav-line-title: var(--color-primary-text);
+  --color-nav-paylist-font: var(--color-primary-text2);
 
   /** 播放进度条 */
-  --color-contr-line-bg: #d5d5d5;
-  --color-contr-line-current-bg: #ff5151;
-  --color-contr-line-btn-bg: #ffffff;
-  --color-contr-line-btn-shadow: #cccccc;
+  --color-contr-line-bg: var(--color-primary-boder);
+  --color-contr-line-current-bg: var(--color-primary);
+  --color-contr-line-btn-bg: var(--color-primary-bg);
+  --color-contr-line-btn-shadow: var(--color-primary-shadow);
   /* 播放器进度条左右的小字 */
-  --color-contr-line-text: #929292;
+  --color-contr-line-text: var(--color-primary-text2);
   /* 播放器暂停播放按钮颜色 */
-  --color-contr-play-btn: #ff5151;
-  --color-contr-play-btn-hover: #ff7575;
+  --color-contr-play-btn: var(--color-primary-button);
+  --color-contr-play-btn-hover: var(--color-primary-button-hover);
   /* 中间文字颜色 */
-  --color-contr-play-btn-text: #ffffff;
+  --color-contr-play-btn-text: var(--color-primary-button-text);
   /* 上一首和下一首按钮颜色 */
-  --color-contr-prev-next-btn: #5e5e5e;
-  --color-contr-prev-next-btn-hover: #343434;
-  /* 添加到我喜欢的按钮颜色 */
-  --color-contr-like-btn: var(--color-contr-prev-next-btn);
-  /* 已经喜欢按钮颜色 */
-  --color-contr-likeed-btn: #ff5151;
+  --color-contr-prev-next-btn: var(--color-primary-button-small);
+  --color-contr-prev-next-btn-hover: var(--color-primary-button-small-hover);
 
   /* 播放器放大状态顶部功能按钮颜色 */
   --color-contr-top-btn-border: #c0c0c050;
@@ -54,64 +83,67 @@ body {
   --color-contr-top-btn-text: #ffffffa8;
 
   /* 播放器左下角字体颜色 */
-  --color-music-player-music-name: #000000;
-  --color-music-player-music-line: #000000;
-  --color-music-player-music-singer: #1d1d1d;
+  --color-music-player-music-name: var(--color-primary-text);
+  --color-music-player-music-line: var(--color-primary-text2);
+  --color-music-player-music-singer: var(--color-primary-text2);
 
   /* 播放器左下角按钮颜色 */
-  --color-music-player-user-button: #646464;
-  --color-music-player-user-button-hover: #2c2c2c;
+  --color-music-player-user-button: var(--color-primary-button-small);
+  --color-music-player-user-button-hover: var(--color-primary-button-small-hover);
 
   /* 播放器右下角按钮颜色 */
-  --color-music-player-right-button: #646464;
-  --color-music-player-right-button-hover: #2c2c2c;
+  --color-music-player-right-button: var(--color-primary-button-small);
+  --color-music-player-right-button-hover: var(--color-primary-button-small-hover);
 
-  /* 播放器右下角音乐播放条颜色*/
+  /* 播放器右下角音量放条颜色*/
   --color-music-player-volume-line-box: var(--color-window-bg);
-  --color-music-player-volume-line-box-shadow: #d3d3d3;
-  --color-music-player-volume-num: #000000;
-  --color-music-player-volume-line-all: #e2e2e2;
-  --color-music-player-volume-line-full: #ff5151;
-  --color-music-player-volume-line-drag-button: #ffffff;
-  --color-music-player-volume-line-drag-button-shadow: #d6d6d6;
+  --color-music-player-volume-line-box-shadow: var(--color-primary-shadow);
+  --color-music-player-volume-num: var(--color-primary-text2);
+  --color-music-player-volume-line-all: var(--color-primary-boder);
+  --color-music-player-volume-line-full: var(--color-primary);
+  --color-music-player-volume-line-drag-button: var(--color-primary-bg);
+  --color-music-player-volume-line-drag-button-shadow: var(--color-primary-shadow);
 
   /* 右侧播放列表颜色 */
   --color-play-list-window-bg: var(--color-window-bg);
-  --color-play-list-window-shadow: #49494998;
-  --color-play-list-item-hover: #eeeeee;
-  --color-play-list-item-name: #000000;
-  --color-play-list-item-author: #646464;
+  --color-play-list-window-shadow: var(--color-primary-shadow);
+  --color-play-list-item-hover: var(--color-primary-list-hover-bg);
+  --color-play-list-item-name: var(--color-primary-text);
+  --color-play-list-item-author: var(--color-primary-list-hover-text);
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
-  --color-play-list-item-name-paying: #ff5151;
-  --color-play-list-item-button-grep-button: #646464;
-  --color-play-list-item-button-grep-button-hover: #2c2c2c;
+  --color-play-list-item-name-paying: var(--color-primary-list-active-text);
+  --color-play-list-item-button-grep-button: var(--color-primary-button-small);
+  --color-play-list-item-button-grep-button-hover: var(--color-primary-button-small-hover);
 
 
   /* 歌单顶部信息栏 */
   --color-pay-list-header-title-font: #000000;
   --color-pay-list-header-description-font: #4f4f4f;
   --color-pay-list-header-author-font: #4f4f4f;
-  --color-play-button-bg: #ff5151;
+  --color-play-button-bg: var(--color-primary);
   --color-play-button-font: #ffffff;
   --color-pay-list-search-bg: #ffffff;
   --color-pay-list-search-border: #e5e5e5;
 
   /* 歌单列表 */
-  --color-pay-list-line-title-border: #e8e8e8;
-  --color-pay-list-line-content-info-name-font: #000000;
-  --color-pay-list-line-content-info-author-font: #646464;
-  --color-pay-list-line-content-info-item-paly-font: #ffbb00;
-  --color-pay-list-line-content-index-font: #646464;
-  --color-pay-list-line-content-hover-bg: #f0f0f0;
+  --color-pay-list-line-title-border: var(--color-primary-boder);
+  --color-pay-list-line-content-info-name-font: var(--color-primary-text);
+  --color-pay-list-line-content-info-author-font: var(--color-primary-text2);
+  --color-pay-list-line-content-index-font: var(--color-primary-text2);
+  --color-pay-list-line-content-hover-bg: var(--color-primary-list-hover-bg);
   --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
   --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
-  --color-pay-list-line-content-info-name-font-playing: #ff5151;
+  --color-pay-list-line-content-info-name-font-playing: var(--color-primary-nav-active-bg);
 
+  /* 小标签 */
+  --color-pay-list-line-content-info-item-paly-font: #ffbb00;
 
   /* 全部的喜欢按钮 */
-  --color-pay-list-favorite-icon: #646464;
-  --color-pay-list-favorite-icon-liked: #ff5151;
+  --color-pay-list-favorite-icon: var(--color-primary-button-small);
+  --color-pay-list-favorite-icon-hover: var(--color-primary-button-small-hover);
+  --color-pay-list-favorite-icon-liked: var(--color-primary);
+  --color-pay-list-favorite-icon-liked-hover: var(--color-primary2);
 
 
   /* 添加到播放列表窗口 */

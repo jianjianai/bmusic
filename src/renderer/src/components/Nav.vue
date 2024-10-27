@@ -52,7 +52,6 @@ watch(()=>playListStorage.playLists,async ()=>{
       <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`" ></div>
       <div class="title">{{ name }}</div>
     </div>
-
   </div>
 </template>
 <style scoped>
@@ -105,8 +104,7 @@ watch(()=>playListStorage.playLists,async ()=>{
 }
 
 .dividing-line {
-  height: 0.1rem;
-  background-color: var(--color-nav-dividing-line);
+  border-bottom: 0.1rem solid var(--color-nav-dividing-line);
   margin: 0.5rem 0.7rem 0.5rem 1.2rem;
 }
 
@@ -138,6 +136,7 @@ watch(()=>playListStorage.playLists,async ()=>{
   cursor: pointer;
 }
 
+.paylist-item:hover,
 .nav-item:hover {
   background-color: var(--color-nav-item-hover-bg);
 }

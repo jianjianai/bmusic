@@ -33,8 +33,14 @@ const props = defineProps<{
     transform: translate(-50%, -50%);
     color: var(--color-pay-list-favorite-icon);
 }
+.favorite-icon:hover {
+    color: var(--color-pay-list-favorite-icon-hover);
+}
 
 .favorite-icon-liked {
     color: var(--color-pay-list-favorite-icon-liked);
+}
+.favorite-icon-liked:hover {
+    color: var(--color-pay-list-favorite-icon-liked-hover);
 }
 </style>
