@@ -10,10 +10,10 @@ const props = defineProps<{
 
 </script>
 <template>
-    <div class="like" v-if="likeedPlayList.isLikeed(props.music)" @click="likeedPlayList.removeLikeed(props.music)">
+    <div class="like" v-if="likeedPlayList.hasMusic(props.music)" @click="likeedPlayList.removeMusic(props.music)">
         <IcFavoriteSvg class="favorite-icon-liked" />
     </div>
-    <div class="like" v-else @click="likeedPlayList.addLikeed(props.music)">
+    <div class="like" v-else @click="likeedPlayList.addMusic(props.music)">
         <IcFavoriteBorderSvg class="favorite-icon" />
     </div>
 </template>

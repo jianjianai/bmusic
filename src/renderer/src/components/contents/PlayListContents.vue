@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { contentState } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
-import { shallowRef, toRef, watch } from 'vue';
+import { Ref, toRef } from 'vue';
 import PlaySvg from '../svg/Play.vue';
 import SearchSvg from '../svg/Search.vue';
 import PauseSvg from '../svg/Pause.vue';
@@ -11,10 +11,7 @@ import FavoriteButton from '../allSmall/FavoriteButton.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
 
 const musicName = toRef(contentState, 'data');
-const musicPlayList = shallowRef<ReturnType<typeof useMusicPlayList>>(useMusicPlayList(musicName.value as string));
-watch(musicName, (newVal) => {
-    musicPlayList.value = useMusicPlayList(newVal as string);
-});
+const musicPlayList = useMusicPlayList(musicName as Ref<string>);
 
 // 点击播放按钮,播放音乐
 function chickMusicIcon(music: Music, index: number) {
@@ -39,7 +36,8 @@ function chickMusicIcon(music: Music, index: number) {
                 <!-- 内容，歌单名称简介等 -->
                 <div class="content">
                     <!-- 图片 -->
-                    <div class="content-img" :style="`background-image: url(${musicPlayList.musicList?.iconUrl || musicPlayList.musicList?.list[0]?.iconUrl || LOGO_URL});`">
+                    <div class="content-img"
+                        :style="`background-image: url(${musicPlayList.musicList?.iconUrl || musicPlayList.musicList?.list[0]?.iconUrl || LOGO_URL});`">
                     </div>
                     <!-- 右边内容 -->
                     <div class="content-main">
@@ -49,7 +47,8 @@ function chickMusicIcon(music: Music, index: number) {
                             <div class="description">{{ musicPlayList.musicList?.description || "没有简介" }}</div>
                             <div class="author">
                                 <div class="author-img"
-                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl || LOGO_URL});`"></div>
+                                    :style="`background-image: url(${musicPlayList.musicList?.authorIconUrl || LOGO_URL});`">
+                                </div>
                                 <div class="author-name">{{ musicPlayList.musicList?.author || "没有作者" }}</div>
                             </div>
                         </div>

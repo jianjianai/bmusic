@@ -1,10 +1,10 @@
 import { ipcPlayListsApi } from "@renderer/ipcAPI"
-import { computed, reactive, readonly, Ref, ref, toRefs, watch } from "vue";
+import { computed, onUnmounted, reactive, readonly, Ref, ref, toRefs, watch } from "vue";
 import { musicKey, type Music } from "./musicPlayerStates";
 
 /** 加载播放列表 */
 async function loadPlayList(): Promise<string[]> {
-    return (await ipcPlayListsApi.getPlaylist()).filter((a)=>a.name !== MYLIKEED_PLAYLIST_NAME).sort((a, b) => a.index - b.index).map(n => n.name);
+    return (await ipcPlayListsApi.getPlaylist()).filter((a) => a.name !== MYLIKEED_PLAYLIST_NAME).sort((a, b) => a.index - b.index).map(n => n.name);
 }
 
 /** 播放列表列表 */
@@ -44,13 +44,13 @@ export const playListStorage = readonly({
     async readPlayList(name: string): Promise<MusicPlayList> {
         try {
             const data = JSON.parse(await ipcPlayListsApi.readPlaylistData(name) || "{}");
-            if(!Array.isArray(data.list)){
+            if (!Array.isArray(data.list)) {
                 data.list = [];
             }
             return data;
         } catch (e) {
             console.error(e);
-            return {list:[]};
+            return { list: [] };
         }
     },
     /** 删除一个播放列表 */
@@ -106,6 +106,45 @@ function newMusicPlayList(fromName: string) {
         deleteed.value = true;
     }
 
+    //key音乐key,value音乐在列表中的索引
+    const musicMap = computed<Map<string, number>>(() => {
+        const map = new Map<string, number>();
+        musicList.value?.list.forEach((n, i) => {
+            map.set(musicKey(n), i);
+        });
+        return map;
+    });
+
+    // 判断音乐是否已经喜欢
+    function hasMusic(music: Music): boolean {
+        return musicMap.value.has(musicKey(music));
+    }
+
+    // 查找音乐索引
+    function findMusicIndex(music: Music) {
+        return musicMap.value.get(musicKey(music));
+    }
+
+    // 添加音乐到喜欢列表
+    function addMusic(music: Music) {
+        if (findMusicIndex(music) != undefined || !loaded.value) {
+            return;
+        }
+        musicList.value!.list!.push(music);
+        // musicMap.set(musicKey(music), likeed.musicList!.list!.length - 1);
+        save();
+    }
+
+    // 从喜欢列表删除
+    function removeMusic(music: Music) {
+        const index = findMusicIndex(music);
+        if (index === undefined || !loaded.value) {
+            return;
+        }
+        musicList.value!.list!.splice(index, 1);
+        save();
+    }
+
     return reactive({
         name: readonly(name),
         loaded: readonly(loaded),
@@ -115,91 +154,67 @@ function newMusicPlayList(fromName: string) {
         save,
         rename,
         deleteThis,
+        hasMusic,
+        findMusicIndex,
+        addMusic,
+        removeMusic,
     });
 }
 
-/** 播放列表缓存 */
-const musicPlayLists: ReturnType<typeof newMusicPlayList>[] = [];
-/** 播放列表管理 */
-export function useMusicPlayList(fromName: string): ReturnType<typeof newMusicPlayList> {
-    let has = musicPlayLists.find(a => a.name === fromName);
-    if (has) {
-        return has;
+type Quote<T> = {
+    quote: number,
+    t: T,
+}
+/** 播放列表缓存,优化性能 */
+const musicPlayLists: Quote<ReturnType<typeof newMusicPlayList>>[] = [];
+/** 播放列表管理,优化性能，没有引用就卸载 */
+export function useMusicPlayList(fromName: Ref<string>): Ref<ReturnType<typeof newMusicPlayList>> {
+    function findOrNew(name: string) {
+        let has = musicPlayLists.find(a => a.t.name === name);
+        if (has) {
+            has.quote++;
+            return has;
+        }
+        const newOne = newMusicPlayList(name);
+        const quote = { quote: 1, t: newOne };
+        musicPlayLists.push(quote);
+        return quote;
     }
-    const newOne = newMusicPlayList(fromName);
-    musicPlayLists.push(newOne);
-    return newOne;
+    function reduceCitations(quote: Quote<ReturnType<typeof newMusicPlayList>>) {
+        quote.quote--;
+        if (quote.quote < 1) {
+            const index = musicPlayLists.findIndex(a => a.t.name === quote.t.name);
+            if (index >= 0) {
+                musicPlayLists.splice(index, 1);
+            }
+        }
+    }
+    const rRef = ref(findOrNew(fromName.value));
+    watch(fromName, (n) => {
+        reduceCitations(rRef.value);
+        rRef.value = findOrNew(n);
+    });
+    onUnmounted(() => {
+        reduceCitations(rRef.value);
+    });
+    return computed(() => rRef.value.t);
 }
 
 export const MYLIKEED_PLAYLIST_NAME = "我喜欢的";
 
-let likeedPlayList: ReturnType<typeof newLikeedPlayList> | null = null;
-
-function newLikeedPlayList() {
-    const likeed = useMusicPlayList(MYLIKEED_PLAYLIST_NAME);
-    //key音乐key,value音乐在列表中的索引
-    const musicMap = computed<Map<string, number>>(()=>{
-        const map = new Map<string, number>();
-        likeed.musicList?.list?.forEach((n, i) => {
-            map.set(musicKey(n), i);
-        });
-        return map;
-    });
-    likeed.onLoaded.then(() => {
-        if (!likeed.musicList!.description) {
-            likeed.musicList!.description = "我喜欢的音乐";
-        }
-        if (!likeed.musicList!.author) {
-            likeed.musicList!.author = "我";
-        }
-    });
-    
-    // 判断音乐是否已经喜欢
-    function isLikeed(music: Music):boolean {
-        return musicMap.value.has(musicKey(music));
-    }
-
-    // 查找音乐索引
-    function findIndex(music: Music) {
-        return musicMap.value.get(musicKey(music));
-    }
-
-    // 添加音乐到喜欢列表
-    function addLikeed(music: Music) {
-        if (findIndex(music)!=undefined || !likeed.loaded) {
-            return;
-        }
-        likeed.musicList!.list!.push(music);
-        // musicMap.set(musicKey(music), likeed.musicList!.list!.length - 1);
-        likeed.save();
-    }
-
-    // 从喜欢列表删除
-    function removeLikeed(music: Music) {
-        const index = findIndex(music);
-        if (index === undefined || !likeed.loaded) {
-            return;
-        }
-        likeed.musicList!.list!.splice(index, 1);
-        likeed.save();
-    }
-
-    return reactive({
-        ...toRefs(likeed),
-        isLikeed,
-        findIndex,
-        addLikeed,
-        removeLikeed,
-    });
-}
 
 /** 我喜欢的音乐 */
 export function useLikeedPlayList() {
-    if (likeedPlayList) {
-        return likeedPlayList;
-    }
-    likeedPlayList = newLikeedPlayList();
-    return likeedPlayList;
+    const likeed = useMusicPlayList(ref(MYLIKEED_PLAYLIST_NAME));
+    likeed.value.onLoaded.then(() => {
+        if (!likeed.value.musicList!.description) {
+            likeed.value.musicList!.description = "我喜欢的音乐";
+        }
+        if (!likeed.value.musicList!.author) {
+            likeed.value.musicList!.author = "我";
+        }
+    });
+    return likeed;
 }
 
 
