@@ -91,7 +91,6 @@ watch(()=>playListStorage.playLists,async ()=>{
 .paylist-item .icon {
   width: 2rem;
   height: 2rem;
-  background-color: rgb(255, 214, 222);
   border-radius: 0.3rem;
   background-position: center;
   background-size: cover;

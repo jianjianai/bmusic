@@ -236,7 +236,6 @@ function playAll() {
     flex: 1;
     width: 0;
     height: 2.5rem;
-    /* background-color: antiquewhite; */
     display: flex;
     flex-direction: column;
 }
@@ -245,7 +244,6 @@ function playAll() {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.25rem;
-    background-color: rgb(255, 210, 233);
     background-position: center;
     background-size: cover;
     position: relative;
@@ -361,7 +359,6 @@ function playAll() {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    background-color: rgb(255, 206, 231);
     margin-right: 0.5rem;
     background-position: center;
     background-size: cover;
@@ -431,7 +428,6 @@ function playAll() {
     width: 10rem;
     height: 10rem;
     border-radius: 1rem;
-    background-color: rgb(255, 206, 231);
     margin: 0 1rem;
     background-position: center;
     background-size: cover;
@@ -459,7 +455,6 @@ function playAll() {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* background-color: antiquewhite; */
 }
 
 .content {

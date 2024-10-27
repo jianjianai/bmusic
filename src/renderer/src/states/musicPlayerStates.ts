@@ -1,4 +1,4 @@
-import { readonly, ref } from 'vue'
+import { computed, readonly, ref } from 'vue'
 
 
 export type Music = {
@@ -101,6 +101,8 @@ export const musicPlayerLink = readonly({
   },
   /** 当前音量,初始化时需要使用 */
   volume: volume,
+  /** 当前音乐数据 */ 
+  currentMusicData:computed(() => currentMusic.value!.playerData),
 });
 
 

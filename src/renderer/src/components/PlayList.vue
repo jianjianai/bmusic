@@ -132,7 +132,6 @@ function clickItemIcon(index: number) {
 .icon {
     width: 3rem;
     height: 3rem;
-    background-color: var(--color-play-list-item-icon);
     margin-right: 0.5rem;
     border-radius: 0.5rem;
     overflow: hidden;

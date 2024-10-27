@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { WebviewTag } from 'electron';
 import { computed, h, Ref, ref, watch } from 'vue';
-import { musicPlayer, musicPlayerSize } from '@renderer/states/musicPlayerStates';
+import { musicPlayerSize } from '@renderer/states/musicPlayerStates';
 import { musicPlayerLink } from '@renderer/states/musicPlayerStates';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/components/svg/BxlDevTo.vue';
@@ -14,7 +14,7 @@ type BilibiliMusicData = {
 }
 
 // 播放器数据
-const musicData: Ref<BilibiliMusicData> = computed(() => JSON.parse(musicPlayer.currentMusic.playerData));
+const musicData: Ref<BilibiliMusicData> = computed(() => JSON.parse(musicPlayerLink.currentMusicData));
 
 // https://www.bilibili.com/video/BV19G411H7DY/?share_source=copy_web&vd_source=8ec9a462acb529345bef8d4422990df9&t=17
 
@@ -57,7 +57,7 @@ function onMessage(msg: string, ...args: any[]) {
   } else if (msg == "onVolumeChange"){
     musicPlayerLink.updateVolume(args[0]);
   } else if(msg == "reqInitVolume"){
-    iframeRef.value?.send("setVolume", musicPlayer.volume);
+    iframeRef.value?.send("setVolume", musicPlayerLink.volume);
   }
 }
 
@@ -136,6 +136,7 @@ function onContextMenu(e: MouseEvent) {
 
 .b-player {
   position: relative;
+  background-color: black;
 }
 
 .b-iframe,

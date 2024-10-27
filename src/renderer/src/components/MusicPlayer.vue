@@ -333,7 +333,6 @@ function clickVolume() {
 
 
 .player {
-    background-color: aqua;
     position: absolute;
     left: 0;
     bottom: 5rem;
