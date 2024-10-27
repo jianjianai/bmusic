@@ -24,9 +24,15 @@ function chickMusicIcon(music: Music, index: number) {
             musicPlayer.requestPlay();
         }
     } else {
-        playList.setList(musicPlayList.value!.musicList!.list!);
+        playList.setList(musicPlayList.value!.musicList!.list);
         playList.setCurrentIndex(index);
     }
+}
+
+// 点击播放全部按钮
+function playAll() {
+    playList.setList(musicPlayList.value!.musicList!.list);
+    playList.setCurrentIndex(0);
 }
 
 </script>
@@ -56,7 +62,7 @@ function chickMusicIcon(music: Music, index: number) {
                         </div>
                         <!-- 按钮组 -->
                         <div class="content-button-grep">
-                            <div class="content-button play-button">
+                            <div class="content-button play-button" @click="playAll()">
                                 <PlaySvg class="icon" />
                                 <div class="text">播放全部</div>
                             </div>
