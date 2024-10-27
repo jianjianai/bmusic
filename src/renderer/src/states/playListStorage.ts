@@ -1,5 +1,5 @@
 import { ipcPlayListsApi } from "@renderer/ipcAPI"
-import { computed, onUnmounted, reactive, readonly, Ref, ref, toRefs, watch } from "vue";
+import { computed, onUnmounted, reactive, readonly, Ref, ref, watch } from "vue";
 import { musicKey, type Music } from "./musicPlayerStates";
 
 /** 加载播放列表 */
@@ -28,9 +28,7 @@ type MusicPlayList = {
     /** 作者头像 */
     authorIconUrl?: string,
     /** 列表 */
-    list: Music[],
-    /** 列表图标url */
-    iconUrl?: string,
+    list: Music[]
 }
 
 export const playListStorage = readonly({
@@ -70,7 +68,11 @@ export const playListStorage = readonly({
         value.splice(to, 0, item);
         playLists.value = value;
         await savePlayListIndex();
-    }
+    },
+    /** 读取播放列表图标 */
+    async readPlayListIconUrl(name: string) {
+        return ipcPlayListsApi.readPlaylistIconUrl(name);
+    },
 });
 
 
@@ -79,6 +81,7 @@ function newMusicPlayList(fromName: string) {
     let loaded = ref(false);
     let musicList = ref<MusicPlayList>();
     let deleteed = ref(false);
+    let musicListInconUrl = ref<string>();
 
     /** 保存修改 */
     async function save() {
@@ -90,6 +93,7 @@ function newMusicPlayList(fromName: string) {
 
     async function load() {
         musicList.value = await playListStorage.readPlayList(name.value);
+        musicListInconUrl.value = await playListStorage.readPlayListIconUrl(name.value);
         loaded.value = true;
     }
 
@@ -149,6 +153,7 @@ function newMusicPlayList(fromName: string) {
         name: readonly(name),
         loaded: readonly(loaded),
         onLoaded: load(),
+        musicListInconUrl: readonly(musicListInconUrl),
         musicList,
         deleteed: readonly(deleteed),
         save,

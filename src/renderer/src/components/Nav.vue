@@ -3,7 +3,7 @@ import { contentState } from '../states/contentState';
 import SearchIcon from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
-import { toRef } from 'vue';
+import { reactive, toRef, watch } from 'vue';
 import { playListStorage,MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
@@ -12,6 +12,14 @@ import { LOGO_URL } from '@renderer/imageUrls';
 const display = toRef(contentState, 'display');
 const data = toRef(contentState, 'data');
 const setDisplay = contentState.setDisplay;
+const iconMap = reactive(new Map<string,string>);
+watch(()=>playListStorage.playLists,async ()=>{
+  iconMap.clear();
+  for(const name of playListStorage.playLists){
+    iconMap.set(name,await playListStorage.readPlayListIconUrl(name));
+  }
+},{immediate:true});
+
 
 </script>
 <template>
@@ -41,7 +49,7 @@ const setDisplay = contentState.setDisplay;
     <div class="line-title">歌单</div>
     <div class="paylist-item" v-for="name of playListStorage.playLists"
       :class="{ selected: display === PlayListContents && data == name }" @click="setDisplay(PlayListContents, name)">
-      <div class="icon"></div>
+      <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`" ></div>
       <div class="title">{{ name }}</div>
     </div>
 

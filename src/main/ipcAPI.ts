@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
+import { pathToFileURL } from "url";
 
 // ipcBilibiliApi bilibili 音乐播放器的API
 (() => {
@@ -11,31 +12,44 @@ import { join } from "path";
 
 // ipcPlayListsApi 歌单
 (() => {
+    function buildFileNameFelx(name: string, index: number) {
+        return `${index}.${name}`;
+    }
     /** 构建文件名 */
     function buildFileName(name: string, index: number) {
-        return `${index}.${name}.json`;
+        return `${buildFileNameFelx(name, index)}.json`;
     }
+    /** 构建图标文件名 */
+    function buildIconFileName(name: string, index: number) {
+        return `${buildFileNameFelx(name, index)}.png`;
+    }
+
     /** 从文件名解name称和index */
     function parseFileName(fileName: string) {
         const lastdIndex = fileName.lastIndexOf(".");
         const sp = fileName.substring(0, lastdIndex);
         const falstdIndex = sp.indexOf(".");
+        const iconFileName = sp + ".png";
+        const isIconFileExists = existsSync(join(playListPath, iconFileName));
         if (falstdIndex === -1) {
             return {
                 name: sp,
-                index: 0
+                index: 0,
+                iconFileName: isIconFileExists ? iconFileName : null
             };
         }
         const index = parseInt(sp.substring(0, falstdIndex));
         if (isNaN(index)) {
             return {
                 name: sp,
-                index: 0
+                index: 0,
+                iconFileName: isIconFileExists ? iconFileName : null
             };
         }
         return {
             name: sp.substring(falstdIndex + 1),
-            index: index
+            index: index,
+            iconFileName: isIconFileExists ? iconFileName : null
         };
     }
 
@@ -49,8 +63,10 @@ import { join } from "path";
         index: number,
         /** 文件名称 */
         fileName: string,
+        /** 图标文件名 null 文件不存在 */
+        iconFileName: string | null
     };
-    
+
     // 读取歌单列表
     const playLists: PlayList[] = readdirSync(playListPath)
         .filter(n => n.endsWith(".json"))
@@ -74,6 +90,11 @@ import { join } from "path";
         renameSync(join(playListPath, thePlayList.fileName), join(playListPath, newFileName));
         thePlayList.index = arg.index;
         thePlayList.fileName = newFileName;
+        if (thePlayList.iconFileName) {
+            const newIconFileName = buildIconFileName(thePlayList.name, arg.index);
+            renameSync(join(playListPath, thePlayList.iconFileName), join(playListPath, newIconFileName!));
+            thePlayList.iconFileName = newIconFileName;
+        }
         return true;
     });
     // 重命名歌单
@@ -85,6 +106,11 @@ import { join } from "path";
         renameSync(join(playListPath, thePlayList.fileName), join(playListPath, newFileName));
         thePlayList.name = arg.newName;
         thePlayList.fileName = newFileName;
+        if (thePlayList.iconFileName) {
+            const newIconFileName = buildIconFileName(arg.newName, thePlayList.index);
+            renameSync(join(playListPath, thePlayList.iconFileName), join(playListPath, newIconFileName!));
+            thePlayList.iconFileName = newIconFileName;
+        }
         return true;
     });
     // 保存歌单数据,如果歌单不存在则创建一个
@@ -96,7 +122,8 @@ import { join } from "path";
             thePlayList = {
                 name: arg.name,
                 index: playLists.length,
-                fileName: newFileName
+                fileName: newFileName,
+                iconFileName: null
             };
             playLists.push(thePlayList);
         } else {
@@ -122,6 +149,27 @@ import { join } from "path";
         const filePath = join(playListPath, thePlayList.fileName);
         playLists.splice(index, 1);
         unlinkSync(filePath);
+        return true;
+    });
+    // 读取播放列表图标
+    ipcMain.handle('ipcPlayListsApi__readPlaylistIconUrl', async (_event, arg: string) => {
+        const index = playLists.findIndex(n => n.name === arg);
+        if (index === -1) return null;
+        const thePlayList = playLists[index];
+        if (thePlayList.iconFileName === null) return null;
+        const iconFilePath = join(playListPath, thePlayList.iconFileName);
+        const fileUrl = pathToFileURL(iconFilePath).toString();
+        return fileUrl;
+    });
+    // 保存播放列表图标
+    ipcMain.handle('ipcPlayListsApi__savePlaylistIcon', async (_event, arg: { name: string, data: Uint8Array }) => {
+        const index = playLists.findIndex(n => n.name === arg.name);
+        if (index === -1) return false;
+        const thePlayList = playLists[index];
+        const iconFileName = thePlayList.iconFileName || buildIconFileName(thePlayList.name, thePlayList.index);
+        const iconFilePath = join(playListPath, iconFileName);
+        writeFileSync(iconFilePath, arg.data);
+        thePlayList.iconFileName = iconFileName;
         return true;
     });
 })();

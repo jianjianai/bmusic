@@ -40,7 +40,15 @@ export const ipcPlayListsApi = {
     /** 删除歌单 */
     deletePlaylist(name: string): Promise<boolean> {
         return electron.ipcRenderer.invoke('ipcPlayListsApi__deletePlaylist', name);
-    }
+    },
+    /** 读取播放列表图标 */
+    readPlaylistIconUrl(name: string): Promise<string> {
+        return electron.ipcRenderer.invoke('ipcPlayListsApi__readPlaylistIconUrl', name);
+    },
+    /** 保存播放列表图标 */
+    savePlaylistIcon(name: string, data: Uint8Array): Promise<boolean> {
+        return electron.ipcRenderer.invoke('ipcPlayListsApi__savePlaylistIcon', { name, data });
+    },
 }
 
 // @ts-ignore TODO: 调试方便，到时候删除 fix this
