@@ -15,10 +15,10 @@ export type Music = {
 }
 
 /** 比较两个音乐是否是同一首 */
-export function compareMusic(music1: Music, music2: Music) {
+export function compareMusic(music1?: Music, music2?: Music) {
   return (
-    music1.playerName === music2.playerName &&
-    music1.playerData === music2.playerData 
+    music1?.playerName === music2?.playerName &&
+    music1?.playerData === music2?.playerData 
   )
 }
 
@@ -27,12 +27,7 @@ export function musicKey(music: Music) {
   return `${music.playerName}_${music.playerData}`;
 }
 
-const currentMusic = ref<Music>({
-  musicName: "测试音乐",
-  musicAuthor: "测试作者",
-  playerName: "TestMusicPlayer",
-  playerData: ""
-});
+const currentMusic = ref<Music>();
 
   /** 音乐长度，单位毫秒 */
 const duration = ref(0);

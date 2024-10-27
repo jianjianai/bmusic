@@ -65,13 +65,13 @@ function clickVolume() {
             <div class="left-control player-control-grep">
                 <div class="player-music-info">
                     <div class="music-info">
-                        <span class="music-name">{{ musicPlayer.currentMusic.musicName || "未知" }}</span>
+                        <span class="music-name">{{ musicPlayer.currentMusic!.musicName || "未知" }}</span>
                         <span class="music-line"> - </span>
-                        <span class="music-singer">{{ musicPlayer.currentMusic.musicAuthor || "未知歌手" }}</span>
+                        <span class="music-singer">{{ musicPlayer.currentMusic!.musicAuthor || "未知歌手" }}</span>
                     </div>
                     <div class="user-button-greap">
                         <!-- 收藏到歌单 -->
-                        <div class="user-button" title="收藏到歌单" @click="addToPlayList(musicPlayer.currentMusic)">
+                        <div class="user-button" title="收藏到歌单" @click="addToPlayList(musicPlayer.currentMusic!)">
                             <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                         </div>
                     </div>

@@ -5,18 +5,19 @@ import MusicPlayer from './components/MusicPlayer.vue';
 import PlayList from './components/PlayList.vue';
 import AddToPlayList from './components/AddToPlayList.vue';
 import { addToPlayListMusic } from './states/addToPlayListState';
+import { musicPlayer } from './states/musicPlayerStates';
 
 </script>
 
 <template>
   <div class="main">
     <!-- 音乐页面 -->
-    <div class="main-box-mask">
+    <div class="main-box">
       <Nav class="nav"></Nav>
       <Content class="content"></Content>
     </div>
     <!-- 下方播放器主体 -->
-    <MusicPlayer />
+    <MusicPlayer v-if="musicPlayer.currentMusic" class="main-music-player" />
     <!-- 右侧播放列表 -->
     <PlayList />
     <!-- 添加到播放列表 -->
@@ -43,14 +44,14 @@ import { addToPlayListMusic } from './states/addToPlayListState';
   background-color: var(--color-window-bg);
 }
 
-.main-box-mask {
+.main-box {
   display: flex;
   flex-direction: row;
   height: 100vh;
   align-items: stretch;
 }
 
-.main:has(.music-player) .main-box {
+.main:has(.main-music-player) .main-box {
   height: calc(100vh - 5rem);
 }
 </style>
