@@ -67,7 +67,7 @@ function formatTime(time: number) {
     <div class="control-main">
         <div class="control-top">
             <!-- 添加到我喜欢的按钮 -->
-            <FavoriteButton :music="musicPlayer.currentMusic" class="likeed-button" title="喜欢" />
+            <FavoriteButton :music="musicPlayer.currentMusic!" class="likeed-button" title="喜欢" />
             <!-- 上一曲 -->
             <div class="previous-btn" title="上一曲" @click="playList.prev()">
                 <ControllerSVG class="previous-icon" />
