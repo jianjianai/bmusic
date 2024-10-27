@@ -354,6 +354,9 @@ function playAll() {
     background-color: var(--color-play-button-bg);
     color: var(--color-play-button-font);
 }
+.play-button:hover{
+    background-color: var(--color-play-button-hover-bg);
+}
 
 .author-img {
     width: 2rem;

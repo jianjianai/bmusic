@@ -10,9 +10,11 @@ body {
 }
 
 :root {
-  /* 主题色 */
-  --color-primary: #0069d9;
-  --color-primary2: #005bbf;
+  /* 主题色1 两种颜色相互搭配 */
+  --color-primary: #EE7755;
+  --color-primary-with: #FEEBC0;
+  /* 主题色2 用于主题色1的变化*/
+  --color-primary2: #e9623d;
 
   --color-primary-bg: white;
   --color-primary-bg2: #f5f5f5;
@@ -24,7 +26,7 @@ body {
   /* 导航栏颜色 */
   --color-primary-nav-hover-text: var(--color-primary-text);
   --color-primary-nav-hover-bg: #ededed;
-  --color-primary-nav-active-text: #ffffff;
+  --color-primary-nav-active-text: var(--color-primary-with);
   --color-primary-nav-active-bg: var(--color-primary);
 
   /* 列表颜色 */
@@ -34,7 +36,7 @@ body {
 
   /* 按钮颜色 */
   --color-primary-button: var(--color-primary);
-  --color-primary-button-text: #ffffff;
+  --color-primary-button-text: var(--color-primary-with);
   --color-primary-button-hover: var(--color-primary2);
 
   /** 无字小按钮颜色 */
@@ -121,10 +123,11 @@ body {
   --color-pay-list-header-title-font: #000000;
   --color-pay-list-header-description-font: #4f4f4f;
   --color-pay-list-header-author-font: #4f4f4f;
-  --color-play-button-bg: var(--color-primary);
-  --color-play-button-font: #ffffff;
-  --color-pay-list-search-bg: #ffffff;
-  --color-pay-list-search-border: #e5e5e5;
+  --color-play-button-bg: var(--color-primary-button);
+  --color-play-button-font: var(--color-primary-button-text);
+  --color-play-button-hover-bg: var(--color-primary-button-hover);
+  --color-pay-list-search-bg: var(--color-primary-bg2);
+  --color-pay-list-search-border: var(--color-primary-boder);
 
   /* 歌单列表 */
   --color-pay-list-line-title-border: var(--color-primary-boder);
