@@ -8,9 +8,9 @@ export default defineConfig({
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
-    build:{
-      rollupOptions:{
-        input:{
+    build: {
+      rollupOptions: {
+        input: {
           index: resolve(__dirname, 'src/preload/index.ts'),
           BilibiliMusicPlayer: resolve(__dirname, 'src/preload/players/BilibiliMusicPlayer/BilibiliMusicPlayer.ts')
         }
@@ -23,6 +23,12 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [vue()]
+    plugins: [vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag === 'webview',
+        }
+      }
+    })]
   }
 })

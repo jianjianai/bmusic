@@ -1,34 +1,34 @@
 <script lang="ts" setup>
-import { setContent,contentDisplay,contentData } from '../states/contentState';
+import { setContent, contentDisplay, contentData } from '../states/contentState';
 import SearchIcon from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
-import { reactive, toRef, watch } from 'vue';
-import { playListStorage,MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
+import { reactive, watch } from 'vue';
+import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
 
 
-const iconMap = reactive(new Map<string,string>);
-watch(()=>playListStorage.playLists,async ()=>{
+const iconMap = reactive(new Map<string, string>);
+watch(() => playListStorage.playLists, async () => {
   iconMap.clear();
-  for(const name of playListStorage.playLists){
-    iconMap.set(name,await playListStorage.readPlayListIconUrl(name));
+  for (const name of playListStorage.playLists) {
+    iconMap.set(name, await playListStorage.readPlayListIconUrl(name));
   }
-},{immediate:true});
+}, { immediate: true });
 
 
 </script>
 <template>
   <div class="nav">
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === Recommend }" @click="setContent(Recommend,{})">
+    <div class="nav-item" :class="{ selected: contentDisplay === Recommend }" @click="setContent(Recommend, {})">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">发现音乐</div>
     </div>
     <!-- 搜索 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search,{})">
+    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search, {})">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">搜索</div>
     </div>
@@ -37,7 +37,9 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">我的</div>
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == MYLIKEED_PLAYLIST_NAME }" @click="setContent(PlayListContents,{musicName:MYLIKEED_PLAYLIST_NAME})">
+    <div class="nav-item"
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == MYLIKEED_PLAYLIST_NAME }"
+      @click="setContent(PlayListContents, { musicName: MYLIKEED_PLAYLIST_NAME })">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
     </div>
@@ -46,8 +48,9 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
     <div class="paylist-item" v-for="name of playListStorage.playLists"
-      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == name }" @click="setContent(PlayListContents, {musicName:name})">
-      <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`" ></div>
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == name }"
+      @click="setContent(PlayListContents, { musicName: name })">
+      <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`"></div>
       <div class="title">{{ name }}</div>
     </div>
   </div>
