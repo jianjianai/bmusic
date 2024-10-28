@@ -121,6 +121,9 @@ body {
 
   /* 歌单顶部信息栏 */
   --color-pay-list-header-title-font: #000000;
+  --color-play-edit-button: var(--color-primary-button-small);
+  --color-play-edit-button-hover:var(--color-primary-button-small-hover);
+
   --color-pay-list-header-description-font: #4f4f4f;
   --color-pay-list-header-author-font: #4f4f4f;
   --color-play-button-bg: var(--color-primary-button);
@@ -128,6 +131,7 @@ body {
   --color-play-button-hover-bg: var(--color-primary-button-hover);
   --color-pay-list-search-bg: var(--color-primary-bg2);
   --color-pay-list-search-border: var(--color-primary-boder);
+
 
   /* 歌单列表 */
   --color-pay-list-line-title-border: var(--color-primary-boder);

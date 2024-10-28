@@ -12,7 +12,7 @@ const data = ref<unknown>(null);
 export const contentState = readonly({
     display: display,
     data: data,
-    setDisplay(newDisplay:DefineComponent<any,any,any>,newData:any = null){
+    setDisplay(newDisplay:DefineComponent<any,any,any>,newData:unknown = null){
         display.value = newDisplay;
         data.value = newData;
     }

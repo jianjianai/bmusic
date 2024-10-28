@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { contentState } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
-import { Ref, toRef } from 'vue';
+import { type Ref, toRef } from 'vue';
 import PlaySvg from '../svg/Play.vue';
 import SearchSvg from '../svg/Search.vue';
 import PauseSvg from '../svg/Pause.vue';
@@ -11,6 +11,8 @@ import FavoriteButton from '../allSmall/FavoriteButton.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
 import { addToPlayList } from '@renderer/states/addToPlayListState';
 import AddMusicCollectionSvg from '../svg/AddMusicCollection.vue';
+import EditSvg from '../svg/Edit.vue';
+import EditPlayListInfo from './EditPlayListInfo.vue';
 
 const musicName = toRef(contentState, 'data');
 const musicPlayList = useMusicPlayList(musicName as Ref<string>);
@@ -35,6 +37,11 @@ function playAll() {
     playList.setCurrentIndex(0);
 }
 
+//去编辑歌单信息
+function toEdit() {
+    contentState.setDisplay(EditPlayListInfo, musicName);
+}
+
 </script>
 <template>
     <div class="pay-list-box">
@@ -51,7 +58,12 @@ function playAll() {
                     <div class="content-main">
                         <!-- 文本内容 -->
                         <div class="content-main-c">
-                            <div class="title">{{ musicPlayList!.name }}</div>
+                            <div class="title-line">
+                                <div class="title">{{ musicPlayList!.name }}</div>
+                                <div class="edit-button" title="编辑歌单信息" @click="toEdit">
+                                    <EditSvg style="width: 100%;height: 100%;" />
+                                </div>
+                            </div>
                             <div class="description">{{ musicPlayList!.musicList?.description || "没有简介" }}</div>
                             <div class="author">
                                 <div class="author-img"
@@ -354,7 +366,8 @@ function playAll() {
     background-color: var(--color-play-button-bg);
     color: var(--color-play-button-font);
 }
-.play-button:hover{
+
+.play-button:hover {
     background-color: var(--color-play-button-hover-bg);
 }
 
@@ -412,8 +425,24 @@ function playAll() {
     display: -webkit-box;
 }
 
+.title-line {
+    display: flex;
+    align-items: center;
+}
+
+.edit-button:hover {
+    color: var(--color-play-edit-button-hover);
+}
+
+.edit-button {
+    height: 1rem;
+    width: 1rem;
+    color: var(--color-play-edit-button);
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
 .title {
-    flex: none;
     font-size: 1.3rem;
     font-weight: bolder;
     color: var(--color-pay-list-header-title-font);
