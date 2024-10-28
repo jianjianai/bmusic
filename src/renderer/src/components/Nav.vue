@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { contentState } from '../states/contentState';
+import { setContent,contentDisplay,contentData } from '../states/contentState';
 import SearchIcon from './svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
@@ -9,9 +9,7 @@ import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
 import { LOGO_URL } from '@renderer/imageUrls';
 
-const display = toRef(contentState, 'display');
-const data = toRef(contentState, 'data');
-const setDisplay = contentState.setDisplay;
+
 const iconMap = reactive(new Map<string,string>);
 watch(()=>playListStorage.playLists,async ()=>{
   iconMap.clear();
@@ -25,12 +23,12 @@ watch(()=>playListStorage.playLists,async ()=>{
 <template>
   <div class="nav">
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: display === Recommend }" @click="setDisplay(Recommend)">
+    <div class="nav-item" :class="{ selected: contentDisplay === Recommend }" @click="setContent(Recommend)">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">发现音乐</div>
     </div>
     <!-- 搜索 -->
-    <div class="nav-item" :class="{ selected: display === Search }" @click="setDisplay(Search)">
+    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search)">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">搜索</div>
     </div>
@@ -39,7 +37,7 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">我的</div>
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: display === PlayListContents && data == MYLIKEED_PLAYLIST_NAME }" @click="setDisplay(PlayListContents,MYLIKEED_PLAYLIST_NAME)">
+    <div class="nav-item" :class="{ selected: contentDisplay === PlayListContents && contentData == MYLIKEED_PLAYLIST_NAME }" @click="setContent(PlayListContents,MYLIKEED_PLAYLIST_NAME)">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
     </div>
@@ -48,7 +46,7 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
     <div class="paylist-item" v-for="name of playListStorage.playLists"
-      :class="{ selected: display === PlayListContents && data == name }" @click="setDisplay(PlayListContents, name)">
+      :class="{ selected: contentDisplay === PlayListContents && contentData == name }" @click="setContent(PlayListContents, name)">
       <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`" ></div>
       <div class="title">{{ name }}</div>
     </div>
