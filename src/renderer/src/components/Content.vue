@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { contentDisplay } from '../states/contentState';
+import { contentDisplay, contentData } from '../states/contentState';
 
 </script>
 <template>
     <div class="content">
-        <component :is="contentDisplay"></component>
+        <component :is="contentDisplay" v-bind="contentData"></component>
     </div>
 </template>
 <style scoped>

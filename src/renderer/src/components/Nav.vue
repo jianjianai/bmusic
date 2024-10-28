@@ -23,12 +23,12 @@ watch(()=>playListStorage.playLists,async ()=>{
 <template>
   <div class="nav">
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === Recommend }" @click="setContent(Recommend)">
+    <div class="nav-item" :class="{ selected: contentDisplay === Recommend }" @click="setContent(Recommend,{})">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">发现音乐</div>
     </div>
     <!-- 搜索 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search)">
+    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search,{})">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">搜索</div>
     </div>
@@ -37,7 +37,7 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">我的</div>
     <!-- 发现音乐 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === PlayListContents && contentData == MYLIKEED_PLAYLIST_NAME }" @click="setContent(PlayListContents,MYLIKEED_PLAYLIST_NAME)">
+    <div class="nav-item" :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == MYLIKEED_PLAYLIST_NAME }" @click="setContent(PlayListContents,{musicName:MYLIKEED_PLAYLIST_NAME})">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
     </div>
@@ -46,7 +46,7 @@ watch(()=>playListStorage.playLists,async ()=>{
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
     <div class="paylist-item" v-for="name of playListStorage.playLists"
-      :class="{ selected: contentDisplay === PlayListContents && contentData == name }" @click="setContent(PlayListContents, name)">
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == name }" @click="setContent(PlayListContents, {musicName:name})">
       <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`" ></div>
       <div class="title">{{ name }}</div>
     </div>

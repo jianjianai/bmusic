@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { contentData as musicName, setContent } from '@renderer/states/contentState';
+import { setContent } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
-import { type Ref } from 'vue';
+import { toRef } from 'vue';
 import PlaySvg from '../svg/Play.vue';
 import SearchSvg from '../svg/Search.vue';
 import PauseSvg from '../svg/Pause.vue';
@@ -14,7 +14,11 @@ import AddMusicCollectionSvg from '../svg/AddMusicCollection.vue';
 import EditSvg from '../svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
 
-const musicPlayList = useMusicPlayList(musicName as Ref<string>);
+const props = defineProps<{
+    musicName: string
+}>();
+
+const musicPlayList = useMusicPlayList(toRef(props, 'musicName'));
 
 // 点击播放按钮,播放音乐
 function chickMusicIcon(music: Music, index: number) {
@@ -38,7 +42,7 @@ function playAll() {
 
 //去编辑歌单信息
 function toEdit() {
-    setContent(EditPlayListInfo, musicName);
+    setContent(EditPlayListInfo, { musicName: props.musicName });
 }
 
 </script>

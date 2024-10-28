@@ -169,6 +169,7 @@ function newMusicPlayList(fromName: string) {
 type Quote<T> = {
     quote: number,
     t: T,
+    clearTimeoutID?: NodeJS.Timeout
 }
 /** 播放列表缓存,优化性能 */
 const musicPlayLists: Quote<ReturnType<typeof newMusicPlayList>>[] = [];
@@ -178,6 +179,7 @@ export function useMusicPlayList(fromName: Ref<string|undefined>): Ref<ReturnTyp
         let has = musicPlayLists.find(a => a.t.name === name);
         if (has) {
             has.quote++;
+            clearTimeout(has.clearTimeoutID);
             return has;
         }
         const newOne = newMusicPlayList(name);
@@ -188,10 +190,14 @@ export function useMusicPlayList(fromName: Ref<string|undefined>): Ref<ReturnTyp
     function reduceCitations(quote: Quote<ReturnType<typeof newMusicPlayList>>) {
         quote.quote--;
         if (quote.quote < 1) {
-            const index = musicPlayLists.findIndex(a => a.t.name === quote.t.name);
-            if (index >= 0) {
-                musicPlayLists.splice(index, 1);
-            }
+            //10秒后卸载
+            clearTimeout(quote.clearTimeoutID);
+            quote.clearTimeoutID = setTimeout(()=>{
+                const index = musicPlayLists.findIndex(a => a.t.name === quote.t.name);
+                if (index >= 0) {
+                    musicPlayLists.splice(index, 1);
+                }
+            },10000);
         }
     }
     const rRef = ref(fromName.value?findOrNew(fromName.value):null);

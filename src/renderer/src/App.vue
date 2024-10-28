@@ -28,6 +28,7 @@ import { musicPlayer } from './states/musicPlayerStates';
 <style scoped>
 .content {
   flex: 1;
+  width: 0;
 }
 
 .nav,
