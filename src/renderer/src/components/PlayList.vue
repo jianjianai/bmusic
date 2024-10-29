@@ -4,9 +4,9 @@ import PlaySvg from './svg/Play.vue';
 import PauseSvg from './svg/Pause.vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates';
 import FavoriteButton from './allSmall/FavoriteButton.vue';
-import { LOGO_URL } from '@renderer/imageUrls';
 import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
 import { addToPlayList } from '@renderer/states/addToPlayListState';
+import ImgDiv from './allSmall/ImgDiv.vue';
 
 function clickItemIcon(index: number) {
     // 如果点击的不是当前的音乐，就切换音乐
@@ -42,7 +42,7 @@ function clickItemIcon(index: number) {
                     <!-- 图标 -->
                     <div class="icon" @click="clickItemIcon(index)">
                         <!-- TODO 图片显示 -->
-                        <div class="icon-img" :style="`background-image: url(${music.iconUrl || LOGO_URL});`"></div>
+                        <ImgDiv class="icon-img" :src="music.iconUrl"></ImgDiv>
                         <!-- hover -->
                         <div class="item-icon-hover"></div>
                         <!-- 暂停图标 -->
@@ -96,8 +96,6 @@ function clickItemIcon(index: number) {
 .icon-img {
     height: 100%;
     width: 100%;
-    background-position: center;
-    background-size: cover;
 }
 
 .item-box.paying .item-icon-hover,

@@ -7,7 +7,7 @@ import { reactive, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from './svg/IcFavorite.vue';
-import { LOGO_URL } from '@renderer/imageUrls';
+import ImgDiv from './allSmall/ImgDiv.vue';
 
 
 const iconMap = reactive(new Map<string, string>);
@@ -47,10 +47,10 @@ watch(() => playListStorage.playLists, async () => {
     <!-- 分割线 -->
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
-    <div class="paylist-item" v-for="name of playListStorage.playLists"
+    <div class="paylist-item" v-for="name of playListStorage.playLists.filter(n => n !== MYLIKEED_PLAYLIST_NAME)"
       :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == name }"
       @click="setContent(PlayListContents, { musicName: name })">
-      <div class="icon" :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`"></div>
+      <ImgDiv class="icon" :src="iconMap.get(name)"></ImgDiv>
       <div class="title">{{ name }}</div>
     </div>
   </div>
@@ -92,8 +92,6 @@ watch(() => playListStorage.playLists, async () => {
   width: 2rem;
   height: 2rem;
   border-radius: 0.3rem;
-  background-position: center;
-  background-size: cover;
 }
 
 

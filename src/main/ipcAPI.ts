@@ -21,7 +21,7 @@ import { pathToFileURL } from "url";
     }
     /** 构建图标文件名 */
     function buildIconFileName(name: string, index: number) {
-        return `${buildFileNameFelx(name, index)}.png`;
+        return `${buildFileNameFelx(name, index)}.webp`;
     }
 
     /** 从文件名解name称和index */
@@ -29,7 +29,7 @@ import { pathToFileURL } from "url";
         const lastdIndex = fileName.lastIndexOf(".");
         const sp = fileName.substring(0, lastdIndex);
         const falstdIndex = sp.indexOf(".");
-        const iconFileName = sp + ".png";
+        const iconFileName = sp + ".webp";
         const isIconFileExists = existsSync(join(playListPath, iconFileName));
         if (falstdIndex === -1) {
             return {
@@ -158,7 +158,9 @@ import { pathToFileURL } from "url";
         const thePlayList = playLists[index];
         if (thePlayList.iconFileName === null) return null;
         const iconFilePath = join(playListPath, thePlayList.iconFileName);
-        const fileUrl = pathToFileURL(iconFilePath).toString();
+        const url = pathToFileURL(iconFilePath);
+        url.search = `?${new Date().getTime()}`;// 防止缓存
+        const fileUrl = url.toString();
         return fileUrl;
     });
     // 保存播放列表图标

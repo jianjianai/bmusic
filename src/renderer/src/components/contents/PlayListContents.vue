@@ -8,11 +8,11 @@ import PauseSvg from '../svg/Pause.vue';
 import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
 import FavoriteButton from '../allSmall/FavoriteButton.vue';
-import { LOGO_URL } from '@renderer/imageUrls';
 import { addToPlayList } from '@renderer/states/addToPlayListState';
 import AddMusicCollectionSvg from '../svg/AddMusicCollection.vue';
 import EditSvg from '../svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
+import ImgDiv from '../allSmall/ImgDiv.vue';
 
 const props = defineProps<{
     musicName: string
@@ -54,9 +54,9 @@ function toEdit() {
                 <!-- 内容，歌单名称简介等 -->
                 <div class="content">
                     <!-- 图片 -->
-                    <div class="content-img"
-                        :style="`background-image: url(${musicPlayList!.musicListInconUrl || musicPlayList!.musicList?.list[0]?.iconUrl || LOGO_URL});`">
-                    </div>
+                    <ImgDiv class="content-img"
+                        :src="musicPlayList!.musicListInconUrl || musicPlayList!.musicList?.list[0]?.iconUrl">
+                    </ImgDiv>
                     <!-- 右边内容 -->
                     <div class="content-main">
                         <!-- 文本内容 -->
@@ -69,9 +69,8 @@ function toEdit() {
                             </div>
                             <div class="description">{{ musicPlayList!.musicList?.description || "没有简介" }}</div>
                             <div class="author">
-                                <div class="author-img"
-                                    :style="`background-image: url(${musicPlayList!.musicList?.authorIconUrl || LOGO_URL});`">
-                                </div>
+                                <ImgDiv class="author-img" :src="musicPlayList!.musicList?.authorIconUrl">
+                                </ImgDiv>
                                 <div class="author-name">{{ musicPlayList!.musicList?.author || "没有作者" }}</div>
                             </div>
                         </div>
@@ -111,8 +110,7 @@ function toEdit() {
                     <!-- 音乐信息 -->
                     <div class="info">
                         <!-- 图标 -->
-                        <div class="info-icon" @click="chickMusicIcon(music, index)"
-                            :style="`background-image: url(${music.iconUrl || LOGO_URL});`">
+                        <ImgDiv class="info-icon" @click="chickMusicIcon(music, index)" :src="music.iconUrl">
                             <!-- 遮罩 -->
                             <div class="info-icon-mask">
                                 <!-- 播放暂停按钮 -->
@@ -120,7 +118,7 @@ function toEdit() {
                                     v-if="compareMusic(musicPlayer.currentMusic, music) && musicPlayer.playing" />
                                 <PlaySvg class="icon" v-else />
                             </div>
-                        </div>
+                        </ImgDiv>
                         <!-- 内容 -->
                         <div class="info-content">
                             <!-- 名称 -->
@@ -259,8 +257,6 @@ function toEdit() {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.25rem;
-    background-position: center;
-    background-size: cover;
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -464,8 +460,6 @@ function toEdit() {
     height: 10rem;
     border-radius: 1rem;
     margin: 0 1rem;
-    background-position: center;
-    background-size: cover;
 }
 
 .content {

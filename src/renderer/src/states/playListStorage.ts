@@ -4,7 +4,7 @@ import { musicKey, type Music } from "./musicPlayerStates";
 
 /** 加载播放列表 */
 async function loadPlayList(): Promise<string[]> {
-    return (await ipcPlayListsApi.getPlaylist()).filter((a) => a.name !== MYLIKEED_PLAYLIST_NAME).sort((a, b) => a.index - b.index).map(n => n.name);
+    return (await ipcPlayListsApi.getPlaylist()).sort((a, b) => a.index - b.index).map(n => n.name);
 }
 
 /** 播放列表列表 */
@@ -73,6 +73,10 @@ export const playListStorage = readonly({
     async readPlayListIconUrl(name: string) {
         return ipcPlayListsApi.readPlaylistIconUrl(name);
     },
+    /** 保存播放列表图标 */
+    async savePlayListIconUrl(name: string, data: Uint8Array) {
+        return ipcPlayListsApi.savePlaylistIcon(name, data);
+    }
 });
 
 
@@ -104,6 +108,12 @@ function newMusicPlayList(fromName: string) {
         name.value = newName;
     }
 
+    /** 修改歌单图标 */
+    async function setIcon(data: Uint8Array) {
+        await playListStorage.savePlayListIconUrl(name.value, data);
+        musicListInconUrl.value = await playListStorage.readPlayListIconUrl(name.value);
+    }
+
     /** 删除歌单 */
     async function deleteThis() {
         await playListStorage.deletePlayList(name.value);
@@ -119,7 +129,7 @@ function newMusicPlayList(fromName: string) {
         return map;
     });
 
-    // 判断音乐是否已经喜欢
+    // 判断音乐是否已经存在
     function hasMusic(music: Music): boolean {
         return musicMap.value.has(musicKey(music));
     }
@@ -129,7 +139,7 @@ function newMusicPlayList(fromName: string) {
         return musicMap.value.get(musicKey(music));
     }
 
-    // 添加音乐到喜欢列表
+    // 添加音乐到列表
     function addMusic(music: Music) {
         if (findMusicIndex(music) != undefined || !loaded.value) {
             return;
@@ -139,7 +149,7 @@ function newMusicPlayList(fromName: string) {
         save();
     }
 
-    // 从喜欢列表删除
+    // 从列表删除
     function removeMusic(music: Music) {
         const index = findMusicIndex(music);
         if (index === undefined || !loaded.value) {
@@ -163,6 +173,7 @@ function newMusicPlayList(fromName: string) {
         findMusicIndex,
         addMusic,
         removeMusic,
+        setIcon
     });
 }
 

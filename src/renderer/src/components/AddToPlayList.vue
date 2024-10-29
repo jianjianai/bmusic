@@ -4,6 +4,7 @@ import { addToPlayListMusic } from '@renderer/states/addToPlayListState';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { reactive, ref, watch } from 'vue';
 import CloseSvg from './svg/Close.vue';
+import ImgDiv from './allSmall/ImgDiv.vue';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
@@ -26,8 +27,8 @@ watch(musicPlayList, async (newVal) => {
     }
 });
 
-function close(){
-    if(loading){
+function close() {
+    if (loading) {
         return;
     }
     addToPlayListMusic.value = undefined;
@@ -45,18 +46,19 @@ function close(){
                     <!-- 每个歌单 -->
                     <div class="add-to-pay-list-box-list" v-for="name of playListStorage.playLists"
                         @click="refAddToList = name">
-                        <div class="add-to-pay-list-box-list-icon"
-                            :style="`background-image: url(${iconMap.get(name) || LOGO_URL});`"></div>
+                        <ImgDiv class="add-to-pay-list-box-list-icon" :src="iconMap.get(name)"></ImgDiv>
                         <div class="add-to-pay-list-box-list-name">{{ name }}</div>
                     </div>
                 </div>
                 <!-- 关闭按钮 -->
-                <div class="add-to-pay-list-box-list-close" @click="close()"><CloseSvg style="width: 100%;height: 100%;" /></div>
+                <div class="add-to-pay-list-box-list-close" @click="close()">
+                    <CloseSvg style="width: 100%;height: 100%;" />
+                </div>
             </template>
             <!-- 收藏中.. -->
             <template v-else>
                 <div class="loading">
-                    <div class="loading-icon" :style="`background-image: url(${iconMap.get(refAddToList) || LOGO_URL});`"></div>
+                    <ImgDiv class="loading-icon" :src="iconMap.get(refAddToList)"></ImgDiv>
                     <div class="loading-text">{{ refAddToList }}</div>
                     <div class="loading-text">收藏中...</div>
                 </div>
@@ -65,7 +67,7 @@ function close(){
     </div>
 </template>
 <style scoped>
-.add-to-pay-list-box-list-close{
+.add-to-pay-list-box-list-close {
     position: absolute;
     right: 1rem;
     top: 1rem;
@@ -74,6 +76,7 @@ function close(){
     cursor: pointer;
     color: var(--color-add-to-play-list-box-list-close);
 }
+
 .loading-text {
     font-size: 1rem;
     color: var(--color-add-to-play-list-box-loading-text);
@@ -84,11 +87,8 @@ function close(){
 .loading-icon {
     width: 3rem;
     height: 3rem;
-    background-color: rgb(252, 189, 244);
     border-radius: 0.5rem;
     overflow: hidden;
-    background-position: center;
-    background-size: cover;
 }
 
 .loading {
@@ -107,8 +107,6 @@ function close(){
     border-radius: 0.5rem;
     margin-left: 1rem;
     overflow: hidden;
-    background-position: center;
-    background-size: cover;
 }
 
 .add-to-pay-list-box-list-name {

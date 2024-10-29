@@ -163,4 +163,35 @@ body {
 
   /* 编辑歌单信息 */
   --edit-play-list-lnfo-title-color: var(--color-primary-text);
+  --from-line-content-input-border-color: var(--color-primary-boder);
+  --from-line-content-input-color: var(--color-primary-text2);
+  --from-line-content-input-bg-color: var(--color-primary-bg2);
+  --edit-play-list-lnfo-line-color: var(--color-primary-boder);
+  --edit-play-list-save-button-color: var(--color-primary-button-text);
+  --edit-play-list-save-button-bg-color: var(--color-primary-button);
+  --edit-play-list-save-button-bg-hover : var(--color-primary-button-hover);
+
+  --edit-play-list-cancel-button-color: var(--color-primary-text);
+  --edit-play-list-cancel-button-bg-color: var(--color-primary-bg2);
+  --edit-play-list-cancel-button-border-color: var(--color-primary-boder);
+
+  --edit-play-list-icon-input-text-color: #ffffff;
+  --edit-play-list-icon-input-bg-hover-color: #00000064; /*有透明度*/
+
+
+  /* 图片编辑器 */
+  --edit-img-bg-color: var(--color-primary-bg);
+  --edit-img-shadow-color: var(--color-primary-shadow);
+  --edit-img-title-color: var(--color-primary-text);
+  --edit-img-ok-bg-color: var(--color-primary-button);
+  --edit-img-ok-color: var(--color-primary-button-text);
+  --edit-img-cancel-bg-color: var(--color-primary-bg2);
+  --edit-img-cancel-color: var(--color-primary-text);
+
+  /* 右上角消息弹出框 */
+  --tip-color-success: #67c23a;
+  --tip-color-error: #f56c6c;
+  --notification-bgc: var(--color-primary-bg);
+  --notification-shadow: 0 0 0.5rem 0.1rem var(--color-primary-shadow);
+
 }
