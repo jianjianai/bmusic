@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { LOGO_URL } from '@renderer/imageUrls';
 import { addToPlayListMusic } from '@renderer/states/addToPlayListState';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { reactive, ref, watch } from 'vue';
