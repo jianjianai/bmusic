@@ -26,56 +26,60 @@ function clickItemIcon(index: number) {
 <template>
     <div>
         <!-- 后面的遮罩，点击关闭 -->
-        <div class="play-list-bc" v-show="playListOpen" @click="playListOpen = false"></div>
+        <div class="play-list-bc" v-if="playListOpen" @click="playListOpen = false"></div>
         <!-- 播放列表主体 -->
-        <div class="play-list-box" :class="{ open: playListOpen }">
-            <!-- 标题 -->
-            <div class="title">
-                <div class="title-left">播放列表</div>
-                <div class="title-right"></div>
-            </div>
-            <!-- 列表 -->
-            <div class="list">
-                <!-- 列表中的每个项 -->
-                <div class="item-box" :class="{ paying: index == playList.currentIndex }"
-                    v-for="music, index of playList.list" :key="music.playerData">
-                    <!-- 图标 -->
-                    <div class="icon" @click="clickItemIcon(index)">
-                        <!-- TODO 图片显示 -->
-                        <ImgDiv class="icon-img" :src="music.iconUrl"></ImgDiv>
-                        <!-- hover -->
-                        <div class="item-icon-hover"></div>
-                        <!-- 暂停图标 -->
-                        <PauseSvg class="item-icon-svg" v-if="index == playList.currentIndex && musicPlayer.playing">
-                        </PauseSvg>
-                        <!-- 播放图标 -->
-                        <PlaySvg class="item-icon-svg" v-else></PlaySvg>
-                    </div>
-                    <!-- 音乐名称啥的 -->
-                    <div class="name-and-author">
-                        <div class="name">{{ music.musicName }}</div>
-                        <div class="author">
-                            <div class="author-player">{{ music.playerName }}</div>
-                            <div class="author-author">{{ music.musicAuthor }}</div>
+        <Transition>
+            <div class="play-list-box" v-if="playListOpen">
+                <!-- 标题 -->
+                <div class="title">
+                    <div class="title-left">播放列表</div>
+                    <div class="title-right"></div>
+                </div>
+                <!-- 列表 -->
+                <div class="list">
+                    <!-- 列表中的每个项 -->
+                    <div class="item-box" :class="{ paying: index == playList.currentIndex }"
+                        v-for="music, index of playList.list" :key="music.playerData">
+                        <!-- 图标 -->
+                        <div class="icon" @click="clickItemIcon(index)">
+                            <!-- TODO 图片显示 -->
+                            <ImgDiv class="icon-img" :src="music.iconUrl"></ImgDiv>
+                            <!-- hover -->
+                            <div class="item-icon-hover"></div>
+                            <!-- 暂停图标 -->
+                            <PauseSvg class="item-icon-svg"
+                                v-if="index == playList.currentIndex && musicPlayer.playing">
+                            </PauseSvg>
+                            <!-- 播放图标 -->
+                            <PlaySvg class="item-icon-svg" v-else></PlaySvg>
                         </div>
-                    </div>
-                    <!-- 按钮组 -->
-                    <div class="button-grep">
-                        <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
-                            <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                        <!-- 音乐名称啥的 -->
+                        <div class="name-and-author">
+                            <div class="name">{{ music.musicName }}</div>
+                            <div class="author">
+                                <div class="author-player">{{ music.playerName }}</div>
+                                <div class="author-author">{{ music.musicAuthor }}</div>
+                            </div>
                         </div>
+                        <!-- 按钮组 -->
+                        <div class="button-grep">
+                            <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
+                                <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                            </div>
+                        </div>
+                        <!-- 喜欢 -->
+                        <FavoriteButton class="like" :music="music" style="width: 1.2rem;height: 1.2rem;" />
                     </div>
-                    <!-- 喜欢 -->
-                    <FavoriteButton class="like" :music="music" style="width: 1.2rem;height: 1.2rem;" />
                 </div>
             </div>
-        </div>
+        </Transition>
     </div>
 </template>
 <style scoped>
 .button-grep-button:hover {
     color: var(--color-play-list-item-button-grep-button-hover);
 }
+
 .button-grep-button {
     width: 1.2rem;
     height: 1.2rem;
@@ -240,21 +244,27 @@ function clickItemIcon(index: number) {
     height: 100vh;
 }
 
-.play-list-box.open {
-    right: 0;
+
+.v-enter-active.play-list-box,
+.v-leave-active.play-list-box {
+    transition: right 0.2s;
+}
+
+.v-enter-from.play-list-box,
+.v-leave-to.play-list-box {
+    right: -30rem;
 }
 
 .play-list-box {
     display: flex;
     flex-direction: column;
     position: fixed;
-    right: -30rem;
+    right: 0;
     width: 23rem;
     top: 2rem;
     height: calc(100vh - 8rem);
     background-color: var(--color-play-list-window-bg);
     border-radius: 1rem 0 0 1rem;
     box-shadow: 0 0 1rem var(--color-play-list-window-shadow);
-    transition: right 0.2s;
 }
 </style>

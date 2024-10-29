@@ -22,6 +22,8 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
     </div>
     <!-- 下方播放器主体 -->
     <MusicPlayer v-if="musicPlayer.currentMusic" class="main-music-player" />
+
+    <!-- 下面全是弹出组件 -->
     <!-- 右侧播放列表 -->
     <PlayList />
     <!-- 添加到播放列表 -->
