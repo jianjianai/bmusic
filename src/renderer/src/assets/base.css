@@ -165,9 +165,6 @@ body {
 
   /* 编辑歌单信息 */
   --edit-play-list-lnfo-title-color: var(--color-primary-text);
-  --from-line-content-input-border-color: var(--color-primary-boder);
-  --from-line-content-input-color: var(--color-primary-text2);
-  --from-line-content-input-bg-color: var(--color-primary-bg2);
   --edit-play-list-lnfo-line-color: var(--color-primary-boder);
 
 
@@ -197,5 +194,11 @@ body {
   --color-universal-ok-button-bgc: var(--color-primary-button);
   --color-universal-ok-button-bgc-hover: var(--color-primary-button-hover);
   --color-universal-ok-button-border: var(--color-primary-boder);
+
+  /* 通用输入框 */
+  --universal-input-border-color: var(--color-primary-boder);
+  --universal-input-color: var(--color-primary-text2);
+  --universal-input-bg-color: var(--color-primary-bg2);
+  --universal-input-border-color-focus: var(--color-primary);
 
 }

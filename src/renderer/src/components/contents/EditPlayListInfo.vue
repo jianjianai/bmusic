@@ -8,6 +8,8 @@ import PlayListContents from './PlayListContents.vue';
 import 'vue-cropper/dist/index.css'
 import { cropperImg } from '@renderer/states/cropperImg/cropperImg';
 import UniversalButton from '../allSmall/UniversalButton.vue';
+import UniversalInput from '../allSmall/UniversalInput.vue';
+import UniversalTextarea from '../allSmall/UniversalTextarea.vue';
 
 const props = defineProps<{
     musicName: string
@@ -121,16 +123,11 @@ function uploadAuthorIcon(event) {
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">名称:</div>
-                    <label class="from-line-content-input name" for="name-input">
-                        <input class="name-input" id="name-input" type="text" v-model="edits.name" />
-                    </label>
+                    <UniversalInput v-model="edits.name"  class="from-line-content-input name"/>
                 </div>
                 <div class="from-line">
                     <div class="from-line-title">简介:</div>
-                    <label class="from-line-content-input description" for="description-input">
-                        <textarea class="description-input" id="description-input"
-                            v-model="edits.description"></textarea>
-                    </label>
+                    <UniversalTextarea v-model="edits.description" class="from-line-content-input description"/>
                 </div>
             </div>
             <!-- 图片 -->
@@ -151,9 +148,7 @@ function uploadAuthorIcon(event) {
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">昵称:</div>
-                    <label class="from-line-content-input name" for="name-input">
-                        <input class="name-input" id="name-input" type="text" v-model="edits.author" />
-                    </label>
+                    <UniversalInput v-model="edits.author" class="from-line-content-input name"/>
                 </div>
             </div>
             <!-- 图片 -->
@@ -219,19 +214,6 @@ function uploadAuthorIcon(event) {
     border-bottom: 0.1rem solid var(--edit-play-list-lnfo-line-color);
     margin-top: 2rem;
     margin-bottom: 1rem;
-
-}
-
-.name-input,
-.description-input {
-    flex: 1;
-    color: var(--from-line-content-input-color);
-    background-color: rgba(0, 0, 0, 0);
-    border: 0;
-    resize: none;
-    outline: none;
-    font-size: 0.9rem;
-    font-family: auto;
 }
 
 .from-line-content-input.description {
@@ -240,17 +222,6 @@ function uploadAuthorIcon(event) {
 
 .from-line-content-input.name {
     height: 2rem;
-}
-
-.from-line-content-input {
-    flex: 1;
-    width: 0;
-    display: flex;
-    align-items: stretch;
-    padding: 0 0.5rem;
-    border: 0.1rem solid var(--from-line-content-input-border-color);
-    border-radius: 0.5rem;
-    background-color: var(--from-line-content-input-bg-color);
 }
 
 .from-line {
