@@ -1,28 +1,21 @@
 <script lang="ts" setup>
-import { addToPlayListMusic } from './addToPlayList';
+import { createNewPlayListMusic } from './createPlayList';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
-import { reactive, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import CloseSvg from '@renderer/svg/Close.vue';
 import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
 import AddSvg from '@renderer/svg/AddSvg.vue';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
-const iconMap = reactive(new Map<string, string>);
-let loading = false;
-watch(() => playListStorage.playLists, async () => {
-    iconMap.clear();
-    for (const name of playListStorage.playLists) {
-        iconMap.set(name, await playListStorage.readPlayListIconUrl(name));
-    }
-}, { immediate: true });
 
+let loading = false;
 watch(musicPlayList, async (newVal) => {
     if (newVal) {
         loading = true;
         await newVal.onLoaded;
-        newVal.addMusic(addToPlayListMusic.value!);
-        addToPlayListMusic.value = undefined;
+        newVal.addMusic(createNewPlayListMusic.value!);
+        createNewPlayListMusic.value = undefined;
         loading = false;
     }
 });
@@ -31,7 +24,7 @@ function close() {
     if (loading) {
         return;
     }
-    addToPlayListMusic.value = undefined;
+    createNewPlayListMusic.value = undefined;
 }
 
 </script>
@@ -41,34 +34,14 @@ function close() {
         <div class="add-to-pay-list-box">
             <!-- 选择歌单 -->
             <template v-if="!refAddToList">
-                <div class="add-to-pay-list-box-title">收藏到歌单</div>
-                <div class="add-to-pay-list-box-lists">
-                    <!-- 创建歌单 -->
-                    <div class="add-to-pay-list-box-list">
-                        <div class="add-to-pay-list-box-list-icon create">
-                            <AddSvg style="width: 100%; height: 100%;" />
-                            <div class="add-to-pay-list-box-list-icon-msk-create"></div>
-                        </div>
-                        <div class="add-to-pay-list-box-list-name create">创建新歌单</div>
-                    </div>
-                    <!-- 每个歌单 -->
-                    <div class="add-to-pay-list-box-list" v-for="name of playListStorage.playLists"
-                        @click="refAddToList = name">
-                        <ImgDiv class="add-to-pay-list-box-list-icon" :src="iconMap.get(name)"></ImgDiv>
-                        <div class="add-to-pay-list-box-list-name">{{ name }}</div>
-                    </div>
-                </div>
-                <!-- 关闭按钮 -->
-                <div class="add-to-pay-list-box-list-close" @click="close()">
-                    <CloseSvg style="width: 100%;height: 100%;" />
-                </div>
+                <div class="add-to-pay-list-box-title">创建新歌单</div>
+
             </template>
-            <!-- 收藏中.. -->
+            <!-- 创建中.. -->
             <template v-else>
                 <div class="loading">
-                    <ImgDiv class="loading-icon" :src="iconMap.get(refAddToList)"></ImgDiv>
                     <div class="loading-text">{{ refAddToList }}</div>
-                    <div class="loading-text">收藏中...</div>
+                    <div class="loading-text">创建中...</div>
                 </div>
             </template>
         </div>

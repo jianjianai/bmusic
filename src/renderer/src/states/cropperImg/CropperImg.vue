@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { cropperImgInfo } from './cropperImg';
 import { VueCropper } from "vue-cropper";
+import UniversalButton from '@renderer/components/allSmall/UniversalButton.vue';
 
 const cropper = ref();
 const editImgBlobUrl = computed(() => {
@@ -35,8 +36,8 @@ function ok() {
             </VueCropper>
         </div>
         <div class="edit-img-buttons">
-            <div class="ok-button" @click="ok">确定</div>
-            <div class="cancel-button" @click="close">取消</div>
+            <UniversalButton type="ok" text="确定" @click="ok" />
+            <UniversalButton type="other" text="取消" @click="close" />
         </div>
     </div>
 </template>
@@ -45,24 +46,6 @@ function ok() {
     display: flex;
     gap: 1rem;
 }
-
-.cancel-button {
-    background-color: var(--edit-img-cancel-bg-color);
-    color: var(--edit-img-cancel-color);
-}
-
-.ok-button {
-    background-color: var(--edit-img-ok-bg-color);
-    color: var(--edit-img-ok-color);
-}
-
-.ok-button,
-.cancel-button {
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
 
 .eidt-img-title {
     font-size: 1.2rem;

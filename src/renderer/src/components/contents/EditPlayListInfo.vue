@@ -7,6 +7,7 @@ import { setContent } from '@renderer/states/contentState';
 import PlayListContents from './PlayListContents.vue';
 import 'vue-cropper/dist/index.css'
 import { cropperImg } from '@renderer/states/cropperImg/cropperImg';
+import UniversalButton from '../allSmall/UniversalButton.vue';
 
 const props = defineProps<{
     musicName: string
@@ -162,14 +163,14 @@ function uploadAuthorIcon(event) {
                         style="display: none;" />
                     <div class="icon-input-text">修改图片</div>
                 </label>
-            </ImgDiv>
+            </ImgDiv> 
         </div>
 
         <!-- 按钮组 -->
         <div class="edit-play-list-button-greap">
-            <div class="save-button" @click="save" v-if="!saveing">保存</div>
-            <div class="save-button" v-else>保存中...</div>
-            <div class="cancel-button" @click="cancel">取消</div>
+            <UniversalButton type="ok" text="保存" @click="save" v-if="!saveing" />
+            <UniversalButton type="other" text="保存中..." v-else />
+            <UniversalButton type="other" text="取消" @click="cancel" />
         </div>
     </div>
 </template>
@@ -198,27 +199,6 @@ function uploadAuthorIcon(event) {
     height: 100%;
     display: block;
     position: relative;
-    cursor: pointer;
-}
-
-.cancel-button {
-    color: var(--edit-play-list-cancel-button-color);
-    background-color: var(--edit-play-list-cancel-button-bg-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    border: 0.1rem solid var(--edit-play-list-cancel-button-border-color);
-}
-
-.save-button:hover {
-    background-color: var(--edit-play-list-save-button-bg-hover);
-}
-
-.save-button {
-    color: var(--edit-play-list-save-button-color);
-    background-color: var(--edit-play-list-save-button-bg-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
     cursor: pointer;
 }
 

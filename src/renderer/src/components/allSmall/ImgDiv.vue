@@ -1,3 +1,4 @@
+<!-- 图片显示div -->
 <script lang="ts" setup>
 import { LOGO_URL } from '@renderer/imageUrls';
 

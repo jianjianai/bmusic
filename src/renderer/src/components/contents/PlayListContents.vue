@@ -13,6 +13,7 @@ import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import EditSvg from '@renderer/svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
+import UniversalButton from '../allSmall/UniversalButton.vue';
 
 const props = defineProps<{
     musicName: string
@@ -76,10 +77,7 @@ function toEdit() {
                         </div>
                         <!-- 按钮组 -->
                         <div class="content-button-grep">
-                            <div class="content-button play-button" @click="playAll()">
-                                <PlaySvg class="icon" />
-                                <div class="text">播放全部</div>
-                            </div>
+                            <UniversalButton text="播放全部" type="ok" :icon="PlaySvg" @click="playAll()"></UniversalButton>
                         </div>
                     </div>
                 </div>
@@ -352,24 +350,6 @@ function toEdit() {
     margin: 0 0.5rem 0 0;
 }
 
-.content-button .text {
-    font-size: 0.9rem;
-}
-
-.content-button .icon {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.play-button {
-    background-color: var(--color-play-button-bg);
-    color: var(--color-play-button-font);
-}
-
-.play-button:hover {
-    background-color: var(--color-play-button-hover-bg);
-}
-
 .author-img {
     width: 2rem;
     height: 2rem;
@@ -390,14 +370,6 @@ function toEdit() {
     flex: none;
 }
 
-.content-button {
-    height: 2.3rem;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    padding: 0 0.5rem;
-    cursor: pointer;
-}
 
 .content-button-grep {
     display: flex;

@@ -1,3 +1,4 @@
+<!-- 播放器左上角按钮 -->
 <script setup lang="ts">
 import type { Component } from 'vue';
 

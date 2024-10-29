@@ -1,3 +1,4 @@
+<!-- 喜欢按钮 -->
 <script lang="ts" setup>
 import IcFavoriteBorderSvg from '@renderer/svg/IcFavoriteBorder.vue';
 import IcFavoriteSvg from '@renderer/svg/IcFavorite.vue';
