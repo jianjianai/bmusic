@@ -2,14 +2,14 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { musicPlayer } from '../states/musicPlayerStates'
-import ControllerSVG from './svg/Controller.vue'
-import PauseSVG from './svg/Pause.vue'
-import PlaySVG from './svg/Play.vue'
-import LoadingSvg from './svg/Loading.vue';
-import RepeatAllSvg from './svg/RepeatAll.vue'
-import RepeatOneSvg from './svg/RepeatOne.vue'
-import SequentialPlaySvg from './svg/SequentialPlay.vue'
-import ShufflePlaySvg from './svg/ShufflePlay.vue'
+import ControllerSVG from '@renderer/svg/Controller.vue'
+import PauseSVG from '@renderer/svg/Pause.vue'
+import PlaySVG from '@renderer/svg/Play.vue'
+import LoadingSvg from '@renderer/svg/Loading.vue';
+import RepeatAllSvg from '@renderer/svg/RepeatAll.vue'
+import RepeatOneSvg from '@renderer/svg/RepeatOne.vue'
+import SequentialPlaySvg from '@renderer/svg/SequentialPlay.vue'
+import ShufflePlaySvg from '@renderer/svg/ShufflePlay.vue'
 import { playList } from '@renderer/states/playListState'
 import FavoriteButton from './allSmall/FavoriteButton.vue'
 

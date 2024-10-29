@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import IcFavoriteBorderSvg from '../svg/IcFavoriteBorder.vue';
-import IcFavoriteSvg from '../svg/IcFavorite.vue';
+import IcFavoriteBorderSvg from '@renderer/svg/IcFavoriteBorder.vue';
+import IcFavoriteSvg from '@renderer/svg/IcFavorite.vue';
 import { useLikeedPlayList } from '@renderer/states/playListStorage';
 import { Music } from '@renderer/states/musicPlayerStates';
 const likeedPlayList = useLikeedPlayList();

@@ -2,15 +2,15 @@
 import { setContent } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { toRef } from 'vue';
-import PlaySvg from '../svg/Play.vue';
-import SearchSvg from '../svg/Search.vue';
-import PauseSvg from '../svg/Pause.vue';
+import PlaySvg from '@renderer/svg/Play.vue';
+import SearchSvg from '@renderer/svg/Search.vue';
+import PauseSvg from '@renderer/svg/Pause.vue';
 import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
 import FavoriteButton from '../allSmall/FavoriteButton.vue';
-import { addToPlayList } from '@renderer/states/addToPlayListState';
-import AddMusicCollectionSvg from '../svg/AddMusicCollection.vue';
-import EditSvg from '../svg/Edit.vue';
+import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
+import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
+import EditSvg from '@renderer/svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 

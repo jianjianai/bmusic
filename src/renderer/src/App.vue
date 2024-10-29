@@ -3,8 +3,8 @@ import Nav from './components/Nav.vue'
 import Content from './components/Content.vue'
 import MusicPlayer from './components/MusicPlayer.vue';
 import PlayList from './components/PlayList.vue';
-import AddToPlayList from './components/AddToPlayList.vue';
-import { addToPlayListMusic } from './states/addToPlayListState';
+import AddToPlayList from './states/addToPlayList/AddToPlayList.vue';
+import { addToPlayListMusic } from './states/addToPlayList/addToPlayList';
 import { musicPlayer } from './states/musicPlayerStates';
 import Notification from './states/notification/Notification.vue';
 import { defineAsyncComponent } from 'vue';

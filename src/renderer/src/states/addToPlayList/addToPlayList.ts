@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { type Music } from "./musicPlayerStates";
+import { type Music } from "../musicPlayerStates";
 
 export const addToPlayListMusic = ref<Music>();
 

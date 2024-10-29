@@ -1,6 +1,6 @@
 import {reactive} from "vue";
-import CircleCheckSvg from "@renderer/components/svg/CircleCheckSvg.vue";
-import CircleCloseOSvg from "@renderer/components/svg/CircleCloseOSvg.vue";
+import CircleCheckSvg from "@renderer/svg/CircleCheckSvg.vue";
+import CircleCloseOSvg from "@renderer/svg/CircleCloseOSvg.vue";
 
 export class IconComponents {
     success = CircleCheckSvg;

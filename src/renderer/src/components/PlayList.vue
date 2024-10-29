@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { playListOpen, playList } from '@renderer/states/playListState';
-import PlaySvg from './svg/Play.vue';
-import PauseSvg from './svg/Pause.vue';
+import PlaySvg from '@renderer/svg/Play.vue';
+import PauseSvg from '@renderer/svg/Pause.vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates';
 import FavoriteButton from './allSmall/FavoriteButton.vue';
-import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
-import { addToPlayList } from '@renderer/states/addToPlayListState';
+import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
+import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 import ImgDiv from './allSmall/ImgDiv.vue';
 
 function clickItemIcon(index: number) {

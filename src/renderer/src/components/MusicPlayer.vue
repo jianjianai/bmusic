@@ -2,17 +2,17 @@
 import MusicPlayerContr from './MusicPlayerContr.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue'
 import { musicPlayer, musicPlayerSize } from '../states/musicPlayerStates';
-import DownSvg from './svg/Down.vue';
+import DownSvg from '@renderer/svg/Down.vue';
 import PlayerButton from './allSmall/PlayerButton.vue';
-import AddMusicCollectionSvg from './svg/AddMusicCollection.vue';
-import Volume0Svg from './svg/Volume0.vue';
-import Volume1Svg from './svg/Volume1.vue';
-import Volume2Svg from './svg/Volume2.vue';
-import Volume3Svg from './svg/Volume3.vue';
+import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
+import Volume0Svg from '@renderer/svg/Volume0.vue';
+import Volume1Svg from '@renderer/svg/Volume1.vue';
+import Volume2Svg from '@renderer/svg/Volume2.vue';
+import Volume3Svg from '@renderer/svg/Volume3.vue';
 import { ref } from 'vue';
-import PlayListLineSvg from './svg/PlayListLine.vue';
+import PlayListLineSvg from '@renderer/svg/PlayListLine.vue';
 import { playListOpen } from '@renderer/states/playListState';
-import { addToPlayList } from '@renderer/states/addToPlayListState';
+import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 
 // 音量拖动条
 const lineCilckEl = ref();

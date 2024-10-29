@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { addToPlayListMusic } from '@renderer/states/addToPlayListState';
+import { addToPlayListMusic } from '@renderer/states/addToPlayList/addToPlayList';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { reactive, ref, watch } from 'vue';
-import CloseSvg from './svg/Close.vue';
-import ImgDiv from './allSmall/ImgDiv.vue';
+import CloseSvg from '@renderer/svg/Close.vue';
+import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
+import AddSvg from '@renderer/svg/AddSvg.vue';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
@@ -42,6 +43,14 @@ function close() {
             <template v-if="!refAddToList">
                 <div class="add-to-pay-list-box-title">收藏到歌单</div>
                 <div class="add-to-pay-list-box-lists">
+                    <!-- 创建歌单 -->
+                    <div class="add-to-pay-list-box-list">
+                        <div class="add-to-pay-list-box-list-icon create">
+                            <AddSvg style="width: 100%; height: 100%;" />
+                            <div class="add-to-pay-list-box-list-icon-msk-create"></div>
+                        </div>
+                        <div class="add-to-pay-list-box-list-name create">创建新歌单</div>
+                    </div>
                     <!-- 每个歌单 -->
                     <div class="add-to-pay-list-box-list" v-for="name of playListStorage.playLists"
                         @click="refAddToList = name">
@@ -98,16 +107,27 @@ function close() {
     justify-content: center;
     align-items: center;
 }
-
+.add-to-pay-list-box-list-icon-msk-create{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-add-to-play-list-box-list-icon-msk-create);
+}
+.add-to-pay-list-box-list-icon.create{
+    position: relative;
+}
 .add-to-pay-list-box-list-icon {
     width: 3rem;
     height: 3rem;
-    background-color: rgb(252, 189, 244);
     border-radius: 0.5rem;
     margin-left: 1rem;
     overflow: hidden;
 }
-
+.add-to-pay-list-box-list-name.create{
+    color: var(--color-add-to-play-list-box-list-name-create);
+}
 .add-to-pay-list-box-list-name {
     font-size: 1rem;
     color: var(--color-add-to-play-list-box-list-name);

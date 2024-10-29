@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {closeNotification, iconComponents, notifications} from "./notification.js";
-import CloseSvg from "@renderer/components/svg/Close.vue";
+import CloseSvg from "@renderer/svg/Close.vue";
 
 </script>
 <template>

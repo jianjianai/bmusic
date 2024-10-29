@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { setContent, contentDisplay, contentData } from '../states/contentState';
-import SearchIcon from './svg/Search.vue'
+import SearchIcon from '@renderer/svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 import Search from './contents/Search.vue';
 import { reactive, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
-import IcFavoriteSvg from './svg/IcFavorite.vue';
+import IcFavoriteSvg from '@renderer/svg/IcFavorite.vue';
 import ImgDiv from './allSmall/ImgDiv.vue';
 
 

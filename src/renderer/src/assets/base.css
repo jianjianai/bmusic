@@ -153,13 +153,15 @@ body {
   --color-pay-list-favorite-icon-liked-hover: var(--color-primary2);
 
 
-  /* 添加到播放列表窗口 */
+  /* 添加到播放列表窗口 创建新歌单窗口 */
   --color-add-to-play-list-box-bg: var(--color-primary-bg);
   --color-add-to-play-list-box-shadow: var(--color-primary-shadow);
   --color-add-to-play-list-box-title: var(--color-primary-text);
   --color-add-to-play-list-box-list-hover-bg: var(--color-primary-list-hover-bg);
   --color-add-to-play-list-box-loading-text: var(--color-primary-text2);
   --color-add-to-play-list-box-list-close: var(--color-primary-text2);
+  --color-add-to-play-list-box-list-name-create: var(--color-primary-text2);
+  --color-add-to-play-list-box-list-icon-msk-create: #5c5c5c47;
 
   /* 编辑歌单信息 */
   --edit-play-list-lnfo-title-color: var(--color-primary-text);
