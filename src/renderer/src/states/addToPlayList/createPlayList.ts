@@ -3,5 +3,5 @@ import { type Music } from "../musicPlayerStates";
 
 export const createNewPlayListMusic = ref<Music>();
 export function createPlayList(music: Music) {
-    
+    createNewPlayListMusic.value = music;
 }

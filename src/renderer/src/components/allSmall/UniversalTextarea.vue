@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 const model = defineModel<string>();
+    const props = defineProps<{
+    placeholder?: string;
+}>();
 const id = Math.random().toString(36).slice(2);
 
 </script>
 <template>
     <label class="universal-input" :for="id">
-        <textarea class="universal-input-input" :id="id" type="text" v-model="model"></textarea>
+        <textarea class="universal-input-input" :id="id" type="text" v-model="model" :placeholder="props.placeholder"></textarea>
     </label>
 </template>
 <style scoped>

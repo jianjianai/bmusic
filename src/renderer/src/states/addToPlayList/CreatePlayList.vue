@@ -2,9 +2,9 @@
 import { createNewPlayListMusic } from './createPlayList';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { ref, watch } from 'vue';
-import CloseSvg from '@renderer/svg/Close.vue';
-import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
-import AddSvg from '@renderer/svg/AddSvg.vue';
+import { putNotification } from '@renderer/states/notification/notification';
+import UniversalButton from '@renderer/components/allSmall/UniversalButton.vue';
+import UniversalTextarea from '@renderer/components/allSmall/UniversalTextarea.vue';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
@@ -20,6 +20,27 @@ watch(musicPlayList, async (newVal) => {
     }
 });
 
+const newPlayeListName = ref<string>('');
+function ok() {
+    if (loading) {
+        return;
+    }
+    if (!newPlayeListName.value) {
+        putNotification({ type: 'error', message: '歌单名不能为空' });
+        return;
+    }
+    const invalidChars = /[<>:"/\\|?*\x00-\x1F]/;
+    if (invalidChars.test(newPlayeListName.value)) {
+        putNotification({ type: 'error', message: "歌单名中不能含有特殊字符" });
+        return;
+    }
+    if (playListStorage.playLists.includes(newPlayeListName.value)) {
+        putNotification({ type: 'error', message: "歌单名称已存在" });
+        return;
+    }
+    refAddToList.value = newPlayeListName.value;
+}
+
 function close() {
     if (loading) {
         return;
@@ -31,11 +52,17 @@ function close() {
 <template>
     <div style="position: fixed;">
         <div class="main-box-mask" @click="close()"></div>
-        <div class="add-to-pay-list-box">
-            <!-- 选择歌单 -->
+        <div class="new-player-list-list-box">
+            <!-- 输入歌单名称 -->
             <template v-if="!refAddToList">
-                <div class="add-to-pay-list-box-title">创建新歌单</div>
-
+                <div class="title">创建新歌单</div>
+                <div>
+                    <UniversalTextarea class="input-name" v-model="newPlayeListName" placeholder="输入歌单名称" />
+                </div>
+                <div class="button-grep">
+                    <UniversalButton @click="ok" text="确定" type="ok" />
+                    <UniversalButton @click="close" text="取消" type="other" />
+                </div>
             </template>
             <!-- 创建中.. -->
             <template v-else>
@@ -48,100 +75,22 @@ function close() {
     </div>
 </template>
 <style scoped>
-.add-to-pay-list-box-list-close {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    width: 1rem;
-    height: 1rem;
-    cursor: pointer;
-    color: var(--color-add-to-play-list-box-list-close);
-}
-
-.loading-text {
-    font-size: 1rem;
-    color: var(--color-add-to-play-list-box-loading-text);
-    text-align: center;
-    margin-top: 1rem;
-}
-
-.loading-icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.5rem;
-    overflow: hidden;
-}
-
-.loading {
-    flex: 1;
-    height: 0;
+.button-grep{
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
-.add-to-pay-list-box-list-icon-msk-create{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-add-to-play-list-box-list-icon-msk-create);
+.input-name{
+    width: 20rem;
+    height: 5rem;
+    margin: auto;
 }
-.add-to-pay-list-box-list-icon.create{
-    position: relative;
-}
-.add-to-pay-list-box-list-icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.5rem;
-    margin-left: 1rem;
-    overflow: hidden;
-}
-.add-to-pay-list-box-list-name.create{
-    color: var(--color-add-to-play-list-box-list-name-create);
-}
-.add-to-pay-list-box-list-name {
-    font-size: 1rem;
-    color: var(--color-add-to-play-list-box-list-name);
-    flex: 1;
-    width: 0;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    user-select: none;
-    margin-right: 1rem;
-}
-
-.add-to-pay-list-box-list:hover {
-    background-color: var(--color-add-to-play-list-box-list-hover-bg);
-}
-
-.add-to-pay-list-box-list {
-    display: flex;
-    align-items: center;
-    height: 4rem;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.add-to-pay-list-box-lists {
-    height: 0;
-    flex: 1;
-    margin: 1rem 0;
-    overflow-y: scroll;
-    scrollbar-width: thin;
-}
-
-.add-to-pay-list-box-title {
-    font-size: 1.3rem;
-    color: var(--color-add-to-play-list-box-title);
+.new-player-list-list-box .title{
     text-align: center;
-    font-weight: bolder;
     margin-top: 1rem;
+    font-size: 1.3rem;
+    font-weight: bolder;
 }
 
 .main-box-mask {
@@ -153,9 +102,8 @@ function close() {
     height: 100vh;
 }
 
-.add-to-pay-list-box {
+.new-player-list-list-box {
     width: 30rem;
-    height: 30rem;
     background-color: var(--color-add-to-play-list-box-bg);
     box-shadow: 0 0 1rem 0.1rem var(--color-add-to-play-list-box-shadow);
     position: fixed;
@@ -166,5 +114,23 @@ function close() {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    gap: 1.5rem;
+}
+
+.loading-text {
+    font-size: 1rem;
+    color: var(--color-add-to-play-list-box-loading-text);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+
+.loading {
+    flex: 1;
+    height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 </style>

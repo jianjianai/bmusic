@@ -5,6 +5,7 @@ import { reactive, ref, watch } from 'vue';
 import CloseSvg from '@renderer/svg/Close.vue';
 import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
 import AddSvg from '@renderer/svg/AddSvg.vue';
+import { createPlayList } from './createPlayList';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
@@ -34,17 +35,22 @@ function close() {
     addToPlayListMusic.value = undefined;
 }
 
+function createNewPlayList() {
+    createPlayList(addToPlayListMusic.value!);
+    addToPlayListMusic.value = undefined;
+}
+
 </script>
 <template>
     <div style="position: fixed;">
         <div class="main-box-mask" @click="close()"></div>
-        <div class="add-to-pay-list-box">
+        <div class="new-player-list-list-box">
             <!-- 选择歌单 -->
             <template v-if="!refAddToList">
                 <div class="add-to-pay-list-box-title">收藏到歌单</div>
                 <div class="add-to-pay-list-box-lists">
                     <!-- 创建歌单 -->
-                    <div class="add-to-pay-list-box-list">
+                    <div class="add-to-pay-list-box-list" @click="createNewPlayList">
                         <div class="add-to-pay-list-box-list-icon create">
                             <AddSvg style="width: 100%; height: 100%;" />
                             <div class="add-to-pay-list-box-list-icon-msk-create"></div>
@@ -107,7 +113,8 @@ function close() {
     justify-content: center;
     align-items: center;
 }
-.add-to-pay-list-box-list-icon-msk-create{
+
+.add-to-pay-list-box-list-icon-msk-create {
     position: absolute;
     left: 0;
     top: 0;
@@ -115,9 +122,11 @@ function close() {
     height: 100%;
     background-color: var(--color-add-to-play-list-box-list-icon-msk-create);
 }
-.add-to-pay-list-box-list-icon.create{
+
+.add-to-pay-list-box-list-icon.create {
     position: relative;
 }
+
 .add-to-pay-list-box-list-icon {
     width: 3rem;
     height: 3rem;
@@ -125,9 +134,11 @@ function close() {
     margin-left: 1rem;
     overflow: hidden;
 }
-.add-to-pay-list-box-list-name.create{
+
+.add-to-pay-list-box-list-name.create {
     color: var(--color-add-to-play-list-box-list-name-create);
 }
+
 .add-to-pay-list-box-list-name {
     font-size: 1rem;
     color: var(--color-add-to-play-list-box-list-name);
@@ -180,7 +191,7 @@ function close() {
     height: 100vh;
 }
 
-.add-to-pay-list-box {
+.new-player-list-list-box {
     width: 30rem;
     height: 30rem;
     background-color: var(--color-add-to-play-list-box-bg);

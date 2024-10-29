@@ -9,6 +9,8 @@ import { musicPlayer } from './states/musicPlayerStates';
 import Notification from './states/notification/Notification.vue';
 import { defineAsyncComponent } from 'vue';
 import { cropperImgInfo } from './states/cropperImg/cropperImg';
+import CreatePlayList from './states/addToPlayList/CreatePlayList.vue';
+import { createNewPlayListMusic } from './states/addToPlayList/createPlayList';
 const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/CropperImg.vue'));
 
 </script>
@@ -23,13 +25,20 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
     <!-- 下方播放器主体 -->
     <MusicPlayer v-if="musicPlayer.currentMusic" class="main-music-player" />
 
-    <!-- 下面全是弹出组件 -->
+
     <!-- 右侧播放列表 -->
     <PlayList />
+
+    <!-- 下面全是弹出组件 -->
+     
     <!-- 添加到播放列表 -->
     <AddToPlayList v-if="addToPlayListMusic" />
+    <!-- 创建新歌单 -->
+    <CreatePlayList v-if="createNewPlayListMusic" />
     <!-- 图片编辑 -->
     <CropperImg v-if="cropperImgInfo" />
+
+
     <!-- 消息弹出框 -->
     <Notification />
   </div>

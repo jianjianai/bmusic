@@ -362,6 +362,11 @@ function toEdit() {
 .author-name {
     font-size: 0.9rem;
     color: var(--color-pay-list-header-author-font);
+    flex: 1;
+    width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .author {
@@ -410,6 +415,7 @@ function toEdit() {
     width: 1rem;
     color: var(--color-play-edit-button);
     margin-left: 1rem;
+    margin-right: 1rem;
     cursor: pointer;
 }
 
@@ -417,6 +423,11 @@ function toEdit() {
     font-size: 1.3rem;
     font-weight: bolder;
     color: var(--color-pay-list-header-title-font);
+    flex: 1;
+    width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .content-main {
