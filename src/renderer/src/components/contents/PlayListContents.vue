@@ -277,7 +277,7 @@ function toEditMusicInfo(index: number) {
 }
 
 .pay-list .line-content {
-    height: 3rem;
+    height: 3.5rem;
     border-radius: 0.5rem;
     user-select: none;
 }

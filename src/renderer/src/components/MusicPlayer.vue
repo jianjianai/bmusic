@@ -64,7 +64,7 @@ function clickVolume() {
             <!-- 左边 -->
             <div class="left-control player-control-grep">
                 <div class="player-music-info">
-                    <div class="music-info">
+                    <div class="music-info" :title="(musicPlayer.currentMusic!.musicName || '未知') + ' - ' + (musicPlayer.currentMusic!.musicAuthor || '未知歌手')">
                         <span class="music-name">{{ musicPlayer.currentMusic!.musicName || "未知" }}</span>
                         <span class="music-line"> - </span>
                         <span class="music-singer">{{ musicPlayer.currentMusic!.musicAuthor || "未知歌手" }}</span>
@@ -263,7 +263,7 @@ function clickVolume() {
 .music-name {
     font-size: 1rem;
     color: var(--color-music-player-music-name);
-    font-weight: bolder;
+    /* font-weight: bolder; */
 }
 
 .music-info {
