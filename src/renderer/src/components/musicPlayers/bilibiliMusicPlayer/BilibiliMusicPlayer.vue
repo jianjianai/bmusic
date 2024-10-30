@@ -2,12 +2,18 @@
 import { WebviewTag } from 'electron';
 import { computed, h, Ref, ref, watch } from 'vue';
 import { musicPlayerSize } from '@renderer/states/musicPlayerStates';
-import { musicPlayerLink } from '@renderer/states/musicPlayerStates';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/svg/MousePointer.vue';
 import CopyOutlineSvg from '@renderer/svg/CopyOutline.vue';
 import { ipcBilibiliApi } from '@renderer/ipcAPI';
+import { MusicPlayerLink } from '../musicPlayers';
+
+const props = defineProps<{
+    musicPlayerLink: MusicPlayerLink,
+}>();
+const musicPlayerLink = props.musicPlayerLink;
+
 
 type BilibiliMusicData = {
   bvId: string;

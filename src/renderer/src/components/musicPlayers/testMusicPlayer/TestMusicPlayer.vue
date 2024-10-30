@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { musicPlayerLink } from '../../../states/musicPlayerStates'
 import { ref } from 'vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates'
 import { playList } from '@renderer/states/playListState';
+import { type MusicPlayerLink } from '../musicPlayers';
 
+const props = defineProps<{
+    musicPlayerLink: MusicPlayerLink,
+}>();
+const musicPlayerLink = props.musicPlayerLink;
 
 musicPlayerLink.updateDuration(20000);
 musicPlayerLink.onRequestPlay(() => {
@@ -47,7 +51,7 @@ function testPayList() {
             musicAuthor: "测试作者",
             playerName: "BilibiliMusicPlayer",
             playerData: `{"bvId":"BV1eU4y1X7uA"}`,
-            iconUrl:"file:///C:/Users/28018/Pictures/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240317073626.jpg"
+            iconUrl: "file:///C:/Users/28018/Pictures/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240317073626.jpg"
         }
     ]);
     playList.setCurrentIndex(0); // 设置当前播放的音乐索引

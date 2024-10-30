@@ -165,12 +165,15 @@ body {
 
   /* 编辑歌单信息 */
   --edit-play-list-lnfo-title-color: var(--color-primary-text);
-  --edit-play-list-lnfo-line-color: var(--color-primary-boder);
-
-
+  --edit-play-list-lnfo-title-smell-color: var(--color-primary-text);
   --edit-play-list-icon-input-text-color: #ffffff;
   --edit-play-list-icon-input-bg-hover-color: #00000064;
-  /*有透明度*/
+
+  /* 编辑音乐信息 */
+  --edit-music-lnfo-title-color: var(--color-primary-text);
+  --edit-music-lnfo-title-smell-color: var(--color-primary-text);
+  --edit-music-icon-input-text-color: #ffffff;
+  --edit-music-icon-input-bg-hover-color: #00000064;
 
 
   /* 图片编辑器 */

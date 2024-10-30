@@ -14,12 +14,13 @@ import EditSvg from '@renderer/svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
+import EditMusicInfo from './EditMusicInfo.vue';
 
 const props = defineProps<{
-    musicName: string
+    musicListName: string
 }>();
 
-const musicPlayList = useMusicPlayList(toRef(props, 'musicName'));
+const musicPlayList = useMusicPlayList(toRef(props, 'musicListName'));
 
 // 点击播放按钮,播放音乐
 function chickMusicIcon(music: Music, index: number) {
@@ -43,7 +44,12 @@ function playAll() {
 
 //去编辑歌单信息
 function toEdit() {
-    setContent(EditPlayListInfo, { musicName: props.musicName });
+    setContent(EditPlayListInfo, { musicListName: props.musicListName });
+}
+
+//去编辑歌曲信息
+function toEditMusicInfo(index: number) {
+    setContent(EditMusicInfo, {editIndex: index, musicListName: props.musicListName});
 }
 
 </script>
@@ -131,6 +137,9 @@ function toEdit() {
                         </div>
                         <!-- 按钮组 -->
                         <div class="button-grep">
+                            <div class="button-grep-button" title="编辑音乐信息" @click="toEditMusicInfo(index)">
+                                <EditSvg style="width: 100%; height: 100%;" />
+                            </div>
                             <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
                                 <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                             </div>

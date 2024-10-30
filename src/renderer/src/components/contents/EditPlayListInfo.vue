@@ -12,9 +12,9 @@ import UniversalInput from '../allSmall/UniversalInput.vue';
 import UniversalTextarea from '../allSmall/UniversalTextarea.vue';
 
 const props = defineProps<{
-    musicName: string
+    musicListName: string
 }>();
-const musicPlayList = useMusicPlayList(toRef(props, 'musicName'));
+const musicPlayList = useMusicPlayList(toRef(props, 'musicListName'));
 function getInitEditData() {
     return {
         name: musicPlayList.value?.name,
@@ -54,12 +54,12 @@ async function save() {
         saveing.value = false;
         return;
     }
-    if (edits.value.name != props.musicName && playListStorage.playLists.includes(edits.value.name)) {
+    if (edits.value.name != props.musicListName && playListStorage.playLists.includes(edits.value.name)) {
         putNotification({ type: 'error', message: "歌单名称已存在" });
         saveing.value = false;
         return;
     }
-    if (edits.value.name != props.musicName && props.musicName == MYLIKEED_PLAYLIST_NAME) {
+    if (edits.value.name != props.musicListName && props.musicListName == MYLIKEED_PLAYLIST_NAME) {
         putNotification({ type: 'error', message: "不能修改我喜欢的歌单名称" });
         saveing.value = false;
         return;
@@ -71,16 +71,16 @@ async function save() {
         musicPlayList.value!.setIcon(new Uint8Array(await musicListInconBlob.value.arrayBuffer()));
     }
     await musicPlayList.value!.save();
-    if (edits.value.name != props.musicName) {
+    if (edits.value.name != props.musicListName) {
         await musicPlayList.value?.rename(edits.value.name);
     }
-    setContent(PlayListContents, { musicName: edits.value.name });
+    setContent(PlayListContents, { musicListName: edits.value.name });
     saveing.value = false;
 }
 
 // 取消
 function cancel() {
-    setContent(PlayListContents, { musicName: props.musicName });
+    setContent(PlayListContents, { musicListName: props.musicListName });
 }
 
 //图片编辑
@@ -116,22 +116,23 @@ function uploadAuthorIcon(event) {
 
 </script>
 <template>
-    <div class="edit-play-list-lnfo-main-box">
-        <div class="edit-play-list-lnfo-title">编辑歌单信息</div>
-        <div class="edit-play-list-lnfo">
+    <div class="edit-music-lnfo-main-box">
+        <div class="edit-music-lnfo-title">编辑歌单信息</div>
+        <div class="edit-music-lnfo-title-small">歌单信息</div>
+        <div class="edit-music-lnfo">
             <!-- 标题简介 -->
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">名称:</div>
-                    <UniversalInput v-model="edits.name"  class="from-line-content-input name"/>
+                    <UniversalInput v-model="edits.name" placeholder="歌单名称"  class="from-line-content-input name"/>
                 </div>
                 <div class="from-line">
                     <div class="from-line-title">简介:</div>
-                    <UniversalTextarea v-model="edits.description" class="from-line-content-input description"/>
+                    <UniversalTextarea v-model="edits.description" placeholder="歌单简介" class="from-line-content-input description"/>
                 </div>
             </div>
             <!-- 图片 -->
-            <ImgDiv class="play-list-icon" :src="musicListInconBlobUrl || musicPlayList?.musicListInconUrl">
+            <ImgDiv class="music-icon" :src="musicListInconBlobUrl || musicPlayList?.musicListInconUrl">
                 <label class="icon-input" for="play-list-icon-input">
                     <input type="file" accept="image/*" @change="uploadPlayListIcon" id="play-list-icon-input"
                         style="display: none;" />
@@ -139,16 +140,15 @@ function uploadAuthorIcon(event) {
                 </label>
             </ImgDiv>
         </div>
-        <div class="line-line"></div>
 
         <!-- 作者信息 -->
-        <div class="edit-play-list-lnfo-title">编辑作者信息</div>
-        <div class="edit-play-list-lnfo">
+        <div class="edit-music-lnfo-title-small">作者信息</div>
+        <div class="edit-music-lnfo">
             <!-- 标题简介 -->
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">昵称:</div>
-                    <UniversalInput v-model="edits.author" class="from-line-content-input name"/>
+                    <UniversalInput v-model="edits.author" placeholder="作者昵称" class="from-line-content-input name"/>
                 </div>
             </div>
             <!-- 图片 -->
@@ -209,12 +209,7 @@ function uploadAuthorIcon(event) {
     border-radius: 3rem;
 }
 
-.line-line {
-    width: min(100% - 2rem, 54rem);
-    border-bottom: 0.1rem solid var(--edit-play-list-lnfo-line-color);
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-}
+
 
 .from-line-content-input.description {
     height: 10rem;
@@ -240,25 +235,32 @@ function uploadAuthorIcon(event) {
     gap: 1rem;
 }
 
-.play-list-icon {
+.music-icon {
     width: 10rem;
     height: 10rem;
     border-radius: 1rem;
     margin-left: 1rem;
 }
 
-.edit-play-list-lnfo {
+.edit-music-lnfo {
     display: flex;
     margin-top: 1rem;
 }
 
-.edit-play-list-lnfo-title {
+.edit-music-lnfo-title-small{
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    font-weight: bolder;
+    color: var(--edit-play-list-lnfo-title-smell-color);
+}
+
+.edit-music-lnfo-title {
     font-size: 1.5rem;
     font-weight: bolder;
     color: var(--edit-play-list-lnfo-title-color);
 }
 
-.edit-play-list-lnfo-main-box {
+.edit-music-lnfo-main-box {
     padding: 1rem;
     height: 100%;
     display: flex;
