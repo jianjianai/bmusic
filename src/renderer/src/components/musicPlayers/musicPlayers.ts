@@ -3,11 +3,12 @@ import TestMusicPlayer from "./testMusicPlayer/TestMusicPlayer.vue";
 import NotExist from "./notExist/NotExist.vue"
 import BilibiliMusicPlayer from './bilibiliMusicPlayer/BilibiliMusicPlayer.vue'
 import { type musicPlayerLink } from "@renderer/states/musicPlayerStates";
+import BilibiliMusicEditor from "./bilibiliMusicPlayer/BilibiliMusicEditor.vue";
 
 
 export type MusicPlayerLink = typeof musicPlayerLink;
 type MusicPlayerComponent = DefineSetupFnComponent<any, any, any, { musicPlayerLink: typeof musicPlayerLink }, any>;
-type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, any, any>;
+type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, { "playerData":string }, any>;
 
 type MusicPlayer = {
     player: MusicPlayerComponent,
@@ -25,6 +26,7 @@ const musicPlayers: { [key: string]: MusicPlayer } = {
     },
     "BilibiliMusicPlayer": {
         player: markRaw(BilibiliMusicPlayer),
+        editor: markRaw(BilibiliMusicEditor)
     }
 }
 

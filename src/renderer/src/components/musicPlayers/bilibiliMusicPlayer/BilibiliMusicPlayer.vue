@@ -8,6 +8,7 @@ import MousePointerSvg from '@renderer/svg/MousePointer.vue';
 import CopyOutlineSvg from '@renderer/svg/CopyOutline.vue';
 import { ipcBilibiliApi } from '@renderer/ipcAPI';
 import { MusicPlayerLink } from '../musicPlayers';
+import { BilibiliMusicData ,paresBilibiliMusicData } from './bilibiliMusic';
 
 const props = defineProps<{
     musicPlayerLink: MusicPlayerLink,
@@ -15,12 +16,10 @@ const props = defineProps<{
 const musicPlayerLink = props.musicPlayerLink;
 
 
-type BilibiliMusicData = {
-  bvId: string;
-}
+
 
 // 播放器数据
-const musicData: Ref<BilibiliMusicData> = computed(() => JSON.parse(musicPlayerLink.currentMusicData));
+const musicData: Ref<BilibiliMusicData> = computed(() => paresBilibiliMusicData(musicPlayerLink.currentMusicData));
 
 // https://www.bilibili.com/video/BV19G411H7DY/?share_source=copy_web&vd_source=8ec9a462acb529345bef8d4422990df9&t=17
 

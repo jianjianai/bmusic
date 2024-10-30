@@ -7,6 +7,7 @@ import { cropperImg } from '@renderer/states/cropperImg/cropperImg';
 import { setContent } from '@renderer/states/contentState';
 import PlayListContents from './PlayListContents.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
+import MusicEditers from '../musicPlayers/MusicEditers.vue';
 
 const props = defineProps<{
     /** 编辑哪个歌单 */
@@ -21,13 +22,15 @@ const editInfo = ref<{
     musicAuthor?: string,
     iconUrl?: string,
     playerData?: string
+    playerName?: string
 }>({});
 watch(eitMusic, (newVle) => {
     editInfo.value = {
         musicName: newVle?.musicName,
         musicAuthor: newVle?.musicAuthor,
         iconUrl: newVle?.iconUrl,
-        playerData: newVle?.playerData
+        playerData: newVle?.playerData,
+        playerName: newVle?.playerName
     }
 }, { immediate: true });
 
@@ -55,12 +58,18 @@ function cancel() {
 
 const saveing = ref(false);
 function save() {
-
+    saveing.value = true;
+    eitMusic.value!.musicName = editInfo.value.musicName!;
+    eitMusic.value!.musicAuthor = editInfo.value.musicAuthor!;
+    eitMusic.value!.iconUrl = editInfo.value.iconUrl!;
+    eitMusic.value!.playerData = editInfo.value.playerData!;
+    musicPlayList.value?.save();
+    setContent(PlayListContents, { musicListName: props.musicListName });
 }
 
 </script>
 <template>
-    <div class="edit-music-lnfo-main-box">
+    <div class="edit-music-lnfo-main-box" v-if="!saveing">
         <div class="edit-music-lnfo-title">编辑音乐信息</div>
         <div class="edit-music-lnfo-title-small">基本信息</div>
         <div class="edit-music-lnfo">
@@ -84,13 +93,18 @@ function save() {
                 </label>
             </ImgDiv>
         </div>
-        <div class="edit-music-lnfo-title-small">{{ eitMusic?.playerName }}</div>
+        <!-- 播放器编辑器 -->
+        <MusicEditers v-model="editInfo" :key="eitMusic?.playerData">
+            <div class="edit-music-lnfo-title-small">{{ eitMusic?.playerName }}</div>
+        </MusicEditers>
         <!-- 按钮组 -->
         <div class="edit-play-list-button-greap">
-            <UniversalButton type="ok" text="保存" @click="save" v-if="!saveing" />
-            <UniversalButton type="other" text="保存中..." v-else />
+            <UniversalButton type="ok" text="保存" @click="save" />
             <UniversalButton type="other" text="取消" @click="cancel" />
         </div>
+    </div>
+    <div class="edit-music-lnfo-main-box" v-else>
+        <div class="edit-music-lnfo-title">保存中...</div>
     </div>
 </template>
 <style scoped>
@@ -156,12 +170,12 @@ function save() {
 
 .edit-music-lnfo {
     display: flex;
-    margin-top: 1rem;
     align-items: center;
 }
 
 .edit-music-lnfo-title-small {
     margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     font-size: 1rem;
     font-weight: bolder;
     color: var(--edit-music-lnfo-title-smell-color);
