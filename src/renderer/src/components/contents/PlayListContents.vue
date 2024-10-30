@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { setContent } from '@renderer/states/contentState';
 import { useMusicPlayList } from '@renderer/states/playListStorage';
-import { toRef } from 'vue';
+import { onMounted, ref, toRef } from 'vue';
 import PlaySvg from '@renderer/svg/Play.vue';
 import SearchSvg from '@renderer/svg/Search.vue';
 import PauseSvg from '@renderer/svg/Pause.vue';
@@ -45,6 +45,53 @@ function playAll() {
 function toEdit() {
     setContent(EditPlayListInfo, { musicName: props.musicName });
 }
+
+
+//拖拽功能
+let x = ref(0);
+let y = ref(0);
+let imgUrl = ref<string>();
+
+const show = ref(false);
+const timeMouseUp = ref<(index: number) => void>()
+const timeMouseOver = ref<(index: number) => void>()
+const timeMouseLeave = ref<(index: number) => void>()
+const over = ref<number>()
+//鼠标点击事件
+function mouseDown(event1: MouseEvent, music: Music, index: number) {
+    timeMouseOver.value = (index1: number) => {
+        over.value = index1;
+        console.log("over", index1);
+    }
+    timeMouseLeave.value = (index1: number) => {
+        over.value = undefined;
+        console.log("leave", index1);
+    }
+    const fun = (event2) => {
+        show.value = true;
+        x.value = event2.clientX + 5;
+        y.value = event2.clientY + 5;
+        timeMouseUp.value = (index1: number) => {
+            if(index1!=index){
+                musicPlayList.value!.musicList!.list.splice(index, 1);
+                musicPlayList.value!.musicList!.list.splice(index1, 0, music);
+                musicPlayList.value!.save();
+            }
+        over.value = undefined;
+    }
+    };
+    document.addEventListener('mousemove', fun);
+    //鼠标松开事件
+    document.addEventListener('mouseup', () => {
+        show.value = false;
+        document.removeEventListener('mousemove', fun);
+        timeMouseUp.value = undefined;
+        timeMouseOver.value = undefined;
+        timeMouseLeave.value = undefined;
+    });
+}
+
+
 
 </script>
 <template>
@@ -101,8 +148,10 @@ function toEdit() {
                     <div class="info">歌曲</div>
                     <div class="like">喜欢</div>
                 </div>
-                <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-                    v-for="music, index of musicPlayList!.musicList?.list">
+                <div @mouseup="timeMouseUp?.(index)" @mouseover="timeMouseOver?.(index)"
+                    @mouseleave="timeMouseLeave?.(index)" @mousedown="mouseDown($event, music, index)"
+                    class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
+                    v-for="music, index of musicPlayList!.musicList?.list" :style="{borderTop:over==index?`0.1rem solid #000`:``}">
                     <!-- 序号 -->
                     <div class="index">{{ index }}</div>
                     <!-- 音乐信息 -->
@@ -143,9 +192,22 @@ function toEdit() {
                 </div>
             </div>
         </div>
+        <!--移动中的元素 -->
+        <div>
+            <ImgDiv class="move-dir" v-show="show" :style="{ left: x + `px`, top: y + `px` }" :src="imgUrl"></ImgDiv>
+        </div>
     </div>
 </template>
 <style scoped>
+.move-dir {
+    width: 3rem;
+    height: 3rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
 .pay-list .line-content .button-grep-button:hover {
     color: var(--color-play-list-item-button-grep-button-hover);
 }
