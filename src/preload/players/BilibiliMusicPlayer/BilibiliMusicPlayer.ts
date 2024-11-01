@@ -1,7 +1,10 @@
 import {
-  autoCloseCaptcha,
+  cancelLike,
+  clickCoin,
+  clickLike,
+  // autoCloseCaptcha,
   fullScreen,
-  pause, play, regBpxStateBuff, regOnPlaybackLengthChange,
+  pause, play, regBpxStateBuff, regOnCoinChange, regOnLikeChange, regOnPlaybackLengthChange,
   regOnPlaybackProgressChange,
   regOnPlaybackStateChange,
   regOnVolumeChange,
@@ -56,10 +59,30 @@ async function onLoaded() {
   ipcRenderer.on("fullScreen", (_event, ..._args: any[]) => {
     fullScreen();
   });
+
+  //点赞部分
+  regOnLikeChange((like) => {
+    ipcRenderer.sendToHost('onLikeChange', like);
+  });
+  ipcRenderer.on("clickLike", (_event, ..._args: any[]) => {
+    clickLike();
+  });
+  ipcRenderer.on("cancelLike", (_event, ..._args: any[]) => {
+    cancelLike();
+  });
+
+  //投币部分
+  regOnCoinChange((coin) => {
+    ipcRenderer.sendToHost('onCoinChange', coin);
+  });
+  ipcRenderer.on("clickCoin", (_event, ..._args: any[]) => {
+    clickCoin();
+  });
+
   //初始化音量
   ipcRenderer.sendToHost("reqInitVolume");
   fullScreen();  //自动网页全屏
-  autoCloseCaptcha();  //自动关闭验证码
+  // autoCloseCaptcha();  //自动关闭验证码
 }
 
 

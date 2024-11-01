@@ -1,4 +1,4 @@
-import { computed, readonly, ref } from 'vue'
+import { type Component, computed, type CSSProperties, type Reactive, readonly, type Ref, ref } from 'vue'
 
 
 export type Music = {
@@ -18,7 +18,7 @@ export type Music = {
 export function compareMusic(music1?: Music, music2?: Music) {
   return (
     music1?.playerName === music2?.playerName &&
-    music1?.playerData === music2?.playerData 
+    music1?.playerData === music2?.playerData
   )
 }
 
@@ -29,7 +29,7 @@ export function musicKey(music: Music) {
 
 const currentMusic = ref<Music>();
 
-  /** 音乐长度，单位毫秒 */
+/** 音乐长度，单位毫秒 */
 const duration = ref(0);
 
 /** 音乐当前播放位置，单位毫秒 */
@@ -53,7 +53,7 @@ const ended = ref(false);
 type EventListens = {
   onRequestPlay: () => void,
   onRequestPause: () => void,
-  onRequestVolume: (volume:number) => void,
+  onRequestVolume: (volume: number) => void,
   onRequestCurrentTime: (currentTime: number) => void,
 }
 
@@ -68,6 +68,23 @@ function createEventListens(): EventListens {
 
 /** 请求事件监听 */
 let onRequestEventListens: EventListens = createEventListens();
+
+
+
+export type PlayerCustomButton = {
+  /** title */
+  title?: string,
+  /** 按钮图标 */
+  icon: Component,
+  /** 当被点击时 */
+  onClick?: (event: MouseEvent, playerData: string) => void,
+  /** 按钮样式 */
+  style?: false | null | string | CSSProperties,
+};
+/** 播放器左下角自定义按钮 */
+export const playerLeftCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
+/** 播放器右下角自定义按钮 */
+export const playerRightCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
 
 /** 音乐播放器链接，用于个各种播放器进行连接 MusicPlayer 需要使用 MusicPlayerLink 和真实的播放器交互 */
 export const musicPlayerLink = readonly({
@@ -101,8 +118,16 @@ export const musicPlayerLink = readonly({
   },
   /** 当前音量,初始化时需要使用 */
   volume: volume,
-  /** 当前音乐数据 */ 
-  currentMusicData:computed(() => currentMusic.value!.playerData),
+  /** 当前音乐数据 */
+  currentMusicData: computed(() => currentMusic.value!.playerData),
+  /** 更新播放器左下角自定义按钮 */
+  updatePlayerLeftCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
+    playerLeftCustomButtons.value = buttons;
+  },
+  /** 更新播放器右下角自定义按钮 */
+  updatePlayerRightCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
+    playerRightCustomButtons.value = buttons;
+  }
 });
 
 
@@ -135,6 +160,8 @@ export const musicPlayer = readonly({
     currentTime.value = 0;
     playing.value = true;
     ended.value = false;
+    playerLeftCustomButtons.value = [];
+    playerRightCustomButtons.value = [];
     // 设置音乐
     currentMusic.value = music;
   },

@@ -241,20 +241,93 @@ export function cancelFullScreen() {
 /**
  * 验证码出现时关闭验证码
  * */
-export function autoCloseCaptcha() {
-  new MutationObserver((c) => {
-    console.log("find captcha");
-    for (let mutationRecord of c) {
-      if (
-        (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_panel") &&
-        (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_wind")
-      ) {
-        let div = document.createElement('div');
-        div.appendChild((mutationRecord.previousSibling as HTMLElement));
-      }
-    }
-  }).observe(document.body, { childList: true, subtree: false, attributes: false });
+// export function autoCloseCaptcha() {
+//   new MutationObserver((c) => {
+//     console.log("find captcha");
+//     for (let mutationRecord of c) {
+//       if (
+//         (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_panel") &&
+//         (mutationRecord.previousSibling as HTMLElement)?.classList?.contains("geetest_wind")
+//       ) {
+//         let div = document.createElement('div');
+//         div.appendChild((mutationRecord.previousSibling as HTMLElement));
+//       }
+//     }
+//   }).observe(document.body, { childList: true, subtree: false, attributes: false });
+// }
+
+/**
+ * 点赞
+ */
+export function clickLike() {
+  const likeButtoin = document.querySelector(".video-like.video-toolbar-left-item");
+  if (likeButtoin!.classList.contains("on")) {
+    return;
+  }
+  likeButtoin!.dispatchEvent(new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true
+  }));
 }
 
+/**
+ * 取消点赞
+ */
+export function cancelLike() {
+  const likeButtoin = document.querySelector(".video-like.video-toolbar-left-item");
+  if (!likeButtoin!.classList.contains("on")) {
+    return;
+  }
+  likeButtoin!.dispatchEvent(new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true
+  }));
+}
 
+/**
+ * 当点赞状态发生变化时
+ */
+export function regOnLikeChange(func: (like: boolean) => void) {
+  const likeButtoin = document.querySelector(".video-like.video-toolbar-left-item");
+  func(likeButtoin!.classList.contains("on"));
+  new MutationObserver(() => {
+    func(likeButtoin!.classList.contains("on"));
+  }).observe(likeButtoin!, { childList: false, subtree: false, attributes: true });
+}
+
+/** 投币状态发生变化时 */
+export function regOnCoinChange(func: (coin: boolean) => void) {
+  const coinButtoin = document.querySelector(".video-coin.video-toolbar-left-item");
+  func(coinButtoin!.classList.contains("on"));
+  new MutationObserver(() => {
+    func(coinButtoin!.classList.contains("on"));
+  }).observe(coinButtoin!, { childList: false, subtree: false, attributes: true });
+}
+
+/** 投币 */
+export async function clickCoin() {
+  const coinButtoin = document.querySelector(".video-coin.video-toolbar-left-item");
+  if (coinButtoin!.classList.contains("on")) {
+    return;
+  }
+  coinButtoin!.dispatchEvent(new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true
+  }));
+  for (let i = 0; i < 10; i++) {
+    const coinButtoin2 = document.querySelector(".coin-bottom .bi-btn");
+    if(!coinButtoin2){
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      continue;
+    }
+    coinButtoin2.dispatchEvent(new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true
+    }));
+  }
+}
 

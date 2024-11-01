@@ -1,31 +1,37 @@
 <script setup lang="ts">
 import { WebviewTag } from 'electron';
-import { computed, h, Ref, ref, watch } from 'vue';
-import { musicPlayerSize } from '@renderer/states/musicPlayerStates';
+import { computed, h, markRaw, reactive, Ref, ref, watch } from 'vue';
+import { musicPlayerSize, PlayerCustomButton } from '@renderer/states/musicPlayerStates';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/svg/MousePointer.vue';
 import CopyOutlineSvg from '@renderer/svg/CopyOutline.vue';
 import { ipcBilibiliApi } from '@renderer/ipcAPI';
 import { MusicPlayerLink } from '../musicPlayers';
-import { BilibiliMusicData ,paresBilibiliMusicData } from './bilibiliMusic';
+import { BilibiliMusicData, paresBilibiliMusicData } from './bilibiliMusic';
+import { putNotification } from '@renderer/states/notification/notification';
+import BilibiliLikeSvg from './svg/BilibiliLikeSvg.vue';
+import CoinOperatedSvg from './svg/CoinOperatedSvg.vue';
 
 const props = defineProps<{
-    musicPlayerLink: MusicPlayerLink,
+  musicPlayerLink: MusicPlayerLink,
 }>();
 const musicPlayerLink = props.musicPlayerLink;
 
-
-
-
 // 播放器数据
 const musicData: Ref<BilibiliMusicData> = computed(() => paresBilibiliMusicData(musicPlayerLink.currentMusicData));
+const like = ref<boolean>(false);//是否点赞
+const coinOperated = ref<boolean>(false);//是否投币
 
 // https://www.bilibili.com/video/BV19G411H7DY/?share_source=copy_web&vd_source=8ec9a462acb529345bef8d4422990df9&t=17
 
 const bilibiliUrl = ref<string>(`https://www.bilibili.com/video/${musicData.value.bvId}/?t=0.01`);
 
-
+// 复制链接
+function copyLink() {
+  navigator.clipboard.writeText(bilibiliUrl.value);
+  putNotification({ type: "success", message: "已复制bilibili网页链接" });
+}
 
 // 播放器交互逻辑 
 const iframeRef = ref<WebviewTag | null>(null);
@@ -55,14 +61,18 @@ function onMessage(msg: string, ...args: any[]) {
   } else if (msg == "onPlaybackStateChange") {
     musicPlayerLink.updatePlaying(args[0]);
     musicPlayerLink.updateLoading(false);
-  } else if (msg == "onBpxStateBuff"){
+  } else if (msg == "onBpxStateBuff") {
     musicPlayerLink.updateLoading(args[0]);
-  } else if (msg == "onPlaybackEnded"){
+  } else if (msg == "onPlaybackEnded") {
     musicPlayerLink.updateEnded(args[0]);
-  } else if (msg == "onVolumeChange"){
+  } else if (msg == "onVolumeChange") {
     musicPlayerLink.updateVolume(args[0]);
-  } else if(msg == "reqInitVolume"){
+  } else if (msg == "reqInitVolume") {
     iframeRef.value?.send("setVolume", musicPlayerLink.volume);
+  } else if (msg == "onLikeChange") {
+    like.value = args[0];
+  } else if (msg == "onCoinChange"){
+    coinOperated.value = args[0];
   }
 }
 
@@ -73,18 +83,50 @@ watch(iframeRef, () => {
     });
   });
 });
+// 复制链接
+const copyButton = reactive<PlayerCustomButton>({
+  title: "复制bilibili网页链接",
+  icon: markRaw(CopyOutlineSvg),
+  onClick: copyLink,
+});
+// 点赞按钮
+const likeButton = reactive<PlayerCustomButton>({
+  title: "给bilibili视频点赞",
+  icon: markRaw(BilibiliLikeSvg),
+  style: computed(()=>like.value?"color: #00aeec":"") as any,
+  onClick: () => {
+    if(like.value){
+      iframeRef.value?.send("cancelLike");
+    }else{
+      iframeRef.value?.send("clickLike");
+    }
+  },
+});
+// 投币按钮
+const coinButton = reactive<PlayerCustomButton>({
+  title: "给bilibili视频投币",
+  icon: markRaw(CoinOperatedSvg),
+  style: computed(()=>coinOperated.value?"color: #00aeec":"") as any,
+  onClick: () => {
+    iframeRef.value?.send("clickCoin");
+  },
+});
+
+//左边自定义按钮
+musicPlayerLink.updatePlayerLeftCustomButtons(reactive([likeButton,coinButton,copyButton]));
+
 
 
 //获取preload文件路径
 const bilibiliMusicPlayer__filePath = ref<string>();
-  ipcBilibiliApi.getPreloadJsFilePath().then((res: string) => {
+ipcBilibiliApi.getPreloadJsFilePath().then((res: string) => {
   bilibiliMusicPlayer__filePath.value = res;
 });
 
 
 // 遮罩逻辑
 const playerinMaxMaskOpen = ref(true);//是否开启遮罩
-watch(musicPlayerSize,()=>{
+watch(musicPlayerSize, () => {
   playerinMaxMaskOpen.value = musicPlayerSize.value === 'max';
 });
 
@@ -98,19 +140,20 @@ function onContextMenu(e: MouseEvent) {
     items: [
       {
         label: "复制网页链接",
-        icon: h(CopyOutlineSvg,{style:"color: black; width: 1rem; height: 1rem;"}),
+        icon: h(CopyOutlineSvg, { style: "color: black; width: 1rem; height: 1rem;" }),
+        onClick: copyLink
       },
       {
         label: "超控网页",
-        icon: h(MousePointerSvg,{style:"color: black; width: 1rem; height: 1rem;"}),
+        icon: h(MousePointerSvg, { style: "color: black; width: 1rem; height: 1rem;" }),
         onClick: () => {
           playerinMaxMaskOpen.value = false;
         },
-        divided:true
+        divided: true
       },
       {
         label: "打开开发者工具",
-        icon: h(BxlDevToSvg,{style:"color: black; width: 1rem; height: 1rem;"}),
+        icon: h(BxlDevToSvg, { style: "color: black; width: 1rem; height: 1rem;" }),
         onClick: () => {
           iframeRef.value?.openDevTools();
         }
@@ -121,9 +164,8 @@ function onContextMenu(e: MouseEvent) {
 </script>
 <template>
   <div class="b-player">
-    <webview v-if="bilibiliMusicPlayer__filePath" ref="iframeRef" class="b-iframe"
-      :src="bilibiliUrl" :preload="bilibiliMusicPlayer__filePath" allowpopups
-      nodeintegration></webview>
+    <webview v-if="bilibiliMusicPlayer__filePath" ref="iframeRef" class="b-iframe" :src="bilibiliUrl"
+      :preload="bilibiliMusicPlayer__filePath" allowpopups nodeintegration></webview>
     <!-- 放大状态遮罩 -->
     <div class="player-max-mask" v-if="musicPlayerSize === 'max' && playerinMaxMaskOpen" @contextmenu="onContextMenu">
     </div>
