@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import MusicPlayerContr from './MusicPlayerContr.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue'
-import { musicPlayer, musicPlayerSize } from '../states/musicPlayerStates';
+import { musicPlayer, musicPlayerSize, playerLeftCustomButtons, playerRightCustomButtons } from '../states/musicPlayerStates';
 import DownSvg from '@renderer/svg/Down.vue';
 import PlayerButton from './allSmall/PlayerButton.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
@@ -64,7 +64,8 @@ function clickVolume() {
             <!-- 左边 -->
             <div class="left-control player-control-grep">
                 <div class="player-music-info">
-                    <div class="music-info">
+                    <div class="music-info"
+                        :title="(musicPlayer.currentMusic!.musicName || '未知') + ' - ' + (musicPlayer.currentMusic!.musicAuthor || '未知歌手')">
                         <span class="music-name">{{ musicPlayer.currentMusic!.musicName || "未知" }}</span>
                         <span class="music-line"> - </span>
                         <span class="music-singer">{{ musicPlayer.currentMusic!.musicAuthor || "未知歌手" }}</span>
@@ -73,6 +74,11 @@ function clickVolume() {
                         <!-- 收藏到歌单 -->
                         <div class="user-button" title="收藏到歌单" @click="addToPlayList(musicPlayer.currentMusic!)">
                             <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                        </div>
+                        <!-- 左下角按钮自定义按钮 -->
+                        <div class="user-button" v-for="button of playerLeftCustomButtons" :title="button.title"
+                            @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)">
+                            <component :is="button.icon" style="width: 100%; height: 100%;" :style="['width: 100%; height: 100%;',button.style]" />
                         </div>
                     </div>
                 </div>
@@ -110,6 +116,11 @@ function clickVolume() {
                             <div class="volume-line-drag-button"></div>
                         </div>
                     </div>
+                </div>
+                <!-- 右下角自定义按钮 -->
+                <div class="right-button" v-for="button of playerRightCustomButtons"
+                    @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)" :title="button.title">
+                    <component :is="button.icon" :style="['width: 100%; height: 100%;',button.style]" />
                 </div>
             </div>
         </div>
@@ -246,7 +257,7 @@ function clickVolume() {
 .user-button-greap {
     height: 1.2rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 0.8rem;
     align-items: center;
 }
 
@@ -263,7 +274,7 @@ function clickVolume() {
 .music-name {
     font-size: 1rem;
     color: var(--color-music-player-music-name);
-    font-weight: bolder;
+    /* font-weight: bolder; */
 }
 
 .music-info {
@@ -278,7 +289,7 @@ function clickVolume() {
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-around;
-    padding-left: 0.5rem;
+    padding-left: 0.8rem;
     flex: 1;
     width: 0;
 }
