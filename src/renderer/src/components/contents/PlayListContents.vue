@@ -49,51 +49,52 @@ function toEdit() {
 
 //去编辑歌曲信息
 function toEditMusicInfo(index: number) {
-    setContent(EditMusicInfo, {editIndex: index, musicListName: props.musicListName});
+    setContent(EditMusicInfo, { editIndex: index, musicListName: props.musicListName });
 }
 
 
 //拖拽功能
-let x = ref(0);
-let y = ref(0);
-let imgUrl = ref<string>();
+let drag = ref<{
+    x: number,
+    y: number,
+    music: Music,
+    mouseUp: (index: number) => void,
+    mouseOver: (index: number) => void,
+    mouseLeave: (index: number) => void,
+    overIndex?: number
+}>();
 
-const show = ref(false);
-const timeMouseUp = ref<(index: number) => void>()
-const timeMouseOver = ref<(index: number) => void>()
-const timeMouseLeave = ref<(index: number) => void>()
-const over = ref<number>()
 //鼠标点击事件
 function mouseDown(event1: MouseEvent, music: Music, index: number) {
-    timeMouseOver.value = (index1: number) => {
-        over.value = index1;
-        console.log("over", index1);
-    }
-    timeMouseLeave.value = (index1: number) => {
-        over.value = undefined;
-        console.log("leave", index1);
-    }
-    const fun = (event2) => {
-        show.value = true;
-        x.value = event2.clientX + 5;
-        y.value = event2.clientY + 5;
-        timeMouseUp.value = (index1: number) => {
-            if(index1!=index){
-                musicPlayList.value!.musicList!.list.splice(index, 1);
-                musicPlayList.value!.musicList!.list.splice(index1, 0, music);
-                musicPlayList.value!.save();
+    const onMousemove = (event2) => {
+        if (!drag.value) {
+            drag.value = {
+                x: 0,
+                y: 0,
+                music: music,
+                mouseOver: (index1: number) => {
+                    drag.value!.overIndex = index1;
+                },
+                mouseLeave: (index1: number) => {
+                    drag.value!.overIndex = undefined;
+                },
+                mouseUp: (index1: number) => {
+                    if (index1 != index) {
+                        musicPlayList.value!.musicList!.list.splice(index, 1);
+                        musicPlayList.value!.musicList!.list.splice(index1, 0, music);
+                        musicPlayList.value!.save();
+                    }
+                },
             }
-        over.value = undefined;
-    }
+        }
+        drag.value!.x = event2.clientX + 5;
+        drag.value!.y = event2.clientY + 5;
     };
-    document.addEventListener('mousemove', fun);
+    document.addEventListener('mousemove', onMousemove);
     //鼠标松开事件
     document.addEventListener('mouseup', () => {
-        show.value = false;
-        document.removeEventListener('mousemove', fun);
-        timeMouseUp.value = undefined;
-        timeMouseOver.value = undefined;
-        timeMouseLeave.value = undefined;
+        document.removeEventListener('mousemove', onMousemove);
+        drag.value = undefined;
     });
 }
 
@@ -154,10 +155,10 @@ function mouseDown(event1: MouseEvent, music: Music, index: number) {
                     <div class="info">歌曲</div>
                     <div class="like">喜欢</div>
                 </div>
-                <div @mouseup="timeMouseUp?.(index)" @mouseover="timeMouseOver?.(index)"
-                    @mouseleave="timeMouseLeave?.(index)" @mousedown="mouseDown($event, music, index)"
+                <div @mouseup="drag?.mouseUp(index)" @mouseover="drag?.mouseOver(index)"
+                    @mouseleave="drag?.mouseLeave(index)" @mousedown="mouseDown($event, music, index)"
                     class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-                    v-for="music, index of musicPlayList!.musicList?.list" :style="{borderTop:over==index?`0.1rem solid #000`:``}">
+                    v-for="music, index of musicPlayList!.musicList?.list">
                     <!-- 序号 -->
                     <div class="index">{{ index }}</div>
                     <!-- 音乐信息 -->
@@ -202,15 +203,18 @@ function mouseDown(event1: MouseEvent, music: Music, index: number) {
             </div>
         </div>
         <!--移动中的元素 -->
-        <div>
-            <ImgDiv class="move-dir" v-show="show" :style="{ left: x + `px`, top: y + `px` }" :src="imgUrl"></ImgDiv>
+        <div class="move-dir" v-if="drag" :style="{ left: drag.x + `px`, top: drag.y + `px` }">
+            <ImgDiv :src="drag.music.iconUrl" style="width: 3rem;height: 3rem;border-radius: 0.5rem;" />
+            <div>
+                <div>{{ drag.music.musicName }}</div>
+                <div>{{ drag.music.musicAuthor }}</div>
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
 .move-dir {
-    width: 3rem;
-    height: 3rem;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
