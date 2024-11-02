@@ -71,7 +71,7 @@ function onMessage(msg: string, ...args: any[]) {
     iframeRef.value?.send("setVolume", musicPlayerLink.volume);
   } else if (msg == "onLikeChange") {
     like.value = args[0];
-  } else if (msg == "onCoinChange"){
+  } else if (msg == "onCoinChange") {
     coinOperated.value = args[0];
   }
 }
@@ -83,37 +83,62 @@ watch(iframeRef, () => {
     });
   });
 });
-// 复制链接
-const copyButton = reactive<PlayerCustomButton>({
-  title: "复制bilibili网页链接",
-  icon: markRaw(CopyOutlineSvg),
-  onClick: copyLink,
-});
-// 点赞按钮
-const likeButton = reactive<PlayerCustomButton>({
-  title: "给bilibili视频点赞",
-  icon: markRaw(BilibiliLikeSvg),
-  style: computed(()=>like.value?"color: #00aeec":"") as any,
-  onClick: () => {
-    if(like.value){
-      iframeRef.value?.send("cancelLike");
-    }else{
-      iframeRef.value?.send("clickLike");
-    }
-  },
-});
-// 投币按钮
-const coinButton = reactive<PlayerCustomButton>({
-  title: "给bilibili视频投币",
-  icon: markRaw(CoinOperatedSvg),
-  style: computed(()=>coinOperated.value?"color: #00aeec":"") as any,
-  onClick: () => {
-    iframeRef.value?.send("clickCoin");
-  },
-});
 
-//左边自定义按钮
-musicPlayerLink.updatePlayerLeftCustomButtons(reactive([likeButton,coinButton,copyButton]));
+
+// 自定义按钮
+{
+  // 复制链接
+  const copyButton = reactive<PlayerCustomButton>({
+    title: "复制bilibili网页链接",
+    icon: markRaw(CopyOutlineSvg),
+    onClick: copyLink,
+  });
+  // 点赞按钮
+  const likeButton = reactive<PlayerCustomButton>({
+    title: "给bilibili视频点赞",
+    icon: markRaw(BilibiliLikeSvg),
+    style: computed(() => like.value ? "color: #00aeec" : "") as any,
+    onClick: () => {
+      if (like.value) {
+        iframeRef.value?.send("cancelLike");
+      } else {
+        iframeRef.value?.send("clickLike");
+      }
+    },
+  });
+  // 投币按钮
+  const coinButton = reactive<PlayerCustomButton>({
+    title: "给bilibili视频投币",
+    icon: markRaw(CoinOperatedSvg),
+    style: computed(() => coinOperated.value ? "color: #00aeec" : "") as any,
+    onClick: () => {
+      iframeRef.value?.send("clickCoin");
+    },
+  });
+  // 操控网页
+  const controlButton = reactive<PlayerCustomButton>({
+    title: "超控网页",
+    icon: markRaw(MousePointerSvg),
+    style: computed(() => playerinMaxMaskOpen.value ? "" : "color: #00aeec") as any,
+    onClick: () => {
+      playerinMaxMaskOpen.value = !playerinMaxMaskOpen.value;
+    },
+  });
+  // 打开开发者工具
+  const openDevToolsButton = reactive<PlayerCustomButton>({
+    title: "打开开发者工具",
+    icon: markRaw(BxlDevToSvg),
+    onClick: () => {
+      iframeRef.value?.openDevTools();
+    },
+  });
+
+  //左边自定义按钮
+  musicPlayerLink.updatePlayerLeftCustomButtons(reactive([likeButton, coinButton, copyButton]));
+  //顶部自定义按钮
+  musicPlayerLink.updateTopBarCustomButtons(reactive([likeButton,coinButton,copyButton,controlButton,openDevToolsButton]));
+}
+
 
 
 

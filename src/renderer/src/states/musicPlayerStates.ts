@@ -85,6 +85,8 @@ export type PlayerCustomButton = {
 export const playerLeftCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
 /** 播放器右下角自定义按钮 */
 export const playerRightCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
+/** 窗口标题栏自定义按钮 */
+export const topBarCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
 
 /** 音乐播放器链接，用于个各种播放器进行连接 MusicPlayer 需要使用 MusicPlayerLink 和真实的播放器交互 */
 export const musicPlayerLink = readonly({
@@ -127,7 +129,11 @@ export const musicPlayerLink = readonly({
   /** 更新播放器右下角自定义按钮 */
   updatePlayerRightCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
     playerRightCustomButtons.value = buttons;
-  }
+  },
+  /** 更新窗口标题栏自定义按钮 */
+  updateTopBarCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
+    topBarCustomButtons.value = buttons;
+  },
 });
 
 
@@ -162,6 +168,7 @@ export const musicPlayer = readonly({
     ended.value = false;
     playerLeftCustomButtons.value = [];
     playerRightCustomButtons.value = [];
+    topBarCustomButtons.value = [];
     // 设置音乐
     currentMusic.value = music;
   },
