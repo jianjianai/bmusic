@@ -8,11 +8,12 @@ import BilibiliMusicEditor from "./bilibiliMusicPlayer/BilibiliMusicEditor.vue";
 
 export type MusicPlayerLink = typeof musicPlayerLink;
 type MusicPlayerComponent = DefineSetupFnComponent<any, any, any, { musicPlayerLink: typeof musicPlayerLink }, any>;
-type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, { "playerData":string }, any>;
+type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, { "playerData": string }, any>;
 
 type MusicPlayer = {
     player: MusicPlayerComponent,
-    editor?: MusicEditorComponent
+    editor?: MusicEditorComponent,
+    colour?: string,
 };
 
 const NotExistRaw = markRaw(NotExist);
@@ -21,12 +22,13 @@ const NotExistRaw = markRaw(NotExist);
  * 播放器组件
  */
 const musicPlayers: { [key: string]: MusicPlayer } = {
-    "TestMusicPlayer": {
+    "Test": {
         player: markRaw(TestMusicPlayer),
     },
-    "BilibiliMusicPlayer": {
+    "Bilibili": {
         player: markRaw(BilibiliMusicPlayer),
-        editor: markRaw(BilibiliMusicEditor)
+        editor: markRaw(BilibiliMusicEditor),
+        colour: "#fb7299",
     }
 }
 
@@ -48,4 +50,12 @@ export const getMusicEditor = (name?: string): Component | undefined => {
     const player = musicPlayers[name];
     if (!player) { return undefined; }
     return player.editor;
+}
+
+/**
+ * 获取播放器颜色
+ */
+export const getMusicPlayerColour = (name?: string): string | undefined => {
+    if (name === undefined) { return undefined; }
+    return musicPlayers[name]?.colour;
 }

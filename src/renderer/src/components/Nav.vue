@@ -2,7 +2,7 @@
 import { setContent, contentDisplay, contentData } from '../states/contentState';
 import SearchIcon from '@renderer/svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
-import Search from './contents/Search.vue';
+// import Search from './contents/Search.vue';
 import { reactive, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
@@ -28,15 +28,15 @@ watch(() => playListStorage.playLists, async () => {
       <div class="title">发现音乐</div>
     </div>
     <!-- 搜索 -->
-    <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search, {})">
+    <!-- <div class="nav-item" :class="{ selected: contentDisplay === Search }" @click="setContent(Search, {})">
       <SearchIcon class="icon"></SearchIcon>
       <div class="title">搜索</div>
-    </div>
+    </div> -->
 
     <!-- 分割线 -->
     <div class="dividing-line"></div>
     <div class="line-title">我的</div>
-    <!-- 发现音乐 -->
+    <!-- 我喜欢的 -->
     <div class="nav-item"
       :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == MYLIKEED_PLAYLIST_NAME }"
       @click="setContent(PlayListContents, { musicListName: MYLIKEED_PLAYLIST_NAME })">

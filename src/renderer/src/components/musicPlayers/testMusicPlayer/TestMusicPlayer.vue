@@ -30,7 +30,7 @@ function testPayOne() {
     musicPlayer.setCurrentMusic({
         musicName: "测试音乐",
         musicAuthor: "测试作者",
-        playerName: "BilibiliMusicPlayer",
+        playerName: "Bilibili",
         playerData: `{"bvId":"BV19G411H7DY"}`
     });
 }
@@ -42,15 +42,22 @@ function testPayList() {
         {
             musicName: "bilibili测试音乐1",
             musicAuthor: "测试作者",
-            playerName: "BilibiliMusicPlayer",
+            playerName: "Bilibili",
             playerData: `{"bvId":"BV19G411H7DY"}`,
             iconUrl: "file:///C:/Users/28018/Pictures/20181127140215_hvhdh.jpg"
         },
         {
             musicName: "bilibili测试音乐2",
             musicAuthor: "测试作者",
-            playerName: "BilibiliMusicPlayer",
+            playerName: "Bilibili",
             playerData: `{"bvId":"BV1eU4y1X7uA"}`,
+            iconUrl: "file:///C:/Users/28018/Pictures/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240317073626.jpg"
+        },
+        {
+            musicName: "Test",
+            musicAuthor: "测试作者",
+            playerName: "Test",
+            playerData: ``,
             iconUrl: "file:///C:/Users/28018/Pictures/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240317073626.jpg"
         }
     ]);

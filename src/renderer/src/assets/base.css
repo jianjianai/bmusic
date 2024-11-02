@@ -125,7 +125,7 @@ body {
   --color-play-list-window-shadow: var(--color-primary-shadow);
   --color-play-list-item-hover: var(--color-primary-list-hover-bg);
   --color-play-list-item-name: var(--color-primary-text);
-  --color-play-list-item-author: var(--color-primary-list-hover-text);
+  --color-play-list-item-author: var(--color-primary-text2);
   --color-play-list-item-icon-hover: #00000049;
   --color-play-list-item-icon-svg: #ffffff;
   --color-play-list-item-name-paying: var(--color-primary-list-active-text);
@@ -156,9 +156,6 @@ body {
   --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
   --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
   --color-pay-list-line-content-info-name-font-playing: var(--color-primary-nav-active-bg);
-
-  /* 小标签 */
-  --color-pay-list-line-content-info-item-paly-font: #ffbb00;
 
   /* 全部的喜欢按钮 */
   --color-pay-list-favorite-icon: var(--color-primary-button-small);

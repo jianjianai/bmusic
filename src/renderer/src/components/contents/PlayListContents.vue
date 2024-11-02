@@ -15,6 +15,7 @@ import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import EditMusicInfo from './EditMusicInfo.vue';
+import PlayerInfoTag from '../allSmall/PlayerInfoTag.vue';
 
 const props = defineProps<{
     musicListName: string
@@ -130,7 +131,7 @@ function toEditMusicInfo(index: number) {
                             <!-- 名称下面一排 -->
                             <div class="info-author">
                                 <!-- 播放器 -->
-                                <div class="item-paly">{{ music.playerName }}</div>
+                                <PlayerInfoTag class="item-player" :playerName="music.playerName" />
                                 <!-- 作者 -->
                                 <div class="item-author">{{ music.musicAuthor }}</div>
                             </div>
@@ -211,15 +212,8 @@ function toEditMusicInfo(index: number) {
     background-color: var(--color-pay-list-line-content-hover-bg);
 }
 
-.pay-list .line-content .info-author .item-paly {
-    color: var(--color-pay-list-line-content-info-item-paly-font);
-    border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
-    border-radius: 0.2rem;
-    height: 0.8rem;
-    font-size: 0.6rem;
-    padding: 0 0.1rem;
-    line-height: 0.8rem;
-    font-weight: bolder;
+.pay-list .line-content .info-author .item-player{
+    font-size: 0.7rem;
 }
 
 .pay-list .line-content .info-author .item-author {

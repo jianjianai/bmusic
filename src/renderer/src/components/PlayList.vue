@@ -7,6 +7,7 @@ import FavoriteButton from './allSmall/FavoriteButton.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 import ImgDiv from './allSmall/ImgDiv.vue';
+import PlayerInfoTag from './allSmall/PlayerInfoTag.vue';
 
 function clickItemIcon(index: number) {
     // 如果点击的不是当前的音乐，就切换音乐
@@ -57,7 +58,8 @@ function clickItemIcon(index: number) {
                         <div class="name-and-author">
                             <div class="name">{{ music.musicName }}</div>
                             <div class="author">
-                                <div class="author-player">{{ music.playerName }}</div>
+                                <!-- 播放器 -->
+                                <PlayerInfoTag class="author-player" :playerName="music.playerName" />
                                 <div class="author-author">{{ music.musicAuthor }}</div>
                             </div>
                         </div>
@@ -148,17 +150,8 @@ function clickItemIcon(index: number) {
     width: 1rem;
 }
 
-
-
-.author-player {
-    color: var(--color-pay-list-line-content-info-item-paly-font);
-    border: 0.05rem solid var(--color-pay-list-line-content-info-item-paly-font);
-    border-radius: 0.2rem;
-    height: 0.9rem;
-    font-size: 0.6rem;
-    padding: 0 0.1rem;
-    line-height: 0.9rem;
-    font-weight: bolder;
+.author-player{
+    font-size: 0.8rem;
 }
 
 .author-author {

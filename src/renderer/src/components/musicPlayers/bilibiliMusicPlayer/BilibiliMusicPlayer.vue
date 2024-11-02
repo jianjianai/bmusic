@@ -97,7 +97,7 @@ watch(iframeRef, () => {
   const likeButton = reactive<PlayerCustomButton>({
     title: "给bilibili视频点赞",
     icon: markRaw(BilibiliLikeSvg),
-    style: computed(() => like.value ? "color: #00aeec" : "") as any,
+    style: computed(() => like.value ? "color: #fb7299" : "") as any,
     onClick: () => {
       if (like.value) {
         iframeRef.value?.send("cancelLike");
@@ -110,7 +110,7 @@ watch(iframeRef, () => {
   const coinButton = reactive<PlayerCustomButton>({
     title: "给bilibili视频投币",
     icon: markRaw(CoinOperatedSvg),
-    style: computed(() => coinOperated.value ? "color: #00aeec" : "") as any,
+    style: computed(() => coinOperated.value ? "color: #fb7299" : "") as any,
     onClick: () => {
       iframeRef.value?.send("clickCoin");
     },
@@ -119,7 +119,7 @@ watch(iframeRef, () => {
   const controlButton = reactive<PlayerCustomButton>({
     title: "超控网页",
     icon: markRaw(MousePointerSvg),
-    style: computed(() => playerinMaxMaskOpen.value ? "" : "color: #00aeec") as any,
+    style: computed(() => playerinMaxMaskOpen.value ? "" : "color: #fb7299") as any,
     onClick: () => {
       playerinMaxMaskOpen.value = !playerinMaxMaskOpen.value;
     },
