@@ -38,7 +38,7 @@ watch(() => playListStorage.playLists, async () => {
     <div class="line-title">我的</div>
     <!-- 发现音乐 -->
     <div class="nav-item"
-      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == MYLIKEED_PLAYLIST_NAME }"
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == MYLIKEED_PLAYLIST_NAME }"
       @click="setContent(PlayListContents, { musicListName: MYLIKEED_PLAYLIST_NAME })">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
@@ -48,7 +48,7 @@ watch(() => playListStorage.playLists, async () => {
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
     <div class="paylist-item" v-for="name of playListStorage.playLists.filter(n => n !== MYLIKEED_PLAYLIST_NAME)"
-      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicName == name }"
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == name }"
       @click="setContent(PlayListContents, { musicListName: name })">
       <ImgDiv class="icon" :src="iconMap.get(name)"></ImgDiv>
       <div class="title">{{ name }}</div>
