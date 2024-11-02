@@ -8,5 +8,7 @@ import { contentDisplay, contentData } from '../states/contentState';
     </div>
 </template>
 <style scoped>
-
+.content{
+    padding-top: var(--top-bar-height);
+}
 </style>

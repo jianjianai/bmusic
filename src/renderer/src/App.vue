@@ -5,12 +5,13 @@ import MusicPlayer from './components/MusicPlayer.vue';
 import PlayList from './components/PlayList.vue';
 import AddToPlayList from './states/addToPlayList/AddToPlayList.vue';
 import { addToPlayListMusic } from './states/addToPlayList/addToPlayList';
-import { musicPlayer } from './states/musicPlayerStates';
+import { musicPlayer, musicPlayerSize } from './states/musicPlayerStates';
 import Notification from './states/notification/Notification.vue';
 import { defineAsyncComponent } from 'vue';
 import { cropperImgInfo } from './states/cropperImg/cropperImg';
 import CreatePlayList from './states/addToPlayList/CreatePlayList.vue';
 import { createNewPlayListMusic } from './states/addToPlayList/createPlayList';
+import TopBar from './components/TopBar.vue';
 const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/CropperImg.vue'));
 
 </script>
@@ -21,16 +22,15 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
     <div class="main-box">
       <Nav class="nav"></Nav>
       <Content class="content"></Content>
+      <TopBar v-if="musicPlayerSize == 'buttom'" />
     </div>
     <!-- 下方播放器主体 -->
     <MusicPlayer v-if="musicPlayer.currentMusic" class="main-music-player" />
-
-
     <!-- 右侧播放列表 -->
     <PlayList />
 
     <!-- 下面全是弹出组件 -->
-     
+
     <!-- 添加到播放列表 -->
     <AddToPlayList v-if="addToPlayListMusic" />
     <!-- 创建新歌单 -->
@@ -41,6 +41,7 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
 
     <!-- 消息弹出框 -->
     <Notification />
+
   </div>
 </template>
 
@@ -72,6 +73,6 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
 }
 
 .main:has(.main-music-player) .main-box {
-  height: calc(100vh - 5rem);
+  height: calc(100vh - var(--button-player-height));
 }
 </style>

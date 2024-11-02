@@ -335,7 +335,7 @@ function clickVolume() {
 
 
 .player-bottom-control {
-    height: 4rem;
+    height: calc(var(--button-player-height) - 1rem);
     border-top: 0.1rem solid var(--color-music-player-border);
     padding: 0.5rem 0;
     display: flex;
@@ -346,9 +346,9 @@ function clickVolume() {
 .player {
     position: absolute;
     left: 0;
-    bottom: 5rem;
+    bottom: var(--button-player-height);
     width: 100vw;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - var(--button-player-height));
     transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13);
 }
 
@@ -357,7 +357,7 @@ function clickVolume() {
     left: 0;
     bottom: 0;
     width: 9rem;
-    height: 5rem;
+    height: var(--button-player-height);
     transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38);
 }
 
@@ -368,7 +368,7 @@ function clickVolume() {
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 5rem;
+    height: var(--button-player-height);
     flex-direction: column;
 }
 </style>

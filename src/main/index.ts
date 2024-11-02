@@ -1,9 +1,28 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, type BrowserWindowConstructorOptions } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, optimizer, is, platform, type Platform } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import './ipcAPI'
 
+
+function getSystemConfig(platform: Platform): BrowserWindowConstructorOptions {
+  if (platform.isWindows) {
+    return {
+      titleBarStyle: 'hidden',
+      titleBarOverlay: {
+        color: '#ffffff00',
+        height: 48
+      },
+    };
+  }
+  if (platform.isMacOS) {
+    return {};
+  }
+  if (platform.isLinux) {
+    return {};
+  }
+  return {};
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -15,7 +34,7 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     icon: icon,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...getSystemConfig(platform),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,

@@ -142,8 +142,8 @@ watch(() => playListStorage.playLists, async () => {
 
 .nav {
   background-color: var(--color-lav-bg);
-  width: 12rem;
-  padding: 0.5rem 0;
+  width: var(--left-vav-width);
+  padding: calc(var(--top-bar-height) + 0.5rem) 0 0.5rem 0;
   overflow-y: scroll;
 }
 

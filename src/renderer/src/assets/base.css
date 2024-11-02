@@ -9,6 +9,15 @@ body {
   overflow: hidden;
 }
 
+:root{
+  /* 上方区域 */
+  --top-bar-height: 3rem;
+  /* 左侧导航栏宽度 */
+  --left-vav-width: 12rem;
+  /* 右侧播放列表宽度 */
+  --button-player-height: 5rem;
+}
+
 :root {
   /* 主题色1 两种颜色相互搭配 */
   --color-primary: #EE7755;
@@ -22,6 +31,11 @@ body {
   --color-primary-text2: #646464;
   --color-primary-boder: #e5e5e5;
   --color-primary-shadow: #d3d3d3;
+
+  /* 顶端窗口栏 */
+  --top-bar-btn-color: var(--color-primary-text2);
+  --top-bar-btn-hover-color: var(--color-primary-text);
+  --top-bar-title-color: var(--color-primary-text);
 
   /* 导航栏颜色 */
   --color-primary-nav-hover-text: var(--color-primary-text);

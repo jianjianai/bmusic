@@ -261,8 +261,8 @@ function clickItemIcon(index: number) {
     position: fixed;
     right: 0;
     width: 23rem;
-    top: 2rem;
-    height: calc(100vh - 8rem);
+    top: calc(var(--top-bar-height) + 1rem);
+    height: calc(100vh - var(--button-player-height) - var(--top-bar-height) - 2rem);
     background-color: var(--color-play-list-window-bg);
     border-radius: 1rem 0 0 1rem;
     box-shadow: 0 0 1rem var(--color-play-list-window-shadow);
