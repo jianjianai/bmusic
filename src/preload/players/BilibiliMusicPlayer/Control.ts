@@ -1,3 +1,7 @@
+// Bmusic 播放器 bilibili 音乐播放器控制脚本 https://github.com/jianjianai/bmusic
+// 此文件单独使用 Apache 2.0 协议。
+// 如果需要可以复制此文件到你的项目中进行修改，但请注明出处。建议保留此注释!
+
 
 /**
  * 设置音量
