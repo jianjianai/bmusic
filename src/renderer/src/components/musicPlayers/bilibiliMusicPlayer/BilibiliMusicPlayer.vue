@@ -49,9 +49,9 @@ musicPlayerLink.onRequestVolume((volume: number) => {
   iframeRef.value?.send("setVolume", volume);
 })
 
-watch(musicPlayerSize, () => {
-  iframeRef.value?.send("fullScreen");
-});
+// watch(musicPlayerSize, () => {
+//   iframeRef.value?.send("fullScreen");
+// });
 
 function onMessage(msg: string, ...args: any[]) {
   if (msg == "onPlaybackProgressChange") {

@@ -9,7 +9,7 @@ body {
   overflow: hidden;
 }
 
-:root{
+:root {
   /* 上方区域 */
   --top-bar-height: 3rem;
   /* 左侧导航栏宽度 */
@@ -36,6 +36,20 @@ body {
   --top-bar-btn-color: var(--color-primary-text2);
   --top-bar-btn-hover-color: var(--color-primary-text);
   --top-bar-title-color: var(--color-primary-text);
+
+  /* 顶部搜索框 */
+  --top-bar-search-box-bg-color: var(--color-primary-bg);
+  --top-bar-search-box-border-color: var(--color-primary-boder);
+  --top-bar-search-icon-color: var(--color-primary-text2);
+  --top-bar-search-icon-hover-color: var(--color-primary-text);
+  --top-bar-search-input-color: var(--color-primary-text);
+  --top-bar-search-box-border-color-focus: var(--color-primary);
+
+  /* 顶部按钮 */
+  --top-bar-button-color: var(--color-primary-text2);
+  --top-bar-button-hover-color: var(--color-primary-text);
+  --top-bar-button-hover-bg-color: #f2f2f2;
+
 
   /* 导航栏颜色 */
   --color-primary-nav-hover-text: var(--color-primary-text);
@@ -145,7 +159,7 @@ body {
   --color-play-button-hover-bg: var(--color-primary-button-hover);
   --color-pay-list-search-bg: var(--color-primary-bg2);
   --color-pay-list-search-border: var(--color-primary-boder);
-
+  --color-pay-list-search-border-focus: var(--color-primary);
 
   /* 歌单列表 */
   --color-pay-list-line-title-border: var(--color-primary-boder);
@@ -156,6 +170,7 @@ body {
   --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
   --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
   --color-pay-list-line-content-info-name-font-playing: var(--color-primary-nav-active-bg);
+
 
   /* 全部的喜欢按钮 */
   --color-pay-list-favorite-icon: var(--color-primary-button-small);
@@ -214,5 +229,12 @@ body {
   --universal-input-color: var(--color-primary-text2);
   --universal-input-bg-color: var(--color-primary-bg2);
   --universal-input-border-color-focus: var(--color-primary);
+
+
+  /* 搜索页面 */
+  --universal-input-border-color: var(--color-primary-boder);
+  --universal-search-item-text-color: var(--color-primary-text2);
+  --universal-search-item-text-color-on: var(--color-primary-text);
+  --universal-search-item-text-border-bottom-color-on: var(--color-primary);
 
 }

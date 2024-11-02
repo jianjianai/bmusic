@@ -337,6 +337,7 @@ function toEditMusicInfo(index: number) {
 
 .search:has(.imput:focus) {
     width: 8rem;
+    border-color: var(--color-pay-list-search-border-focus);
 }
 
 .search {

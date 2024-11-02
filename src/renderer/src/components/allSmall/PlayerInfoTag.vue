@@ -1,12 +1,14 @@
 <!-- 播放器显示小标签 -->
 <script setup lang="ts">
-import { getMusicPlayerColour } from '../musicPlayers/musicPlayers';
+import { computed } from 'vue';
+import { getMusicPlayerInfo } from '../musicPlayers/musicPlayers';
 
-defineProps<{ playerName: string }>();
+const props = defineProps<{ playerName: string }>();
+const info = computed(() => getMusicPlayerInfo(props.playerName));
 </script>
 <template>
     <div class="item-paly">
-        <span class="item-paly-text">{{ playerName }}</span>
+        <span class="item-paly-text">{{ info?.displayName || props.playerName }}</span>
     </div>
 </template>
 <style scoped>
@@ -20,8 +22,8 @@ defineProps<{ playerName: string }>();
 
 .item-paly {
     position: relative;
-    color: v-bind("getMusicPlayerColour(playerName) || '#7b7b7b'");
-    border: 0.05em solid v-bind("getMusicPlayerColour(playerName) || '#7b7b7b'");
+    color: v-bind("info?.colour || '#7b7b7b'");
+    border: 0.05em solid v-bind("info?.colour || '#7b7b7b'");
     height: 0.9em;
     border-radius: 0.3em;
     padding: 0 0.2em;

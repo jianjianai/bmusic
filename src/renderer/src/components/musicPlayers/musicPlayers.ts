@@ -4,16 +4,20 @@ import NotExist from "./notExist/NotExist.vue"
 import BilibiliMusicPlayer from './bilibiliMusicPlayer/BilibiliMusicPlayer.vue'
 import { type musicPlayerLink } from "@renderer/states/musicPlayerStates";
 import BilibiliMusicEditor from "./bilibiliMusicPlayer/BilibiliMusicEditor.vue";
+import BilibiliMusicSearch from "./bilibiliMusicPlayer/BilibiliMusicSearch.vue";
 
 
 export type MusicPlayerLink = typeof musicPlayerLink;
-type MusicPlayerComponent = DefineSetupFnComponent<any, any, any, { musicPlayerLink: typeof musicPlayerLink }, any>;
-type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, { "playerData": string }, any>;
+export type MusicPlayerComponent = DefineSetupFnComponent<any, any, any, { musicPlayerLink: typeof musicPlayerLink }, any>;
+export type MusicEditorComponent = DefineSetupFnComponent<any, { 'update:playerData': (value: string) => any; }, any, { "playerData": string }, any>;
+export type MusicSearchComponent = DefineSetupFnComponent<any, any, any, { keyword: string }, any>;
 
-type MusicPlayer = {
+export type MusicPlayer = {
     player: MusicPlayerComponent,
     editor?: MusicEditorComponent,
+    search?: MusicSearchComponent,
     colour?: string,
+    displayName?: string,
 };
 
 const NotExistRaw = markRaw(NotExist);
@@ -21,14 +25,17 @@ const NotExistRaw = markRaw(NotExist);
 /**
  * 播放器组件
  */
-const musicPlayers: { [key: string]: MusicPlayer } = {
+export const musicPlayers: { [key: string]: MusicPlayer } = {
     "Test": {
         player: markRaw(TestMusicPlayer),
+        displayName: "测试",
     },
     "Bilibili": {
         player: markRaw(BilibiliMusicPlayer),
         editor: markRaw(BilibiliMusicEditor),
         colour: "#fb7299",
+        displayName: "B站",
+        search: markRaw(BilibiliMusicSearch),
     }
 }
 
@@ -53,9 +60,10 @@ export const getMusicEditor = (name?: string): Component | undefined => {
 }
 
 /**
- * 获取播放器颜色
+ * 获取播放器信息
  */
-export const getMusicPlayerColour = (name?: string): string | undefined => {
+export const getMusicPlayerInfo = (name?: string): MusicPlayer | undefined => {
     if (name === undefined) { return undefined; }
-    return musicPlayers[name]?.colour;
+    return musicPlayers[name];
 }
+
