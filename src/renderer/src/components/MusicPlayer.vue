@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import MusicPlayerContr from './MusicPlayerContr.vue';
-import MusicPlayers from './musicPlayers/MusicPlayers.vue'
 import { musicPlayer, musicPlayerSize, playerLeftCustomButtons, playerRightCustomButtons } from '../states/musicPlayerStates';
-import DownSvg from '@renderer/svg/Down.vue';
-import PlayerButton from './allSmall/PlayerButton.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import Volume0Svg from '@renderer/svg/Volume0.vue';
 import Volume1Svg from '@renderer/svg/Volume1.vue';
@@ -13,6 +10,7 @@ import { ref } from 'vue';
 import PlayListLineSvg from '@renderer/svg/PlayListLine.vue';
 import { playListOpen } from '@renderer/states/playListState';
 import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
+import MusicPlayerView from './MusicPlayerView.vue';
 
 // 音量拖动条
 const lineCilckEl = ref();
@@ -48,17 +46,9 @@ function clickVolume() {
 
 </script>
 <template>
-    <div class="music-player" :class="{ 'player-min': musicPlayerSize === 'buttom' }">
+    <div class="music-player" :class="musicPlayerSize">
         <!-- 播放器主体 -->
-        <div class="player">
-            <MusicPlayers></MusicPlayers>
-            <!-- 缩小状态遮罩 -->
-            <div class="player-min-mask" @click="() => { musicPlayerSize = 'max' }" v-if="musicPlayerSize === 'buttom'"
-                title="放大"></div>
-            <!-- 缩小按钮 -->
-            <PlayerButton v-if="musicPlayerSize === 'max'" @click="musicPlayerSize = 'buttom'" title="缩小"
-                style="left: 2rem;top: 1rem;" :icon="DownSvg"></PlayerButton>
-        </div>
+        <MusicPlayerView></MusicPlayerView>
         <!-- 下方控制栏 -->
         <div class="player-bottom-control">
             <!-- 左边 -->
@@ -78,7 +68,8 @@ function clickVolume() {
                         <!-- 左下角按钮自定义按钮 -->
                         <div class="user-button" v-for="button of playerLeftCustomButtons" :title="button.title"
                             @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)">
-                            <component :is="button.icon" style="width: 100%; height: 100%;" :style="['width: 100%; height: 100%;',button.style]" />
+                            <component :is="button.icon" style="width: 100%; height: 100%;"
+                                :style="['width: 100%; height: 100%;', button.style]" />
                         </div>
                     </div>
                 </div>
@@ -120,7 +111,7 @@ function clickVolume() {
                 <!-- 右下角自定义按钮 -->
                 <div class="right-button" v-for="button of playerRightCustomButtons"
                     @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)" :title="button.title">
-                    <component :is="button.icon" :style="['width: 100%; height: 100%;',button.style]" />
+                    <component :is="button.icon" :style="['width: 100%; height: 100%;', button.style]" />
                 </div>
             </div>
         </div>
@@ -294,7 +285,7 @@ function clickVolume() {
     width: 0;
 }
 
-.music-player.player-min .left-control::before {
+.music-player.buttom .left-control::before {
     width: 9rem;
 }
 
@@ -314,25 +305,9 @@ function clickVolume() {
     width: 0;
 }
 
-/* 缩小状态遮罩 */
-.player-min-mask:hover {
-    background-color: rgba(0, 0, 0, 0.036);
-}
-
-.player-min-mask {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    cursor: pointer;
-}
-
 .player-control-grep {
     height: 100%;
 }
-
-
 
 .player-bottom-control {
     height: calc(var(--button-player-height) - 1rem);
@@ -340,25 +315,6 @@ function clickVolume() {
     padding: 0.5rem 0;
     display: flex;
     justify-content: space-between;
-}
-
-
-.player {
-    position: absolute;
-    left: 0;
-    bottom: var(--button-player-height);
-    width: 100vw;
-    height: calc(100vh - var(--button-player-height));
-    transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13);
-}
-
-.music-player.player-min .player {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 9rem;
-    height: var(--button-player-height);
-    transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38);
 }
 
 .music-player {
