@@ -7,6 +7,10 @@ import GearSvg from '@renderer/svg/Gear.vue';
 import { ref } from 'vue';
 import { setContent } from '@renderer/states/contentState';
 import SearchContents from './contents/SearchContents.vue';
+import SyncSvg from '@renderer/svg/Sync.vue';
+import CloudCheckSvg from '@renderer/svg/CloudCheck.vue';
+import CloudSlashSvg from '@renderer/svg/CloudSlash.vue';
+import ExclamationCrcleSvg from '@renderer/svg/ExclamationCrcle.vue';
 
 const searchValue = ref('');
 function search() {
@@ -31,15 +35,58 @@ function search() {
             </label>
             <!-- 占空用 -->
             <div style="width: 0;flex: 1;"></div>
-            <!-- 设置 -->
-            <div class="top-bar-button" title="设置">
-                <GearSvg class="top-bar-button-icon" />
+            <div class="right-button-grep">
+                <!-- 同步 -->
+                <div class="top-bar-button-and-text" title="同步">
+                    <SyncSvg class="top-bar-button-icon" />
+                    <CloudCheckSvg class="top-bar-button-icon" />
+                    <CloudSlashSvg class="top-bar-button-icon" />
+                    <ExclamationCrcleSvg class="top-bar-button-icon" />
+                    <div class="top-bar-button-text">同步</div>
+                </div>
+                <!-- 设置 -->
+                <div class="top-bar-button" title="设置">
+                    <GearSvg class="top-bar-button-icon" />
+                </div>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
-.top-bar-button-icon {
+.right-button-grep {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.top-bar-button-and-text:hover {
+    color: var(--top-bar-button-hover-color);
+    background-color: var(--top-bar-button-hover-bg-color);
+}
+
+.top-bar-button-and-text {
+    position: relative;
+    height: 2rem;
+    cursor: pointer;
+    color: var(--top-bar-button-color);
+    -webkit-app-region: no-drag;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0 0.5rem;
+}
+
+.top-bar-button-and-text .top-bar-button-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.top-bar-button-and-text .top-bar-button-text {
+    font-size: 0.8rem;
+}
+
+
+.top-bar-button .top-bar-button-icon {
     width: 50%;
     height: 50%;
     position: absolute;
@@ -54,7 +101,6 @@ function search() {
     cursor: pointer;
     color: var(--top-bar-button-color);
     -webkit-app-region: no-drag;
-    justify-self: end;
 }
 
 .top-bar-button:hover {
