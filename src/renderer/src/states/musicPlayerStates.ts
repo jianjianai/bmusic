@@ -23,8 +23,8 @@ export function compareMusic(music1?: Music, music2?: Music) {
 }
 
 /** 计算一首音乐的key */
-export function musicKey(music: Music) {
-  return `${music.playerName}_${music.playerData}`;
+export function musicKey(music?: Music) {
+  return `${music?.playerName}_${music?.playerData}`;
 }
 
 const currentMusic = ref<Music>();
@@ -159,6 +159,11 @@ export const musicPlayer = readonly({
 
   /**设置正在播放的音乐 */
   setCurrentMusic(music: Music) {
+    if(compareMusic(music, currentMusic.value)){
+      console.log('musicPlayer.setCurrentMusic: music is same');
+      currentMusic.value = music;
+      return;
+    }
     // 重置音乐播放器链接
     onRequestEventListens = createEventListens();
     loading.value = true;

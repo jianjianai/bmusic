@@ -2,7 +2,7 @@
 import { playListOpen, playList } from '@renderer/states/playListState';
 import PlaySvg from '@renderer/svg/Play.vue';
 import PauseSvg from '@renderer/svg/Pause.vue';
-import { musicPlayer } from '@renderer/states/musicPlayerStates';
+import { musicKey, musicPlayer } from '@renderer/states/musicPlayerStates';
 import FavoriteButton from './allSmall/FavoriteButton.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
@@ -40,7 +40,7 @@ function clickItemIcon(index: number) {
                 <div class="list">
                     <!-- 列表中的每个项 -->
                     <div class="item-box" :class="{ paying: index == playList.currentIndex }"
-                        v-for="music, index of playList.list" :key="music.playerData">
+                        v-for="music, index of playList.list" :key="musicKey(music)">
                         <!-- 图标 -->
                         <div class="icon" @click="clickItemIcon(index)">
                             <!-- TODO 图片显示 -->

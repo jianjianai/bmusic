@@ -22,7 +22,7 @@ watch(() => musicPlayer.currentMusic, () => {
 });
 
 //如果当前列表音乐变化则更新musicPlayer
-watch(currentMusic, () => {
+watch([currentIndex,list], () => {
     if (currentMusic.value) {
         musicPlayer.setCurrentMusic(currentMusic.value);
     }

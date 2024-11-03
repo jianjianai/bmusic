@@ -9,6 +9,7 @@ import PlayListContents from './PlayListContents.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import MusicEditers from '../musicPlayers/MusicEditers.vue';
 import { getMusicPlayerInfo } from '../musicPlayers/musicPlayers';
+import { musicKey } from '@renderer/states/musicPlayerStates';
 
 const props = defineProps<{
     /** 编辑哪个歌单 */
@@ -95,7 +96,7 @@ function save() {
             </ImgDiv>
         </div>
         <!-- 播放器编辑器 -->
-        <MusicEditers v-model="editInfo" :key="eitMusic?.playerData">
+        <MusicEditers v-model="editInfo" :key="musicKey(eitMusic)">
             <div class="edit-music-lnfo-title-small">{{ getMusicPlayerInfo(eitMusic?.playerName)?.displayName || eitMusic?.playerName }}</div>
         </MusicEditers>
         <!-- 按钮组 -->
