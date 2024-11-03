@@ -8,7 +8,7 @@ import FavoriteButton from './FavoriteButton.vue';
 import PlayerInfoTag from './PlayerInfoTag.vue';
 import ImgDiv from './ImgDiv.vue';
 import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
-import { type CSSProperties, type Component } from 'vue';
+import { ref, type CSSProperties, type Component } from 'vue';
 
 const props = defineProps<{
     // 音乐列表
@@ -22,6 +22,8 @@ const props = defineProps<{
         style?: false | null | string | CSSProperties,
         onClick?: (index: number) => void
     }[],
+    // 是否可拖动排序
+    dragSort?: boolean,
 }>();
 
 
@@ -41,6 +43,54 @@ function chickMusicIcon(music: Music, index: number) {
     }
 }
 
+
+//用于拖动排序
+//拖拽功能
+let drag = ref<{
+    x: number,
+    y: number,
+    music: Music,
+    mouseUp: (index: number) => void,
+    mouseOver: (index: number) => void,
+    mouseLeave: (index: number) => void,
+
+}>();
+function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: number) {
+    if (!props.dragSort) {
+        return;
+    }
+    const onMousemove = (event2) => {
+        if (!drag.value) {
+            drag.value = {
+                x: 0,
+                y: 0,
+                music: music,
+                mouseOver: (index1: number) => {
+
+                },
+                mouseLeave: (index1: number) => {
+
+                },
+                mouseUp: (index1: number) => {
+                    if (index1 != mouseDownIndex) {
+                        props.list.splice(mouseDownIndex, 1);
+                        props.list.splice(index1, 0, music);
+                        // musicPlayList.value!.save();
+                    }
+                },
+            }
+        }
+        drag.value!.x = event2.clientX + 5;
+        drag.value!.y = event2.clientY + 5;
+    };
+    document.addEventListener('mousemove', onMousemove);
+    //鼠标松开事件
+    document.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', onMousemove);
+        drag.value = undefined;
+    });
+}
+
 </script>
 <template>
     <div class="pay-list">
@@ -50,7 +100,8 @@ function chickMusicIcon(music: Music, index: number) {
             <div class="like">喜欢</div>
         </div>
         <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-            v-for="music, index of props.list">
+            v-for="music, index of props.list" @mousedown="mouseDown($event, music, index)"
+            @mouseup="drag?.mouseUp(index)" @mouseover="drag?.mouseOver(index)" @mouseleave="drag?.mouseLeave(index)">
             <!-- 序号 -->
             <div class="index">{{ index }}</div>
             <!-- 音乐信息 -->
@@ -93,9 +144,22 @@ function chickMusicIcon(music: Music, index: number) {
                 <FavoriteButton :music="music" style="width: 1.2rem;height: 1.2rem;" />
             </div>
         </div>
+        <!-- 拖动中的元素 -->
+        <div v-if="drag" class="drag-item">
+
+        </div>
     </div>
 </template>
 <style scoped>
+.drag-item {
+    width: 3rem;
+    height: 3rem;
+    position: fixed;
+    top: v-bind("`${drag?.y}px`");
+    left: v-bind("`${drag?.x}px`");
+    background-color: aquamarine;
+}
+
 .pay-list .line-content .button-grep-button:hover {
     color: var(--color-play-list-item-button-grep-button-hover);
 }

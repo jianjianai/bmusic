@@ -4,7 +4,6 @@ import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { toRef } from 'vue';
 import PlaySvg from '@renderer/svg/Play.vue';
 import SearchSvg from '@renderer/svg/Search.vue';
-import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
 import EditSvg from '@renderer/svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
@@ -19,19 +18,6 @@ const props = defineProps<{
 
 const musicPlayList = useMusicPlayList(toRef(props, 'musicListName'));
 
-// 点击播放按钮,播放音乐
-function chickMusicIcon(music: Music, index: number) {
-    if (compareMusic(musicPlayer.currentMusic, music)) {
-        if (musicPlayer.playing) {
-            musicPlayer.requestPause();
-        } else {
-            musicPlayer.requestPlay();
-        }
-    } else {
-        playList.setList(musicPlayList.value!.musicList!.list);
-        playList.setCurrentIndex(index);
-    }
-}
 
 // 点击播放全部按钮
 function playAll() {
@@ -98,7 +84,7 @@ function toEditMusicInfo(index: number) {
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :customButtons="[
+            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true" :customButtons="[
                 {
                     title: '编辑歌曲信息',
                     icon: EditSvg,
