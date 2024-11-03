@@ -105,7 +105,6 @@ ipcBilibiliApi.getPreloadJsFilePath_BilibiliMusicSearch().then((res: string) => 
 
 .bilibili-search {
     position: relative;
-    margin: 0 1rem;
     min-height: 100%;
 }
 </style>
