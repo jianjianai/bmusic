@@ -3,10 +3,17 @@
 import { musicPlayer, musicPlayerSize, topBarCustomButtons } from '@renderer/states/musicPlayerStates';
 import DownSvg from '@renderer/svg/Down.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue';
+import { ref, watch } from 'vue';
+
+/** 过渡动画仅改变状态时开启 */
+const transitOpen = ref(false);
+watch(musicPlayerSize, () => {
+    transitOpen.value = true;
+})
 
 </script>
 <template>
-    <div class="player" :class="musicPlayerSize">
+    <div class="player" :class="[musicPlayerSize, { 'transit-open': transitOpen }]" @transitionend="transitOpen = false">
         <MusicPlayers></MusicPlayers>
         <!-- 缩小状态遮罩 -->
         <div class="player-min-mask" @click="() => { musicPlayerSize = 'max' }" v-if="musicPlayerSize === 'buttom'"
@@ -18,7 +25,8 @@ import MusicPlayers from './musicPlayers/MusicPlayers.vue';
                 <DownSvg class="player-but-icon"></DownSvg>
             </div>
             <!-- 其他自定义按钮 -->
-            <div v-for="button of topBarCustomButtons" class="player-but top-bar-button" @click="button.onClick?.($event,musicPlayer.currentMusic!.playerData)" :title="button.title">
+            <div v-for="button of topBarCustomButtons" class="player-but top-bar-button"
+                @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)" :title="button.title">
                 <component :is="button.icon" class="player-but-icon" :style="button.style"></component>
             </div>
         </div>
@@ -90,6 +98,10 @@ import MusicPlayers from './musicPlayers/MusicPlayers.vue';
     bottom: var(--button-player-height);
     width: 100vw;
     height: calc(100vh - var(--button-player-height));
+    /* transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13); */
+}
+
+.player.transit-open {
     transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13);
 }
 
@@ -99,6 +111,10 @@ import MusicPlayers from './musicPlayers/MusicPlayers.vue';
     bottom: 0;
     width: 9rem;
     height: var(--button-player-height);
+    /* transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38); */
+}
+
+.player.buttom.transit-open {
     transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38);
 }
 </style>
