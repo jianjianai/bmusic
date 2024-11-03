@@ -24,6 +24,8 @@ const props = defineProps<{
     }[],
     // 是否可拖动排序
     dragSort?: boolean,
+    // 当音乐顺序被拖拽改变时
+    onMusicOrderChange?: (newList: Music[]) => void,
 }>();
 
 
@@ -50,38 +52,56 @@ let drag = ref<{
     x: number,
     y: number,
     music: Music,
-    mouseUp: (index: number) => void,
-    mouseOver: (index: number) => void,
-    mouseLeave: (index: number) => void,
-
+    mouseUp: (event: MouseEvent, index: number) => void,
+    mouseMove: (event: MouseEvent, index: number) => void,
+    mouseLeave: (event: MouseEvent, index: number) => void,
 }>();
-function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: number) {
+function mouseDown(_mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: number) {
     if (!props.dragSort) {
         return;
     }
+    //判断是移动到上面还是下面 true 上面 false 下面
+    function moveUpOrDown(event: MouseEvent): boolean {
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        return event.clientY - rect.top < rect.height / 2;
+    }
+
     const onMousemove = (event2) => {
         if (!drag.value) {
             drag.value = {
                 x: 0,
                 y: 0,
                 music: music,
-                mouseOver: (index1: number) => {
-
+                mouseMove: (mouseOverEvent: MouseEvent, _index1: number) => {
+                    const target = mouseOverEvent.currentTarget as HTMLElement;
+                    target.classList.remove('drag-item-to-left');
+                    target.classList.remove('drag-item-to-next');
+                    if (moveUpOrDown(mouseOverEvent)) {
+                        target.classList.add('drag-item-to-left');
+                    } else {
+                        target.classList.add('drag-item-to-next');
+                    }
                 },
-                mouseLeave: (index1: number) => {
-
+                mouseLeave: (mouseLeaveEvent: MouseEvent, _index1: number) => {
+                    const target = mouseLeaveEvent.currentTarget as HTMLElement;
+                    target.classList.remove('drag-item-to-left');
+                    target.classList.remove('drag-item-to-next');
                 },
-                mouseUp: (index1: number) => {
-                    if (index1 != mouseDownIndex) {
+                mouseUp: (mouseUpEvent: MouseEvent, index1: number) => {
+                    const target = mouseUpEvent.currentTarget as HTMLElement;
+                    target.classList.remove('drag-item-to-left');
+                    target.classList.remove('drag-item-to-next');
+                    const up = moveUpOrDown(mouseUpEvent);
+                    if (index1 != mouseDownIndex && index1 != mouseDownIndex + (up ? 1 : -1)) {
                         props.list.splice(mouseDownIndex, 1);
-                        props.list.splice(index1, 0, music);
-                        // musicPlayList.value!.save();
+                        props.list.splice(index1 + (index1 < mouseDownIndex ? 1 : 0) - (up ? 1 : 0), 0, music);
+                        props.onMusicOrderChange?.(props.list);
                     }
                 },
             }
         }
-        drag.value!.x = event2.clientX + 5;
-        drag.value!.y = event2.clientY + 5;
+        drag.value!.x = event2.clientX;
+        drag.value!.y = event2.clientY;
     };
     document.addEventListener('mousemove', onMousemove);
     //鼠标松开事件
@@ -101,7 +121,8 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
         </div>
         <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
             v-for="music, index of props.list" @mousedown="mouseDown($event, music, index)"
-            @mouseup="drag?.mouseUp(index)" @mouseover="drag?.mouseOver(index)" @mouseleave="drag?.mouseLeave(index)">
+            @mouseup="drag?.mouseUp($event, index)" @mousemove="drag?.mouseMove($event, index)"
+            @mouseleave="drag?.mouseLeave($event, index)">
             <!-- 序号 -->
             <div class="index">{{ index }}</div>
             <!-- 音乐信息 -->
@@ -146,18 +167,45 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
         </div>
         <!-- 拖动中的元素 -->
         <div v-if="drag" class="drag-item">
-
+            <ImgDiv class="info-icon" :src="drag.music.iconUrl" />
+            <div class="info-content">
+                <!-- 名称 -->
+                <div class="info-name">{{ drag.music.musicName }}</div>
+                <!-- 名称下面一排 -->
+                <div class="info-author">
+                    <!-- 播放器 -->
+                    <PlayerInfoTag class="item-player" :playerName="drag.music.playerName" />
+                    <!-- 作者 -->
+                    <div class="item-author">{{ drag.music.musicAuthor }}</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
+.pay-list .line.line-content.drag-item-to-left {
+    border-top: 0.1rem solid var(--color-pay-list-drag-item-border-line);
+    border-radius: 0;
+    background-color: unset;
+}
+
+.pay-list .line.line-content.drag-item-to-next {
+    border-bottom: 0.1rem solid var(--color-pay-list-drag-item-border-line);
+    border-radius: 0;
+    background-color: unset;
+}
+
 .drag-item {
-    width: 3rem;
-    height: 3rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--color-pay-list-drag-item-bg);
+    border: 0.1rem solid var(--color-pay-list-drag-item-border);
+    width: 15rem;
     position: fixed;
-    top: v-bind("`${drag?.y}px`");
-    left: v-bind("`${drag?.x}px`");
-    background-color: aquamarine;
+    top: calc(v-bind("`${drag?.y}px`") - 1.5rem);
+    left: calc(v-bind("`${drag?.x}px`") + 0.5rem);
+    display: flex;
+    gap: 0.5rem;
 }
 
 .pay-list .line-content .button-grep-button:hover {
@@ -216,10 +264,12 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
     background-color: var(--color-pay-list-line-content-hover-bg);
 }
 
+.drag-item .item-player,
 .pay-list .line-content .info-author .item-player {
     font-size: 0.7rem;
 }
 
+.drag-item .item-author,
 .pay-list .line-content .info-author .item-author {
     word-break: keep-all;
     overflow: hidden;
@@ -228,6 +278,7 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
     width: 0;
 }
 
+.drag-item .info-author,
 .pay-list .line-content .info-author {
     font-size: 0.7rem;
     color: var(--color-pay-list-line-content-info-author-font);
@@ -242,6 +293,7 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
     color: var(--color-pay-list-line-content-info-name-font-playing);
 }
 
+.drag-item .info-name,
 .pay-list .line-content .info-name {
     font-size: 0.9rem;
     color: var(--color-pay-list-line-content-info-name-font);
@@ -251,6 +303,7 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
     white-space: nowrap;
 }
 
+.drag-item .info-content,
 .pay-list .line-content .info-content {
     flex: 1;
     width: 0;
@@ -259,6 +312,7 @@ function mouseDown(mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: num
     flex-direction: column;
 }
 
+.drag-item .info-icon,
 .pay-list .line-content .info-icon {
     width: 2.5rem;
     height: 2.5rem;

@@ -11,6 +11,7 @@ import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import EditMusicInfo from './EditMusicInfo.vue';
 import MusicList from '../allSmall/MusicList.vue';
+import { type Music } from '@renderer/states/musicPlayerStates';
 
 const props = defineProps<{
     musicListName: string
@@ -33,6 +34,11 @@ function toEdit() {
 //去编辑歌曲信息
 function toEditMusicInfo(index: number) {
     setContent(EditMusicInfo, { editIndex: index, musicListName: props.musicListName });
+}
+
+function onMusicOrderChange(newList: Music[]) {
+    musicPlayList.value!.musicList!.list = newList;
+    musicPlayList.value?.save();
 }
 
 </script>
@@ -84,7 +90,7 @@ function toEditMusicInfo(index: number) {
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true" :customButtons="[
+            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true" :onMusicOrderChange="onMusicOrderChange" :customButtons="[
                 {
                     title: '编辑歌曲信息',
                     icon: EditSvg,

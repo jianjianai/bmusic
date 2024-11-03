@@ -170,6 +170,10 @@ body {
   --color-pay-list-line-content-info-icon-mask-bg: #5c5c5c47;
   --color-pay-list-line-content-info-icon-mask-icon: #ffffff;
   --color-pay-list-line-content-info-name-font-playing: var(--color-primary-nav-active-bg);
+  /* 拖动排序歌单列表 */
+  --color-pay-list-drag-item-bg: var(--color-primary-bg);
+  --color-pay-list-drag-item-border: var(--color-primary-boder);
+  --color-pay-list-drag-item-border-line: var(--color-primary-text2);
 
 
   /* 全部的喜欢按钮 */

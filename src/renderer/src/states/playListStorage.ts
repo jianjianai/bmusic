@@ -144,7 +144,7 @@ function newMusicPlayList(fromName: string) {
         if (findMusicIndex(music) != undefined || !loaded.value) {
             return;
         }
-        musicList.value!.list!.push(music);
+        musicList.value!.list!.unshift(music);
         // musicMap.set(musicKey(music), likeed.musicList!.list!.length - 1);
         save();
     }
