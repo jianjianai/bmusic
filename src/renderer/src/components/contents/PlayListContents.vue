@@ -4,18 +4,14 @@ import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { toRef } from 'vue';
 import PlaySvg from '@renderer/svg/Play.vue';
 import SearchSvg from '@renderer/svg/Search.vue';
-import PauseSvg from '@renderer/svg/Pause.vue';
 import { musicPlayer, compareMusic, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
-import FavoriteButton from '../allSmall/FavoriteButton.vue';
-import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
-import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import EditSvg from '@renderer/svg/Edit.vue';
 import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import EditMusicInfo from './EditMusicInfo.vue';
-import PlayerInfoTag from '../allSmall/PlayerInfoTag.vue';
+import MusicList from '../allSmall/MusicList.vue';
 
 const props = defineProps<{
     musicListName: string
@@ -50,7 +46,7 @@ function toEdit() {
 
 //去编辑歌曲信息
 function toEditMusicInfo(index: number) {
-    setContent(EditMusicInfo, {editIndex: index, musicListName: props.musicListName});
+    setContent(EditMusicInfo, { editIndex: index, musicListName: props.musicListName });
 }
 
 </script>
@@ -102,225 +98,17 @@ function toEditMusicInfo(index: number) {
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <div class="pay-list">
-                <div class="line line-title">
-                    <div class="index">#</div>
-                    <div class="info">歌曲</div>
-                    <div class="like">喜欢</div>
-                </div>
-                <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
-                    v-for="music, index of musicPlayList!.musicList?.list">
-                    <!-- 序号 -->
-                    <div class="index">{{ index }}</div>
-                    <!-- 音乐信息 -->
-                    <div class="info">
-                        <!-- 图标 -->
-                        <ImgDiv class="info-icon" @click="chickMusicIcon(music, index)" :src="music.iconUrl">
-                            <!-- 遮罩 -->
-                            <div class="info-icon-mask">
-                                <!-- 播放暂停按钮 -->
-                                <PauseSvg class="icon"
-                                    v-if="compareMusic(musicPlayer.currentMusic, music) && musicPlayer.playing" />
-                                <PlaySvg class="icon" v-else />
-                            </div>
-                        </ImgDiv>
-                        <!-- 内容 -->
-                        <div class="info-content">
-                            <!-- 名称 -->
-                            <div class="info-name">{{ music.musicName }}</div>
-                            <!-- 名称下面一排 -->
-                            <div class="info-author">
-                                <!-- 播放器 -->
-                                <PlayerInfoTag class="item-player" :playerName="music.playerName" />
-                                <!-- 作者 -->
-                                <div class="item-author">{{ music.musicAuthor }}</div>
-                            </div>
-                        </div>
-                        <!-- 按钮组 -->
-                        <div class="button-grep">
-                            <div class="button-grep-button" title="编辑音乐信息" @click="toEditMusicInfo(index)">
-                                <EditSvg style="width: 100%; height: 100%;" />
-                            </div>
-                            <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
-                                <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 喜欢 -->
-                    <div class="like">
-                        <FavoriteButton :music="music" style="width: 1.2rem;height: 1.2rem;" />
-                    </div>
-                </div>
-            </div>
+            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :customButtons="[
+                {
+                    title: '编辑歌曲信息',
+                    icon: EditSvg,
+                    onClick: toEditMusicInfo
+                },
+            ]"></MusicList>
         </div>
     </div>
 </template>
 <style scoped>
-.pay-list .line-content .button-grep-button:hover {
-    color: var(--color-play-list-item-button-grep-button-hover);
-}
-
-.pay-list .line-content .button-grep-button {
-    width: 1.2rem;
-    height: 1.2rem;
-    cursor: pointer;
-    color: var(--color-play-list-item-button-grep-button);
-}
-
-.pay-list .line-content:hover .button-grep {
-    display: flex;
-}
-
-.pay-list .line-content .button-grep {
-    display: none;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.pay-list .line-content.playing .info-icon-mask .icon,
-.pay-list .line-content:hover .info-icon-mask .icon {
-    display: block;
-}
-
-.pay-list .line-content .info-icon-mask .icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--color-pay-list-line-content-info-icon-mask-icon);
-    display: none;
-}
-
-.pay-list .line-content.playing .info-icon-mask,
-.pay-list .line-content:hover .info-icon-mask {
-    display: block;
-}
-
-.pay-list .line-content .info-icon-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-pay-list-line-content-info-icon-mask-bg);
-    display: none;
-}
-
-.pay-list .line-content:hover {
-    background-color: var(--color-pay-list-line-content-hover-bg);
-}
-
-.pay-list .line-content .info-author .item-player{
-    font-size: 0.7rem;
-}
-
-.pay-list .line-content .info-author .item-author {
-    word-break: keep-all;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    width: 0;
-}
-
-.pay-list .line-content .info-author {
-    font-size: 0.7rem;
-    color: var(--color-pay-list-line-content-info-author-font);
-    display: flex;
-    align-items: center;
-    flex: 1;
-    height: 0;
-    gap: 0.2rem;
-}
-
-.pay-list .line-content.playing .info-name {
-    color: var(--color-pay-list-line-content-info-name-font-playing);
-}
-
-.pay-list .line-content .info-name {
-    font-size: 0.9rem;
-    color: var(--color-pay-list-line-content-info-name-font);
-    word-break: keep-all;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.pay-list .line-content .info-content {
-    flex: 1;
-    width: 0;
-    height: 2.5rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.pay-list .line-content .info-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.25rem;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.pay-list .line-content .info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    height: 2.3rem;
-}
-
-.pay-list .line-content {
-    height: 3.5rem;
-    border-radius: 0.5rem;
-    user-select: none;
-}
-
-.pay-list .line-content .index {
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--color-pay-list-line-content-index-font);
-}
-
-
-.pay-list .line-title .info {
-    text-align: left;
-}
-
-.pay-list .line.line-title {
-    text-align: center;
-    font-size: 0.8rem;
-    border-bottom: 0.1rem solid var(--color-pay-list-line-title-border);
-    padding: 0.5rem 0;
-    margin-bottom: 0.3rem;
-}
-
-.pay-list .line .length {
-    width: 4rem;
-}
-
-.pay-list .line .like {
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-}
-
-.pay-list .line .info {
-    flex: 1;
-    width: 0;
-}
-
-.pay-list .line .index {
-    width: 2rem;
-}
-
-.pay-list .line {
-    display: flex;
-    gap: 0.5rem;
-    margin: 0 0.5rem;
-    align-items: center;
-}
-
 .search .imput {
     flex: 1;
     width: 0;

@@ -144,7 +144,7 @@ watch(iframeRef, () => {
 
 //获取preload文件路径
 const bilibiliMusicPlayer__filePath = ref<string>();
-ipcBilibiliApi.getPreloadJsFilePath().then((res: string) => {
+ipcBilibiliApi.getPreloadJsFilePath_BilibiliMusicPlayer().then((res: string) => {
   bilibiliMusicPlayer__filePath.value = res;
 });
 
