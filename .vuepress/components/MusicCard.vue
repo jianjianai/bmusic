@@ -1,26 +1,10 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
 import ImgDiv from './ImgDiv.vue';
 import PlayerInfoTag from './PlayerInfoTag.vue';
 import { Music } from '../type';
 import PlaySvg from './svg/Play.vue';
 
-// const props = defineProps<{music:Music}>();
-
-const props = reactive<{ music: Music }>({
-    music: {
-        /** 图标 */
-        iconUrl: 'file:///C:/Users/Administrator/Pictures/2e0e47571d612323fdd1991a01d5e4fefa4dd8ad.webp@96w_96h_1c_1s_!web-avatar.avif',
-        /** 音乐名 */
-        musicName: "测试音乐adsasdasdasdasdasdasdasdas",
-        /** 音乐作者 */
-        musicAuthor: "测试作者asdasdasdasdasdasdasdasdsa",
-        /** 播放器 */
-        playerName: "Bilibili",
-        /** 数据 */
-        playerData: "测试数据",
-    }
-});
+const props = defineProps<{music:Music}>();
 
 </script>
 <template>
@@ -109,7 +93,7 @@ const props = reactive<{ music: Music }>({
 
 .music-list-card-box {
     padding: 0.5rem;
-    width: 20rem;
+    /* width: 20rem; */
     /* background-color: antiquewhite; */
     display: flex;
     gap: 0.5rem;
