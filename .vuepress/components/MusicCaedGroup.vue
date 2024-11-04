@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Music } from '../type';
+import { Music } from '../findMain';
 import MusicListCard from './MusicCard.vue';
 
 const prop = defineProps<{ title: string, list: Music[] }>();

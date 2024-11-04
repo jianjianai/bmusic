@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import ImgDiv from './ImgDiv.vue';
 import PlayerInfoTag from './PlayerInfoTag.vue';
-import { Music } from '../type';
+import { compareMusic, currentMusic, isMusicPlaying, Music, pauseMusic, playMusic, resumeMusic } from '../findMain';
 import PlaySvg from './svg/Play.vue';
+import PauseSvg from './svg/Pause.vue';
 
 const props = defineProps<{music:Music}>();
 
+
 </script>
 <template>
-    <div class="music-list-card-box">
+    <div class="music-list-card-box" >
         <ImgDiv class="card-img" :src="props.music.iconUrl">
-            <div class="card-img-misk">
+            <!-- 切换音乐 -->
+            <div class="card-img-misk" v-if="!compareMusic(currentMusic,props.music)" @click="playMusic(props.music)">
+                <PlaySvg class="card-img-misk-icon"></PlaySvg>
+            </div>
+            <!-- 暂停 -->
+            <div class="card-img-misk current" v-else-if="isMusicPlaying" @click="pauseMusic()">
+                <PauseSvg class="card-img-misk-icon"></PauseSvg>
+            </div>
+            <!-- 播放 -->
+            <div class="card-img-misk current" v-else @click="resumeMusic()">
                 <PlaySvg class="card-img-misk-icon"></PlaySvg>
             </div>
         </ImgDiv>
@@ -46,6 +57,7 @@ const props = defineProps<{music:Music}>();
     display: none;
 }
 
+.card-img-misk.current,
 .music-list-card-box:hover .card-img-misk{
     display: block;
 }
@@ -68,7 +80,7 @@ const props = defineProps<{music:Music}>();
 
 .card-name {
     font-size: 1rem;
-    font-weight: bolder;
+    /* font-weight: bolder; */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
