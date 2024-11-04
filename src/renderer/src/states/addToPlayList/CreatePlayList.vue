@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { createNewPlayListMusic } from './createPlayList';
+import { createNewPlayListAndOpen, createNewPlayListMusic, createNewPlayListMusicOnLoc } from './createPlayList';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { ref, watch } from 'vue';
 import { putNotification } from '@renderer/states/notification/notification';
 import UniversalButton from '@renderer/components/allSmall/UniversalButton.vue';
 import UniversalTextarea from '@renderer/components/allSmall/UniversalTextarea.vue';
+import { setContent } from '../contentState';
+import PlayListContents from '@renderer/components/contents/PlayListContents.vue';
 
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
@@ -13,14 +15,39 @@ let loading = false;
 watch(musicPlayList, async (newVal) => {
     if (newVal) {
         loading = true;
-        await newVal.onLoaded;
-        newVal.addMusic(createNewPlayListMusic.value!);
-        createNewPlayListMusic.value = undefined;
-        loading = false;
+        if (createNewPlayListMusicOnLoc.value) {
+            await newVal.onLoaded;
+            newVal.musicList!.description = createNewPlayListMusicOnLoc.value.description;
+            newVal.musicList!.author = createNewPlayListMusicOnLoc.value.author;
+            newVal.musicList!.authorIconUrl = createNewPlayListMusicOnLoc.value.authorIconUrl;
+            newVal.musicList!.list = createNewPlayListMusicOnLoc.value.list;
+            await newVal.save();
+            if (createNewPlayListMusicOnLoc.value.iconUrl) {
+                const response = await fetch(createNewPlayListMusicOnLoc.value.iconUrl);
+                const blob = await response.blob();
+                const arrayBuffer = await blob.arrayBuffer();
+                const uint8Array = new Uint8Array(arrayBuffer);
+                newVal.setIcon(uint8Array);
+            }
+            createNewPlayListMusicOnLoc.value = undefined;
+            loading = false;
+            if (createNewPlayListAndOpen.value) {
+                setContent(PlayListContents, { musicListName: newVal.name });
+            }
+        } else if (createNewPlayListMusic.value) {
+            await newVal.onLoaded;
+            newVal.addMusic(createNewPlayListMusic.value!);
+            await newVal.save();
+            createNewPlayListMusic.value = undefined;
+            loading = false;
+            if (createNewPlayListAndOpen.value) {
+                setContent(PlayListContents, { musicListName: newVal.name });
+            }
+        }
     }
 });
 
-const newPlayeListName = ref<string>('');
+const newPlayeListName = ref<string>(createNewPlayListMusicOnLoc.value?.name || '');
 function ok() {
     if (loading) {
         return;
@@ -46,6 +73,7 @@ function close() {
         return;
     }
     createNewPlayListMusic.value = undefined;
+    createNewPlayListMusicOnLoc.value = undefined;
 }
 
 </script>
@@ -75,18 +103,20 @@ function close() {
     </div>
 </template>
 <style scoped>
-.button-grep{
+.button-grep {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-bottom: 1rem;
 }
-.input-name{
+
+.input-name {
     width: 20rem;
     height: 5rem;
     margin: auto;
 }
-.new-player-list-list-box .title{
+
+.new-player-list-list-box .title {
     text-align: center;
     margin-top: 1rem;
     font-size: 1.3rem;

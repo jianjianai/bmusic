@@ -31,6 +31,12 @@ type MusicPlayList = {
     list: Music[]
 }
 
+// 不是保存在本地的播放列表，也就是临时播放列表
+export type MusicPlayListOnLoc = {
+    name: string,
+    iconUrl?: string,
+} & MusicPlayList
+
 export const playListStorage = readonly({
     playLists: playLists,
     /** 保存一个播放列表 */
@@ -146,7 +152,15 @@ function newMusicPlayList(fromName: string) {
         }
         musicList.value!.list!.unshift(music);
         // musicMap.set(musicKey(music), likeed.musicList!.list!.length - 1);
-        save();
+        // save();
+    }
+
+    // 批量添加音乐到列表
+    function addMusics(musics: Music[]) {
+        if (!loaded.value) {
+            return;
+        }
+        musicList.value!.list!.unshift(...musics);
     }
 
     // 从列表删除
@@ -156,7 +170,7 @@ function newMusicPlayList(fromName: string) {
             return;
         }
         musicList.value!.list!.splice(index, 1);
-        save();
+        // save();
     }
 
     return reactive({
@@ -173,7 +187,8 @@ function newMusicPlayList(fromName: string) {
         findMusicIndex,
         addMusic,
         removeMusic,
-        setIcon
+        setIcon,
+        addMusics
     });
 }
 
@@ -185,7 +200,7 @@ type Quote<T> = {
 /** 播放列表缓存,优化性能 */
 const musicPlayLists: Quote<ReturnType<typeof newMusicPlayList>>[] = [];
 /** 播放列表管理,优化性能，没有引用就卸载 */
-export function useMusicPlayList(fromName: Ref<string|undefined>): Ref<ReturnType<typeof newMusicPlayList>|undefined> {
+export function useMusicPlayList(fromName: Ref<string | undefined>): Ref<ReturnType<typeof newMusicPlayList> | undefined> {
     function findOrNew(name: string) {
         let has = musicPlayLists.find(a => a.t.name === name);
         if (has) {
@@ -203,27 +218,27 @@ export function useMusicPlayList(fromName: Ref<string|undefined>): Ref<ReturnTyp
         if (quote.quote < 1) {
             //10秒后卸载
             clearTimeout(quote.clearTimeoutID);
-            quote.clearTimeoutID = setTimeout(()=>{
+            quote.clearTimeoutID = setTimeout(() => {
                 const index = musicPlayLists.findIndex(a => a.t.name === quote.t.name);
                 if (index >= 0) {
                     musicPlayLists.splice(index, 1);
                 }
-            },10000);
+            }, 10000);
         }
     }
-    const rRef = ref(fromName.value?findOrNew(fromName.value):null);
+    const rRef = ref(fromName.value ? findOrNew(fromName.value) : null);
     watch(fromName, (n) => {
-        if(rRef.value){
+        if (rRef.value) {
             reduceCitations(rRef.value);
         }
-        if(n){
+        if (n) {
             rRef.value = findOrNew(n);
-        }else{
+        } else {
             rRef.value = null;
         }
     });
     onUnmounted(() => {
-        if(rRef.value){
+        if (rRef.value) {
             reduceCitations(rRef.value);
         }
     });

@@ -1,45 +1,25 @@
 <script lang="ts" setup>
-import { setContent } from '@renderer/states/contentState';
-import { useMusicPlayList } from '@renderer/states/playListStorage';
-import { toRef } from 'vue';
+import { type MusicPlayListOnLoc } from '@renderer/states/playListStorage';
 import PlaySvg from '@renderer/svg/Play.vue';
 import SearchSvg from '@renderer/svg/Search.vue';
 import { playList } from '@renderer/states/playListState';
-import EditSvg from '@renderer/svg/Edit.vue';
-import EditPlayListInfo from './EditPlayListInfo.vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
-import EditMusicInfo from './EditMusicInfo.vue';
 import MusicList from '../allSmall/MusicList.vue';
-import { type Music } from '@renderer/states/musicPlayerStates';
+import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
+import { createPlayListByLoc } from '@renderer/states/addToPlayList/createPlayList';
 
 const props = defineProps<{
-    musicListName: string
+    musicPlayList: MusicPlayListOnLoc
 }>();
-
-const musicPlayList = useMusicPlayList(toRef(props, 'musicListName'));
 
 
 // 点击播放全部按钮
 function playAll() {
-    playList.setList(musicPlayList.value!.musicList!.list);
+    playList.setList(props.musicPlayList!.list);
     playList.setCurrentIndex(0);
 }
 
-//去编辑歌单信息
-function toEdit() {
-    setContent(EditPlayListInfo, { musicListName: props.musicListName });
-}
-
-//去编辑歌曲信息
-function toEditMusicInfo(index: number) {
-    setContent(EditMusicInfo, { editIndex: index, musicListName: props.musicListName });
-}
-
-function onMusicOrderChange(newList: Music[]) {
-    musicPlayList.value!.musicList!.list = newList;
-    musicPlayList.value?.save();
-}
 
 </script>
 <template>
@@ -51,28 +31,26 @@ function onMusicOrderChange(newList: Music[]) {
                 <div class="content">
                     <!-- 图片 -->
                     <ImgDiv class="content-img"
-                        :src="musicPlayList!.musicListInconUrl || musicPlayList!.musicList?.list[0]?.iconUrl">
+                        :src="props.musicPlayList.iconUrl || props.musicPlayList.list[0]?.iconUrl">
                     </ImgDiv>
                     <!-- 右边内容 -->
                     <div class="content-main">
                         <!-- 文本内容 -->
                         <div class="content-main-c">
                             <div class="title-line">
-                                <div class="title">{{ musicPlayList!.name }}</div>
-                                <div class="edit-button" title="编辑歌单信息" @click="toEdit">
-                                    <EditSvg style="width: 100%;height: 100%;" />
-                                </div>
+                                <div class="title">{{ musicPlayList.name }}</div>
                             </div>
-                            <div class="description">{{ musicPlayList!.musicList?.description || "没有简介" }}</div>
+                            <div class="description">{{ props.musicPlayList.description || "没有简介" }}</div>
                             <div class="author">
-                                <ImgDiv class="author-img" :src="musicPlayList!.musicList?.authorIconUrl">
+                                <ImgDiv class="author-img" :src="props.musicPlayList.authorIconUrl">
                                 </ImgDiv>
-                                <div class="author-name">{{ musicPlayList!.musicList?.author || "没有作者" }}</div>
+                                <div class="author-name">{{ props.musicPlayList.author || "没有作者" }}</div>
                             </div>
                         </div>
                         <!-- 按钮组 -->
                         <div class="content-button-grep">
                             <UniversalButton text="播放全部" type="ok" :icon="PlaySvg" @click="playAll()"></UniversalButton>
+                            <UniversalButton text="保存到歌单" type='other' :icon="AddMusicCollectionSvg" @click="createPlayListByLoc(props.musicPlayList,true)"></UniversalButton>
                         </div>
                     </div>
                 </div>
@@ -90,13 +68,7 @@ function onMusicOrderChange(newList: Music[]) {
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true" :onMusicOrderChange="onMusicOrderChange" :customButtons="[
-                {
-                    title: '编辑歌曲信息',
-                    icon: EditSvg,
-                    onClick: toEditMusicInfo
-                },
-            ]"></MusicList>
+            <MusicList :list="props.musicPlayList.list || []" :replacePlayList="true"></MusicList>
         </div>
     </div>
 </template>
@@ -189,19 +161,6 @@ function onMusicOrderChange(newList: Music[]) {
 .title-line {
     display: flex;
     align-items: center;
-}
-
-.edit-button:hover {
-    color: var(--color-play-edit-button-hover);
-}
-
-.edit-button {
-    height: 1rem;
-    width: 1rem;
-    color: var(--color-play-edit-button);
-    margin-left: 1rem;
-    margin-right: 1rem;
-    cursor: pointer;
 }
 
 .title {

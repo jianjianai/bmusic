@@ -1,3 +1,4 @@
+<!-- 音乐列表表单 -->
 <script setup lang="ts">
 import { compareMusic, musicPlayer, type Music } from '@renderer/states/musicPlayerStates';
 import { playList } from '@renderer/states/playListState';
