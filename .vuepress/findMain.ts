@@ -1,4 +1,4 @@
-import { readonly, ref, toRaw } from "vue";
+import { type DefineSetupFnComponent, readonly, ref, toRaw } from "vue";
 
 export type Music = {
     /** 图标 */
@@ -82,4 +82,22 @@ export function compareMusic(music1?: Music, music2?: Music) {
 /** 计算一首音乐的key */
 export function musicKey(music?: Music) {
     return `${music?.playerName}_${music?.playerData}`;
+}
+
+
+type ShowComponent<P> = DefineSetupFnComponent<any,any,any,P,any>;
+type ComponentProps<T> = T extends ShowComponent<infer P> ? P : never;
+
+/** 推荐 */
+export type Recommend<T extends ShowComponent<any>> = {
+    display: T, 
+    data: ComponentProps<T>
+}
+
+
+export function createRecommends(...recommends: ReturnType<typeof createRecommend>[]) {
+    return recommends;
+}
+export function createRecommend<T extends ShowComponent<any>>(display: T, data: ComponentProps<T>) {
+    return { display, data };
 }
