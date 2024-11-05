@@ -79,6 +79,8 @@ const props = defineProps<{ musicList: MusicPlayListOnLoc }>();
 .music-list-card-box {
     position: relative;
     width: 9rem;
+    min-width: 9rem;
+    max-width: 9rem;
     height: 11.5rem;
     border-radius: 0.5rem;
     overflow: hidden;
