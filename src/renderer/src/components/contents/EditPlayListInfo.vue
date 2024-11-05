@@ -67,10 +67,10 @@ async function save() {
     musicPlayList.value!.musicList!.description = edits.value.description;
     musicPlayList.value!.musicList!.author = edits.value.author;
     musicPlayList.value!.musicList!.authorIconUrl = edits.value.authorIconUrl;
-    if (musicListInconBlob.value) {
-        musicPlayList.value!.setIcon(new Uint8Array(await musicListInconBlob.value.arrayBuffer()));
-    }
     await musicPlayList.value!.save();
+    if (musicListInconBlob.value) {
+        await musicPlayList.value!.setIcon(new Uint8Array(await musicListInconBlob.value.arrayBuffer()));
+    }
     if (edits.value.name != props.musicListName) {
         await musicPlayList.value?.rename(edits.value.name);
     }
@@ -124,11 +124,12 @@ function uploadAuthorIcon(event) {
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">名称:</div>
-                    <UniversalInput v-model="edits.name" placeholder="歌单名称"  class="from-line-content-input name"/>
+                    <UniversalInput v-model="edits.name" placeholder="歌单名称" class="from-line-content-input name" />
                 </div>
                 <div class="from-line">
                     <div class="from-line-title">简介:</div>
-                    <UniversalTextarea v-model="edits.description" placeholder="歌单简介" class="from-line-content-input description"/>
+                    <UniversalTextarea v-model="edits.description" placeholder="歌单简介"
+                        class="from-line-content-input description" />
                 </div>
             </div>
             <!-- 图片 -->
@@ -148,7 +149,7 @@ function uploadAuthorIcon(event) {
             <div class="from">
                 <div class="from-line">
                     <div class="from-line-title">昵称:</div>
-                    <UniversalInput v-model="edits.author" placeholder="作者昵称" class="from-line-content-input name"/>
+                    <UniversalInput v-model="edits.author" placeholder="作者昵称" class="from-line-content-input name" />
                 </div>
             </div>
             <!-- 图片 -->
@@ -158,7 +159,7 @@ function uploadAuthorIcon(event) {
                         style="display: none;" />
                     <div class="icon-input-text">修改图片</div>
                 </label>
-            </ImgDiv> 
+            </ImgDiv>
         </div>
 
         <!-- 按钮组 -->
@@ -247,7 +248,7 @@ function uploadAuthorIcon(event) {
     margin-top: 1rem;
 }
 
-.edit-music-lnfo-title-small{
+.edit-music-lnfo-title-small {
     margin-top: 1.5rem;
     font-size: 1rem;
     font-weight: bolder;

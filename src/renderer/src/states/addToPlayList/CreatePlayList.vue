@@ -27,7 +27,7 @@ watch(musicPlayList, async (newVal) => {
                 const blob = await response.blob();
                 const arrayBuffer = await blob.arrayBuffer();
                 const uint8Array = new Uint8Array(arrayBuffer);
-                newVal.setIcon(uint8Array);
+                await newVal.setIcon(uint8Array);
             }
             createNewPlayListMusicOnLoc.value = undefined;
             loading = false;
