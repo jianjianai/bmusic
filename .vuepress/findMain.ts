@@ -43,12 +43,15 @@ function message(event: MessageEvent) {
     const data = event.data.data;
     if (type === 'currentMusicUpdate') {
         currentMusicValue.value = data;
-    }else if (type === 'playingUpdate') {
+    } else if (type === 'playingUpdate') {
         musicPlaying.value = data;
     }
 }
-addEventListener('message', message);
-sendMessage('load', null);
+if (!__VUEPRESS_SSR__) {
+    window.addEventListener('message', message);
+    sendMessage('load', null);
+}
+
 
 
 // 播放某首音乐
@@ -85,12 +88,12 @@ export function musicKey(music?: Music) {
 }
 
 
-type ShowComponent<P> = DefineSetupFnComponent<any,any,any,P,any>;
+type ShowComponent<P> = DefineSetupFnComponent<any, any, any, P, any>;
 type ComponentProps<T> = T extends ShowComponent<infer P> ? P : never;
 
 /** 推荐 */
 export type Recommend<T extends ShowComponent<any>> = {
-    display: T, 
+    display: T,
     data: ComponentProps<T>
 }
 
