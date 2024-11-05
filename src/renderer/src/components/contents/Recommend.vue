@@ -51,7 +51,7 @@ watch(() => musicPlayer.playing, () => {
         <div v-if="iframeLoading" class="loading">
             <LoadingSvg class="loading-icon" />
         </div>
-        <iframe class="recommend-iframe" frameborder="no" src="http://localhost:8080/find/" ref="iframeRef"></iframe>
+        <iframe class="recommend-iframe" frameborder="no" src="https://bmusic.jjaw.cn/find/" ref="iframeRef"></iframe>
     </div>
 </template>
 <style scoped>
