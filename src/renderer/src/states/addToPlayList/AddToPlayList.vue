@@ -23,6 +23,7 @@ watch(musicPlayList, async (newVal) => {
         loading = true;
         await newVal.onLoaded;
         newVal.addMusic(addToPlayListMusic.value!);
+        await newVal.save();
         addToPlayListMusic.value = undefined;
         loading = false;
     }

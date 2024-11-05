@@ -11,10 +11,10 @@ const props = defineProps<{
 
 </script>
 <template>
-    <div title="喜欢" class="like" v-if="likeedPlayList!.hasMusic(props.music)" @click="likeedPlayList!.removeMusic(props.music)">
+    <div title="喜欢" class="like" v-if="likeedPlayList!.hasMusic(props.music)" @click="likeedPlayList!.removeMusic(props.music);likeedPlayList?.save()">
         <IcFavoriteSvg class="favorite-icon-liked" />
     </div>
-    <div title="喜欢" class="like" v-else @click="likeedPlayList!.addMusic(props.music)">
+    <div title="喜欢" class="like" v-else @click="likeedPlayList!.addMusic(props.music);likeedPlayList?.save()">
         <IcFavoriteBorderSvg class="favorite-icon" />
     </div>
 </template>
