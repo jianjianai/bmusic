@@ -4,7 +4,6 @@ import LoadingSvg from '@renderer/svg/Loading.vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates';
 import { setContent } from '@renderer/states/contentState';
 import PlayListContentsNoLoc from './PlayListContentsNoLoc.vue';
-import { on } from 'stream';
 
 const iframeLoading = ref(true);
 const iframeRef = ref<HTMLIFrameElement | null>(null);
