@@ -4,6 +4,7 @@ import LoadingSvg from '@renderer/svg/Loading.vue';
 import { musicPlayer } from '@renderer/states/musicPlayerStates';
 import { setContent } from '@renderer/states/contentState';
 import PlayListContentsNoLoc from './PlayListContentsNoLoc.vue';
+import { on } from 'stream';
 
 const iframeLoading = ref(true);
 const iframeRef = ref<HTMLIFrameElement | null>(null);
@@ -45,9 +46,22 @@ watch(() => musicPlayer.playing, () => {
     sendMessage('playingUpdate', musicPlayer.playing);
 });
 
+
+const loadTooLong = ref(false);
+const tiemout = setTimeout(() => {
+    loadTooLong.value = true;
+}, 5000);
+onUnmounted(() => {
+    clearTimeout(tiemout);
+});
+
 </script>
 <template>
     <div class="recommend">
+        <div v-if="loadTooLong && iframeLoading" style="margin-left: 1rem;">
+            <h2>↑ ↑ ↑ ↑ ↑ ↑ ↑</h2>
+            <h2>还是直接搜索吧！推荐服务器可能挂掉了QAQ。</h2>
+        </div>
         <div v-if="iframeLoading" class="loading">
             <LoadingSvg class="loading-icon" />
         </div>
