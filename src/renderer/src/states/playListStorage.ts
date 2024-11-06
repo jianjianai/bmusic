@@ -13,10 +13,9 @@ const playLists: Ref<string[]> = ref([]);
 loadPlayList().then(n => playLists.value = n);
 
 /** 保存播放列表排序 */
-async function savePlayListIndex() {
-    const value = playLists.value;
-    for (const i in value) {
-        await ipcPlayListsApi.setPlaylistIndex(value[i], parseInt(i));
+async function savePlayListIndex(index: string[]) {
+    for (const i in index) {
+        await ipcPlayListsApi.setPlaylistIndex(index[i], parseInt(i));
     }
 }
 
@@ -72,8 +71,8 @@ export const playListStorage = readonly({
         const value = playLists.value;
         const item = value.splice(from, 1)[0];
         value.splice(to, 0, item);
+        await savePlayListIndex(value);
         playLists.value = value;
-        await savePlayListIndex();
     },
     /** 读取播放列表图标 */
     async readPlayListIconUrl(name: string) {
@@ -82,7 +81,17 @@ export const playListStorage = readonly({
     /** 保存播放列表图标 */
     async savePlayListIconUrl(name: string, data: Uint8Array) {
         return ipcPlayListsApi.savePlaylistIcon(name, data);
-    }
+    },
+    /** 按照指定列表顺序重新排序，列表中不存在的歌单排最前面，列表存在但歌单中不存在的则不管 */
+    async sortPlayList(nameList: string[]) {
+        const value = playLists.value;
+        const newList = nameList.filter(n => value.includes(n));
+        const noList = value.filter(n => !newList.includes(n));
+        const newindex = [...noList, ...newList];
+        console.log(newindex);
+        await savePlayListIndex(newindex);
+        playLists.value = newindex;
+    },
 });
 
 

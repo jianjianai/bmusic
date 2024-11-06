@@ -3,7 +3,7 @@ import { setContent, contentDisplay, contentData } from '../states/contentState'
 import SearchIcon from '@renderer/svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
 // import Search from './contents/Search.vue';
-import { reactive, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from '@renderer/svg/IcFavorite.vue';
@@ -11,12 +11,77 @@ import ImgDiv from './allSmall/ImgDiv.vue';
 
 
 const iconMap = reactive(new Map<string, string>);
+const shwoPlayLists = ref<string[]>([]);
 watch(() => playListStorage.playLists, async () => {
+  shwoPlayLists.value = playListStorage.playLists.filter(n => n !== MYLIKEED_PLAYLIST_NAME);
   iconMap.clear();
-  for (const name of playListStorage.playLists) {
+  for (const name of shwoPlayLists.value) {
     iconMap.set(name, await playListStorage.readPlayListIconUrl(name));
   }
 }, { immediate: true });
+
+//用于拖动排序
+//拖拽功能
+let drag = ref<{
+  x: number,
+  y: number,
+  musicList: string,
+  mouseUp: (event: MouseEvent, index: number) => void,
+  mouseMove: (event: MouseEvent, index: number) => void,
+  mouseLeave: (event: MouseEvent, index: number) => void,
+}>();
+function mouseDown(_mouseDownEvent: MouseEvent, musicList: string, mouseDownIndex: number) {
+  //判断是移动到上面还是下面 true 上面 false 下面
+  function moveUpOrDown(event: MouseEvent): boolean {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    return event.clientY - rect.top < rect.height / 2;
+  }
+  const onMousemove = (event2: MouseEvent) => {
+    if (!drag.value) {
+      drag.value = {
+        x: 0,
+        y: 0,
+        musicList: musicList,
+        mouseMove: (mouseOverEvent: MouseEvent, _index1: number) => {
+          const target = mouseOverEvent.currentTarget as HTMLElement;
+          target.classList.remove('drag-item-to-left');
+          target.classList.remove('drag-item-to-next');
+          if (moveUpOrDown(mouseOverEvent)) {
+            target.classList.add('drag-item-to-left');
+          } else {
+            target.classList.add('drag-item-to-next');
+          }
+        },
+        mouseLeave: (mouseLeaveEvent: MouseEvent, _index1: number) => {
+          const target = mouseLeaveEvent.currentTarget as HTMLElement;
+          target.classList.remove('drag-item-to-left');
+          target.classList.remove('drag-item-to-next');
+        },
+        mouseUp: (mouseUpEvent: MouseEvent, index1: number) => {
+          const target = mouseUpEvent.currentTarget as HTMLElement;
+          target.classList.remove('drag-item-to-left');
+          target.classList.remove('drag-item-to-next');
+          const up = moveUpOrDown(mouseUpEvent);
+          if (index1 != mouseDownIndex && index1 != mouseDownIndex + (up ? 1 : -1)) {
+            shwoPlayLists.value.splice(mouseDownIndex, 1);
+            shwoPlayLists.value.splice(index1 + (index1 < mouseDownIndex ? 1 : 0) - (up ? 1 : 0), 0, musicList);
+            //保存排序结果
+            playListStorage.sortPlayList(shwoPlayLists.value);
+          }
+        },
+      }
+    }
+    drag.value!.x = event2.clientX;
+    drag.value!.y = event2.clientY;
+  };
+  document.addEventListener('mousemove', onMousemove);
+  //鼠标松开事件
+  document.addEventListener('mouseup', () => {
+    document.removeEventListener('mousemove', onMousemove);
+    drag.value = undefined;
+  });
+}
+
 
 
 </script>
@@ -47,15 +112,52 @@ watch(() => playListStorage.playLists, async () => {
     <!-- 分割线 -->
     <div class="dividing-line"></div>
     <div class="line-title">歌单</div>
-    <div class="paylist-item" v-for="name of playListStorage.playLists.filter(n => n !== MYLIKEED_PLAYLIST_NAME)"
-      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == name }"
-      @click="setContent(PlayListContents, { musicListName: name })">
+    <div class="paylist-item" v-for="name, index of shwoPlayLists"
+      :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == name && !drag }"
+      @click="setContent(PlayListContents, { musicListName: name })" @mousedown="mouseDown($event, name, index)"
+      @mousemove="drag?.mouseMove($event, index)" @mouseup="drag?.mouseUp($event, index)"
+      @mouseleave="drag?.mouseLeave($event, index)">
       <ImgDiv class="icon" :src="iconMap.get(name)"></ImgDiv>
       <div class="title">{{ name }}</div>
+    </div>
+    <!-- 拖动中的歌单 -->
+    <div class="paylist-item-drag" v-if="drag">
+      <ImgDiv class="icon" :src="iconMap.get(drag.musicList)"></ImgDiv>
+      <div class="title">{{ drag.musicList }}</div>
     </div>
   </div>
 </template>
 <style scoped>
+.paylist-item-drag {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.4rem;
+  top: calc(v-bind("`${drag?.y}px`") - 1rem);
+  left: calc(v-bind("`${drag?.x}px`") + 0.5rem);
+  color: var(--color-nav-paylist-font);
+  width: 9rem;
+  background-color: var(--color-nav-item-drag-bg);
+}
+
+.paylist-item.drag-item-to-next:hover,
+.paylist-item.drag-item-to-next {
+  border-bottom: 0.1rem solid var(--color-nav-item-drag-border-line);
+  border-radius: 0;
+  background-color: unset;
+}
+
+.paylist-item.drag-item-to-left:hover,
+.paylist-item.drag-item-to-left {
+  border-top: 0.1rem solid var(--color-nav-item-drag-border-line);
+  border-radius: 0;
+  background-color: unset;
+}
+
 .paylist-item.selected:hover,
 .paylist-item.selected {
   background-color: var(--color-nav-item-selected-bg);
@@ -73,8 +175,10 @@ watch(() => playListStorage.playLists, async () => {
   padding: 0.2rem 0.4rem;
   color: var(--color-nav-paylist-font);
   cursor: pointer;
+  user-select: none;
 }
 
+.paylist-item-drag .title,
 .paylist-item .title {
   flex: 1;
   width: 0;
@@ -88,6 +192,7 @@ watch(() => playListStorage.playLists, async () => {
   user-select: none;
 }
 
+.paylist-item-drag .icon,
 .paylist-item .icon {
   width: 2rem;
   height: 2rem;

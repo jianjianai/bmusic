@@ -67,7 +67,7 @@ function mouseDown(_mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: nu
         return event.clientY - rect.top < rect.height / 2;
     }
 
-    const onMousemove = (event2) => {
+    const onMousemove = (event2: MouseEvent) => {
         if (!drag.value) {
             drag.value = {
                 x: 0,

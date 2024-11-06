@@ -89,6 +89,8 @@ body {
   --color-nav-dividing-line: var(--color-primary-boder);
   --color-nav-line-title: var(--color-primary-text);
   --color-nav-paylist-font: var(--color-primary-text2);
+  --color-nav-item-drag-bg: var(--color-lav-bg);
+  --color-nav-item-drag-border-line: var(--color-primary-text2);
 
   /** 播放进度条 */
   --color-contr-line-bg: var(--color-primary-boder);
