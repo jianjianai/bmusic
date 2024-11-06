@@ -30,7 +30,7 @@ watch(musicPlayList, async (newVal) => {
         await newVal.onLoaded;
         newVal.addMusic(props.music);
         await newVal.save();
-
+        props.closePopUpSelf();
         loading = false;
     }
 });
@@ -51,42 +51,39 @@ function createNewPlayList() {
 
 </script>
 <template>
-    <div style="position: fixed;">
-        <div class="main-box-mask" @click="close()"></div>
-        <div class="new-player-list-list-box">
-            <!-- 选择歌单 -->
-            <template v-if="!refAddToList">
-                <div class="add-to-pay-list-box-title">收藏到歌单</div>
-                <div class="add-to-pay-list-box-lists">
-                    <!-- 创建歌单 -->
-                    <div class="add-to-pay-list-box-list" @click="createNewPlayList">
-                        <div class="add-to-pay-list-box-list-icon create">
-                            <AddSvg style="width: 100%; height: 100%;" />
-                            <div class="add-to-pay-list-box-list-icon-msk-create"></div>
-                        </div>
-                        <div class="add-to-pay-list-box-list-name create">创建新歌单</div>
+    <div class="new-player-list-list-box">
+        <!-- 选择歌单 -->
+        <template v-if="!refAddToList">
+            <div class="add-to-pay-list-box-title">收藏到歌单</div>
+            <div class="add-to-pay-list-box-lists">
+                <!-- 创建歌单 -->
+                <div class="add-to-pay-list-box-list" @click="createNewPlayList">
+                    <div class="add-to-pay-list-box-list-icon create">
+                        <AddSvg style="width: 100%; height: 100%;" />
+                        <div class="add-to-pay-list-box-list-icon-msk-create"></div>
                     </div>
-                    <!-- 每个歌单 -->
-                    <div class="add-to-pay-list-box-list" v-for="name of playListStorage.playLists"
-                        @click="refAddToList = name">
-                        <ImgDiv class="add-to-pay-list-box-list-icon" :src="iconMap.get(name)"></ImgDiv>
-                        <div class="add-to-pay-list-box-list-name">{{ name }}</div>
-                    </div>
+                    <div class="add-to-pay-list-box-list-name create">创建新歌单</div>
                 </div>
-                <!-- 关闭按钮 -->
-                <div class="add-to-pay-list-box-list-close" @click="close()">
-                    <CloseSvg style="width: 100%;height: 100%;" />
+                <!-- 每个歌单 -->
+                <div class="add-to-pay-list-box-list" v-for="name of playListStorage.playLists"
+                    @click="refAddToList = name">
+                    <ImgDiv class="add-to-pay-list-box-list-icon" :src="iconMap.get(name)"></ImgDiv>
+                    <div class="add-to-pay-list-box-list-name">{{ name }}</div>
                 </div>
-            </template>
-            <!-- 收藏中.. -->
-            <template v-else>
-                <div class="loading">
-                    <ImgDiv class="loading-icon" :src="iconMap.get(refAddToList)"></ImgDiv>
-                    <div class="loading-text">{{ refAddToList }}</div>
-                    <div class="loading-text">收藏中...</div>
-                </div>
-            </template>
-        </div>
+            </div>
+            <!-- 关闭按钮 -->
+            <div class="add-to-pay-list-box-list-close" @click="close()">
+                <CloseSvg style="width: 100%;height: 100%;" />
+            </div>
+        </template>
+        <!-- 收藏中.. -->
+        <template v-else>
+            <div class="loading">
+                <ImgDiv class="loading-icon" :src="iconMap.get(refAddToList)"></ImgDiv>
+                <div class="loading-text">{{ refAddToList }}</div>
+                <div class="loading-text">收藏中...</div>
+            </div>
+        </template>
     </div>
 </template>
 <style scoped>
@@ -191,24 +188,13 @@ function createNewPlayList() {
     margin-top: 1rem;
 }
 
-.main-box-mask {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vw;
-    width: 100vw;
-    height: 100vh;
-}
 
 .new-player-list-list-box {
+    position: relative;
     width: 30rem;
     height: 30rem;
     background-color: var(--color-add-to-play-list-box-bg);
     box-shadow: 0 0 1rem 0.1rem var(--color-add-to-play-list-box-shadow);
-    position: fixed;
-    left: 50%;
-    top: calc(50% - 2rem);
-    transform: translate(-50%, -50%);
     border-radius: 1rem;
     display: flex;
     flex-direction: column;

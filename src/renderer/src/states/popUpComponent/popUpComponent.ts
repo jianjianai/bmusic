@@ -1,6 +1,6 @@
 /** 处理弹出组件 */
 
-import { type DefineSetupFnComponent, reactive } from "vue";
+import { type DefineSetupFnComponent, markRaw, reactive } from "vue";
 type ShowComponent<P> = DefineSetupFnComponent<any, any, any, P, any>;
 type ComponentProps<T> = T extends ShowComponent<infer P> ? P : never;
 
@@ -16,7 +16,7 @@ export const popUpComponents = reactive<{ component: ShowComponent<any>, data: a
  */
 export function openPopUpComponent<T extends ShowComponent<any>>(component: T, data: Omit<ComponentProps<T>, 'closePopUpSelf'>): number {
     keyCount++;
-    popUpComponents.push({ component, data: data, popUpComponentKey: keyCount });
+    popUpComponents.push({ component: markRaw(component), data: data, popUpComponentKey: keyCount });
     return keyCount;
 }
 
