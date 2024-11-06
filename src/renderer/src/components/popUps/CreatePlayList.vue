@@ -1,13 +1,21 @@
 <script lang="ts" setup>
-import { createNewPlayListAndOpen, createNewPlayListMusic, createNewPlayListMusicOnLoc } from './createPlayList';
-import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
+import { MusicPlayListOnLoc, playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { ref, watch } from 'vue';
 import { putNotification } from '@renderer/states/notification/notification';
 import UniversalButton from '@renderer/components/allSmall/UniversalButton.vue';
 import UniversalTextarea from '@renderer/components/allSmall/UniversalTextarea.vue';
-import { setContent } from '../contentState';
+import { setContent } from '../../states/contentState';
 import PlayListContents from '@renderer/components/contents/PlayListContents.vue';
+import { Music } from '../../states/musicPlayerStates';
 
+
+
+const props = defineProps<{
+    music?: Music,
+    playListMusicOnLoc?: MusicPlayListOnLoc
+    okAndOpen?: boolean,
+    closePopUpSelf: () => void;
+}>();
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
 
@@ -15,39 +23,39 @@ let loading = false;
 watch(musicPlayList, async (newVal) => {
     if (newVal) {
         loading = true;
-        if (createNewPlayListMusicOnLoc.value) {
+        if (props.playListMusicOnLoc) {
             await newVal.onLoaded;
-            newVal.musicList!.description = createNewPlayListMusicOnLoc.value.description;
-            newVal.musicList!.author = createNewPlayListMusicOnLoc.value.author;
-            newVal.musicList!.authorIconUrl = createNewPlayListMusicOnLoc.value.authorIconUrl;
-            newVal.musicList!.list = createNewPlayListMusicOnLoc.value.list;
+            newVal.musicList!.description = props.playListMusicOnLoc.description;
+            newVal.musicList!.author = props.playListMusicOnLoc.author;
+            newVal.musicList!.authorIconUrl = props.playListMusicOnLoc.authorIconUrl;
+            newVal.musicList!.list = props.playListMusicOnLoc.list;
             await newVal.save();
-            if (createNewPlayListMusicOnLoc.value.iconUrl) {
-                const response = await fetch(createNewPlayListMusicOnLoc.value.iconUrl);
+            if (props.playListMusicOnLoc.iconUrl) {
+                const response = await fetch(props.playListMusicOnLoc.iconUrl);
                 const blob = await response.blob();
                 const arrayBuffer = await blob.arrayBuffer();
                 const uint8Array = new Uint8Array(arrayBuffer);
                 await newVal.setIcon(uint8Array);
             }
-            createNewPlayListMusicOnLoc.value = undefined;
+            props.closePopUpSelf();
             loading = false;
-            if (createNewPlayListAndOpen.value) {
+            if (props.okAndOpen) {
                 setContent(PlayListContents, { musicListName: newVal.name });
             }
-        } else if (createNewPlayListMusic.value) {
+        } else if (props.music) {
             await newVal.onLoaded;
-            newVal.addMusic(createNewPlayListMusic.value!);
+            newVal.addMusic(props.music);
             await newVal.save();
-            createNewPlayListMusic.value = undefined;
+            props.closePopUpSelf();
             loading = false;
-            if (createNewPlayListAndOpen.value) {
+            if (props.okAndOpen) {
                 setContent(PlayListContents, { musicListName: newVal.name });
             }
         }
     }
 });
 
-const newPlayeListName = ref<string>(createNewPlayListMusicOnLoc.value?.name || '');
+const newPlayeListName = ref<string>(('playListMusicOnLoc' in props && props.playListMusicOnLoc?.name) || '');
 function ok() {
     if (loading) {
         return;
@@ -72,8 +80,7 @@ function close() {
     if (loading) {
         return;
     }
-    createNewPlayListMusic.value = undefined;
-    createNewPlayListMusicOnLoc.value = undefined;
+    props.closePopUpSelf();
 }
 
 </script>

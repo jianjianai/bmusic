@@ -6,10 +6,11 @@ import { putNotification } from '@renderer/states/notification/notification';
 import { setContent } from '@renderer/states/contentState';
 import PlayListContents from './PlayListContents.vue';
 import 'vue-cropper/dist/index.css'
-import { cropperImg } from '@renderer/states/cropperImg/cropperImg';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import UniversalInput from '../allSmall/UniversalInput.vue';
 import UniversalTextarea from '../allSmall/UniversalTextarea.vue';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import CropperImg from '../popUps/CropperImg.vue';
 
 const props = defineProps<{
     musicListName: string
@@ -89,7 +90,7 @@ function uploadPlayListIcon(event) {
     if (!file) {
         return;
     }
-    cropperImg({
+    openPopUpComponent(CropperImg,{
         editImg: file,
         editok: (blob) => {
             musicListInconBlob.value = blob;
@@ -101,7 +102,7 @@ function uploadAuthorIcon(event) {
     if (!file) {
         return;
     }
-    cropperImg({
+    openPopUpComponent(CropperImg,{
         editImg: file,
         editok: (blob) => {
             const reader = new FileReader();

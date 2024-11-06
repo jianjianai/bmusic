@@ -9,8 +9,9 @@ import Volume3Svg from '@renderer/svg/Volume3.vue';
 import { ref } from 'vue';
 import PlayListLineSvg from '@renderer/svg/PlayListLine.vue';
 import { playListOpen } from '@renderer/states/playListState';
-import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 import MusicPlayerView from './MusicPlayerView.vue';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import AddToPlayList from './popUps/AddToPlayList.vue';
 
 // 音量拖动条
 const lineCilckEl = ref();
@@ -62,7 +63,7 @@ function clickVolume() {
                     </div>
                     <div class="user-button-greap">
                         <!-- 收藏到歌单 -->
-                        <div class="user-button" title="收藏到歌单" @click="addToPlayList(musicPlayer.currentMusic!)">
+                        <div class="user-button" title="收藏到歌单" @click="openPopUpComponent(AddToPlayList,{music:musicPlayer.currentMusic!})">
                             <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                         </div>
                         <!-- 左下角按钮自定义按钮 -->

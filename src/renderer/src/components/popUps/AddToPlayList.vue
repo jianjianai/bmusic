@@ -1,12 +1,18 @@
+<!-- 将音乐添加到歌单列表 -->
 <script lang="ts" setup>
-import { addToPlayListMusic } from './addToPlayList';
 import { playListStorage, useMusicPlayList } from '@renderer/states/playListStorage';
 import { reactive, ref, watch } from 'vue';
 import CloseSvg from '@renderer/svg/Close.vue';
 import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
 import AddSvg from '@renderer/svg/AddSvg.vue';
-import { createPlayList } from './createPlayList';
+import { Music } from '../../states/musicPlayerStates';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import CreatePlayList from './CreatePlayList.vue';
 
+const props = defineProps<{
+    music: Music,
+    closePopUpSelf: () => void;
+}>();
 const refAddToList = ref<string>()
 const musicPlayList = useMusicPlayList(refAddToList);
 const iconMap = reactive(new Map<string, string>);
@@ -22,9 +28,9 @@ watch(musicPlayList, async (newVal) => {
     if (newVal) {
         loading = true;
         await newVal.onLoaded;
-        newVal.addMusic(addToPlayListMusic.value!);
+        newVal.addMusic(props.music);
         await newVal.save();
-        addToPlayListMusic.value = undefined;
+
         loading = false;
     }
 });
@@ -33,12 +39,14 @@ function close() {
     if (loading) {
         return;
     }
-    addToPlayListMusic.value = undefined;
+    props.closePopUpSelf();
 }
 
 function createNewPlayList() {
-    createPlayList(addToPlayListMusic.value!);
-    addToPlayListMusic.value = undefined;
+    openPopUpComponent(CreatePlayList, {
+        music: props.music
+    });
+    props.closePopUpSelf();
 }
 
 </script>

@@ -1,3 +1,4 @@
+<!-- 右上角消息提示框 -->
 <script setup lang="ts">
 import {closeNotification, iconComponents, notifications} from "./notification.js";
 import CloseSvg from "@renderer/svg/Close.vue";

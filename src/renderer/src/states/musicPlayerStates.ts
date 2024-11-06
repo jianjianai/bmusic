@@ -90,9 +90,13 @@ export const topBarCustomButtons: Ref<PlayerCustomButton[]> = ref([]);
 
 /** 音乐播放器链接，用于个各种播放器进行连接 MusicPlayer 需要使用 MusicPlayerLink 和真实的播放器交互 */
 export const musicPlayerLink = readonly({
+  /** 点击播放按钮的监听 */
   onRequestPlay: (listen: () => void) => onRequestEventListens.onRequestPlay = listen,
+  /** 点击暂停按钮的监听 */
   onRequestPause: (listen: () => void) => onRequestEventListens.onRequestPause = listen,
+  /** 请求音量 */
   onRequestVolume: (listen: (volume: number) => void) => onRequestEventListens.onRequestVolume = listen,
+  /** 请求当前播放位置 */
   onRequestCurrentTime: (listen: (currentTime: number) => void) => onRequestEventListens.onRequestCurrentTime = listen,
   /** 更新当前播放位置 */
   updateCurrentTime(thecurrentTime: number) {

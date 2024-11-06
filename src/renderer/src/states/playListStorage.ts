@@ -88,7 +88,6 @@ export const playListStorage = readonly({
         const newList = nameList.filter(n => value.includes(n));
         const noList = value.filter(n => !newList.includes(n));
         const newindex = [...noList, ...newList];
-        console.log(newindex);
         await savePlayListIndex(newindex);
         playLists.value = newindex;
     },

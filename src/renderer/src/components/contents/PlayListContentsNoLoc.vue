@@ -7,7 +7,8 @@ import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import MusicList from '../allSmall/MusicList.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
-import { createPlayListByLoc } from '@renderer/states/addToPlayList/createPlayList';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import CreatePlayList from '../popUps/CreatePlayList.vue';
 
 const props = defineProps<{
     musicPlayList: MusicPlayListOnLoc
@@ -50,7 +51,7 @@ function playAll() {
                         <!-- 按钮组 -->
                         <div class="content-button-grep">
                             <UniversalButton text="播放全部" type="ok" :icon="PlaySvg" @click="playAll()"></UniversalButton>
-                            <UniversalButton text="保存到歌单" type='other' :icon="AddMusicCollectionSvg" @click="createPlayListByLoc(props.musicPlayList,true)"></UniversalButton>
+                            <UniversalButton text="保存到歌单" type='other' :icon="AddMusicCollectionSvg" @click="openPopUpComponent(CreatePlayList,{playListMusicOnLoc:props.musicPlayList,okAndOpen:true})"></UniversalButton>
                         </div>
                     </div>
                 </div>

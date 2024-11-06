@@ -3,16 +3,12 @@ import Nav from './components/Nav.vue'
 import Content from './components/Content.vue'
 import MusicPlayer from './components/MusicPlayer.vue';
 import PlayList from './components/PlayList.vue';
-import AddToPlayList from './states/addToPlayList/AddToPlayList.vue';
-import { addToPlayListMusic } from './states/addToPlayList/addToPlayList';
 import { musicPlayer, musicPlayerSize } from './states/musicPlayerStates';
 import Notification from './states/notification/Notification.vue';
-import { defineAsyncComponent } from 'vue';
-import { cropperImgInfo } from './states/cropperImg/cropperImg';
-import CreatePlayList from './states/addToPlayList/CreatePlayList.vue';
-import { createNewPlayListMusic, createNewPlayListMusicOnLoc } from './states/addToPlayList/createPlayList';
+
+
 import TopBar from './components/TopBar.vue';
-const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/CropperImg.vue'));
+import PopUpComponent from './states/popUpComponent/PopUpComponent.vue';
 
 </script>
 
@@ -30,14 +26,7 @@ const CropperImg = defineAsyncComponent(() => import('./states/cropperImg/Croppe
     <PlayList />
 
     <!-- 下面全是弹出组件 -->
-
-    <!-- 添加到播放列表 -->
-    <AddToPlayList v-if="addToPlayListMusic" />
-    <!-- 创建新歌单 -->
-    <CreatePlayList v-if="createNewPlayListMusic || createNewPlayListMusicOnLoc" />
-    <!-- 图片编辑 -->
-    <CropperImg v-if="cropperImgInfo" />
-
+    <PopUpComponent />
 
     <!-- 消息弹出框 -->
     <Notification />

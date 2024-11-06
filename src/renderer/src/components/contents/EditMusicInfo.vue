@@ -3,13 +3,14 @@ import { useMusicPlayList } from '@renderer/states/playListStorage';
 import { computed, ref, toRef, watch } from 'vue';
 import ImgDiv from '../allSmall/ImgDiv.vue';
 import UniversalInput from '../allSmall/UniversalInput.vue';
-import { cropperImg } from '@renderer/states/cropperImg/cropperImg';
 import { setContent } from '@renderer/states/contentState';
 import PlayListContents from './PlayListContents.vue';
 import UniversalButton from '../allSmall/UniversalButton.vue';
 import MusicEditers from '../musicPlayers/MusicEditers.vue';
 import { getMusicPlayerInfo } from '../musicPlayers/musicPlayers';
 import { musicKey } from '@renderer/states/musicPlayerStates';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import CropperImg from '../popUps/CropperImg.vue';
 
 const props = defineProps<{
     /** 编辑哪个歌单 */
@@ -42,7 +43,7 @@ function uploadPlayListIcon(event) {
     if (!file) {
         return;
     }
-    cropperImg({
+    openPopUpComponent(CropperImg, {
         editImg: file,
         editok: (blob) => {
             const reader = new FileReader();
@@ -97,7 +98,8 @@ function save() {
         </div>
         <!-- 播放器编辑器 -->
         <MusicEditers v-model="editInfo" :key="musicKey(eitMusic)">
-            <div class="edit-music-lnfo-title-small">{{ getMusicPlayerInfo(eitMusic?.playerName)?.displayName || eitMusic?.playerName }}</div>
+            <div class="edit-music-lnfo-title-small">{{ getMusicPlayerInfo(eitMusic?.playerName)?.displayName ||
+                eitMusic?.playerName }}</div>
         </MusicEditers>
         <!-- 按钮组 -->
         <div class="edit-play-list-button-greap">

@@ -5,9 +5,10 @@ import PauseSvg from '@renderer/svg/Pause.vue';
 import { musicKey, musicPlayer } from '@renderer/states/musicPlayerStates';
 import FavoriteButton from './allSmall/FavoriteButton.vue';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
-import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 import ImgDiv from './allSmall/ImgDiv.vue';
 import PlayerInfoTag from './allSmall/PlayerInfoTag.vue';
+import AddToPlayList from './popUps/AddToPlayList.vue';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
 
 function clickItemIcon(index: number) {
     // 如果点击的不是当前的音乐，就切换音乐
@@ -65,7 +66,7 @@ function clickItemIcon(index: number) {
                         </div>
                         <!-- 按钮组 -->
                         <div class="button-grep">
-                            <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
+                            <div class="button-grep-button" title="收藏到歌单" @click="openPopUpComponent(AddToPlayList,{music:music})">
                                 <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                             </div>
                         </div>

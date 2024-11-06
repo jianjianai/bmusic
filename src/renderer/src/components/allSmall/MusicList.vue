@@ -8,8 +8,9 @@ import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import FavoriteButton from './FavoriteButton.vue';
 import PlayerInfoTag from './PlayerInfoTag.vue';
 import ImgDiv from './ImgDiv.vue';
-import { addToPlayList } from '@renderer/states/addToPlayList/addToPlayList';
 import { ref, type CSSProperties, type Component } from 'vue';
+import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import AddToPlayList from '../popUps/AddToPlayList.vue';
 
 const props = defineProps<{
     // 音乐列表
@@ -156,7 +157,7 @@ function mouseDown(_mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: nu
                         v-for="button of props.customButtons">
                         <component :is="button.icon" :style="['width: 100%; height: 100%;', button.style]" />
                     </div>
-                    <div class="button-grep-button" title="收藏到歌单" @click="addToPlayList(music)">
+                    <div class="button-grep-button" title="收藏到歌单" @click="openPopUpComponent(AddToPlayList,{music:music})">
                         <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                     </div>
                 </div>

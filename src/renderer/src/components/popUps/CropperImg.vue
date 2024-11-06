@@ -1,28 +1,37 @@
+<!-- 图片编辑组件 -->
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { cropperImgInfo } from './cropperImg';
 import { VueCropper } from "vue-cropper";
 import UniversalButton from '@renderer/components/allSmall/UniversalButton.vue';
+const props = defineProps<{
+    /** 编辑完成 */
+    editok: (ok: Blob) => void;
+    /** 编辑取消 */
+    editcancel?: () => void;
+    /** 编辑图片 */
+    editImg: Blob | string;
+    closePopUpSelf: () => void;
+}>();
+
+console.log(props);
 
 const cropper = ref();
 const editImgBlobUrl = computed(() => {
-    const editImg = cropperImgInfo.value?.editImg;
+    const editImg = props.editImg;
     if (editImg instanceof Blob) {
         return URL.createObjectURL(editImg);
     }
     return editImg;
 });
 function close() {
-    const info = cropperImgInfo.value;
-    cropperImgInfo.value = undefined;
-    info?.editcancel?.();
+    props.closePopUpSelf();
+    props.editcancel?.();
 }
 
 function ok() {
     cropper.value.getCropBlob(data => {
-        const info = cropperImgInfo.value;
-        cropperImgInfo.value = undefined;
-        info?.editok?.(data);
+        props.closePopUpSelf();
+        props.editok?.(data);
     });
 }
 
@@ -32,7 +41,8 @@ function ok() {
         <div class="eidt-img-title">调整图片</div>
         <div class="edit-img-cropper">
             <VueCropper ref="cropper" :img="editImgBlobUrl" :outputSize="0.5" :outputType="'webp'" :fixed="true"
-                :fixedNumber="[1, 1]" :centerBox="true" :autoCrop="true" :fixedBox="true" :canMoveBox="false" :infoTrue="true">
+                :fixedNumber="[1, 1]" :centerBox="true" :autoCrop="true" :fixedBox="true" :canMoveBox="false"
+                :infoTrue="true">
             </VueCropper>
         </div>
         <div class="edit-img-buttons">
@@ -61,14 +71,10 @@ function ok() {
 }
 
 .edit-img {
-    position: fixed;
     width: 30rem;
     background-color: var(--edit-img-bg-color);
     box-shadow: 0 0 1rem var(--edit-img-shadow-color);
     border-radius: 1rem;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
