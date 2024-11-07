@@ -12,6 +12,9 @@ import UniversalButton from '../allSmall/UniversalButton.vue';
 import EditMusicInfo from './EditMusicInfo.vue';
 import MusicList from '../allSmall/MusicList.vue';
 import { type Music } from '@renderer/states/musicPlayerStates';
+import { closePopUpComponent, openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import Confirm from '../popUps/Confirm.vue';
+import TrashSvg from '@renderer/svg/Trash.vue';
 
 const props = defineProps<{
     musicListName: string
@@ -39,6 +42,22 @@ function toEditMusicInfo(index: number) {
 function onMusicOrderChange(newList: Music[]) {
     musicPlayList.value!.musicList!.list = newList;
     musicPlayList.value?.save();
+}
+
+//删除歌曲
+function deleteMusic(index: number) {
+    const popUpId = openPopUpComponent(Confirm, {
+        title: '删除歌曲',
+        content: '确定删除这首歌曲吗？',
+        confirm: () => {
+            musicPlayList.value!.musicList!.list.splice(index, 1);
+            musicPlayList.value?.save();
+            closePopUpComponent(popUpId);
+        },
+        cancel: () => {
+            closePopUpComponent(popUpId);
+        },
+    });
 }
 
 </script>
@@ -90,13 +109,19 @@ function onMusicOrderChange(newList: Music[]) {
                 </div>
             </div>
             <!-- 歌曲列表 -->
-            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true" :onMusicOrderChange="onMusicOrderChange" :customButtons="[
-                {
-                    title: '编辑歌曲信息',
-                    icon: EditSvg,
-                    onClick: toEditMusicInfo
-                },
-            ]"></MusicList>
+            <MusicList :list="musicPlayList?.musicList?.list || []" :replacePlayList="true" :dragSort="true"
+                :onMusicOrderChange="onMusicOrderChange" :customButtons="[
+                    {
+                        title: '编辑歌曲信息',
+                        icon: EditSvg,
+                        onClick: toEditMusicInfo
+                    },
+                    {
+                        title: '删除歌曲',
+                        icon: TrashSvg,
+                        onClick: deleteMusic
+                    },
+                ]"></MusicList>
         </div>
     </div>
 </template>

@@ -243,4 +243,8 @@ body {
   --universal-search-item-text-color-on: var(--color-primary-text);
   --universal-search-item-text-border-bottom-color-on: var(--color-primary);
 
+  /* 确认弹出框 */
+  --confirm-box-title-color: var(--color-primary-text);
+  --confirm-box-content-color: var(--color-primary-text2);
+
 }
