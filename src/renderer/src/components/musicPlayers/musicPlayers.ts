@@ -5,6 +5,8 @@ import BilibiliMusicPlayer from './bilibiliMusicPlayer/BilibiliMusicPlayer.vue'
 import { type musicPlayerLink } from "@renderer/states/musicPlayerStates";
 import BilibiliMusicEditor from "./bilibiliMusicPlayer/BilibiliMusicEditor.vue";
 import BilibiliMusicSearch from "./bilibiliMusicPlayer/BilibiliMusicSearch.vue";
+import EmoMusicPlayer from "./emoMusicPlayer/EmoMusicPlayer.vue";
+import EmoMusicSearch from "./emoMusicPlayer/EmoMusicSearch.vue";
 
 
 export type MusicPlayerLink = typeof musicPlayerLink;
@@ -36,6 +38,12 @@ export const musicPlayers: { [key: string]: MusicPlayer } = {
         colour: "#fb7299",
         displayName: "B站",
         search: markRaw(BilibiliMusicSearch),
+    },
+    "EmoMusic":{
+        player: markRaw(EmoMusicPlayer),
+        search: markRaw(EmoMusicSearch),
+        displayName: "网易云",
+        colour: "#E4080A",
     }
 }
 
