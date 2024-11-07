@@ -36,6 +36,7 @@ function copyLink() {
 // 播放器交互逻辑 
 const iframeRef = ref<WebviewTag | null>(null);
 
+musicPlayerLink.updateButtomWidth('9rem');
 musicPlayerLink.onRequestPlay(() => {
   iframeRef.value?.send("play");
 });

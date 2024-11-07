@@ -47,6 +47,10 @@ const loading = ref(true);
 /** 播放器尺寸 */
 export const musicPlayerSize = ref<"buttom" | "max">("buttom");
 
+export type CssLength = `${number}${'px' | 'rem'}` | `var(${string})`;
+/** 播放器缩小状态下的宽度 */
+export const musicPlayerButtomWidth = ref<CssLength>('var(--button-player-height)');
+
 /** 是否播放完毕 */
 const ended = ref(false);
 
@@ -128,6 +132,8 @@ export const musicPlayerLink = readonly({
   musicPlayerSize: musicPlayerSize,
   /** 当前音乐 */
   currentMusic: currentMusic,
+  /** 播放器缩小状态下的宽度 */
+  musicButtomWidth: musicPlayerButtomWidth,
   /** 当前音乐数据 */
   currentMusicData: computed(() => currentMusic.value!.playerData),
   /** 更新播放器左下角自定义按钮 */
@@ -141,6 +147,10 @@ export const musicPlayerLink = readonly({
   /** 更新窗口标题栏自定义按钮 */
   updateTopBarCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
     topBarCustomButtons.value = buttons;
+  },
+  /** 更新播放器缩小状态下的宽度 */
+  updateButtomWidth(width: CssLength) {
+    musicPlayerButtomWidth.value = width;
   },
 });
 
@@ -167,7 +177,7 @@ export const musicPlayer = readonly({
 
   /**设置正在播放的音乐 */
   setCurrentMusic(music: Music) {
-    if(compareMusic(music, currentMusic.value)){
+    if (compareMusic(music, currentMusic.value)) {
       console.log('musicPlayer.setCurrentMusic: music is same');
       currentMusic.value = music;
       return;
@@ -182,6 +192,7 @@ export const musicPlayer = readonly({
     playerLeftCustomButtons.value = [];
     playerRightCustomButtons.value = [];
     topBarCustomButtons.value = [];
+    musicPlayerButtomWidth.value = 'var(--button-player-height)';
     // 设置音乐
     currentMusic.value = music;
   },

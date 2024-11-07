@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import MusicPlayerContr from './MusicPlayerContr.vue';
-import { musicPlayer, musicPlayerSize, playerLeftCustomButtons, playerRightCustomButtons } from '../states/musicPlayerStates';
+import { musicPlayer, musicPlayerButtomWidth, musicPlayerSize, playerLeftCustomButtons, playerRightCustomButtons } from '../states/musicPlayerStates';
 import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import Volume0Svg from '@renderer/svg/Volume0.vue';
 import Volume1Svg from '@renderer/svg/Volume1.vue';
@@ -287,7 +287,8 @@ function clickVolume() {
 }
 
 .music-player.buttom .left-control::before {
-    width: 9rem;
+    /* width: 9rem; */
+    width: v-bind("musicPlayerButtomWidth");
 }
 
 .left-control::before {

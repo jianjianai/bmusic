@@ -1,6 +1,6 @@
 <!-- 播放器主体 -->
 <script lang="ts" setup>
-import { musicPlayer, musicPlayerSize, topBarCustomButtons } from '@renderer/states/musicPlayerStates';
+import { musicPlayer, musicPlayerSize, topBarCustomButtons,musicPlayerButtomWidth } from '@renderer/states/musicPlayerStates';
 import DownSvg from '@renderer/svg/Down.vue';
 import MusicPlayers from './musicPlayers/MusicPlayers.vue';
 import { ref, watch } from 'vue';
@@ -79,9 +79,9 @@ watch(musicPlayerSize, () => {
 }
 
 /* 缩小状态遮罩 */
-.player-min-mask:hover {
+/* .player-min-mask:hover {
     background-color: rgba(0, 0, 0, 0.036);
-}
+} */
 
 .player-min-mask {
     width: 100%;
@@ -109,7 +109,8 @@ watch(musicPlayerSize, () => {
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 9rem;
+    /* width: 9rem; */
+    width: v-bind("musicPlayerButtomWidth");
     height: var(--button-player-height);
     /* transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38); */
 }
