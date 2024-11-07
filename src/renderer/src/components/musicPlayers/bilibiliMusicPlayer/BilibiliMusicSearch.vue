@@ -26,7 +26,7 @@ const searchWebview = ref<WebviewTag | null>();
 function onMessage(msg: string, ...args: any[]) {
     if (msg == "searchResult") {
         result.value = args[0];
-        console.log(args[0]);
+        // console.log(args[0]);
     }
 }
 watch(searchWebview, () => {

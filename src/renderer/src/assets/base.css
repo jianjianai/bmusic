@@ -14,7 +14,7 @@ body {
   --top-bar-height: 3rem;
   /* 左侧导航栏宽度 */
   --left-vav-width: 12rem;
-  /* 右侧播放列表宽度 */
+  /* 底部播放器高度 */
   --button-player-height: 5rem;
 }
 

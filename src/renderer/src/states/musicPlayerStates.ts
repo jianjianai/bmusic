@@ -120,6 +120,10 @@ export const musicPlayerLink = readonly({
   },
   /** 当前音量,初始化时需要使用 */
   volume: volume,
+  /** 播放器的大小状态 */
+  musicPlayerSize: musicPlayerSize,
+  /** 当前音乐 */
+  currentMusic: currentMusic,
   /** 当前音乐数据 */
   currentMusicData: computed(() => currentMusic.value!.playerData),
   /** 更新播放器左下角自定义按钮 */
