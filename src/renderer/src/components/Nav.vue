@@ -2,12 +2,15 @@
 import { setContent, contentDisplay, contentData } from '../states/contentState';
 import SearchIcon from '@renderer/svg/Search.vue'
 import Recommend from './contents/Recommend.vue';
-// import Search from './contents/Search.vue';
-import { reactive, ref, watch } from 'vue';
+import { h, reactive, ref, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/states/playListStorage';
 import PlayListContents from './contents/PlayListContents.vue';
 import IcFavoriteSvg from '@renderer/svg/IcFavorite.vue';
 import ImgDiv from './allSmall/ImgDiv.vue';
+import ContextMenu from '@imengyu/vue3-context-menu'
+import TrashSvg from '@renderer/svg/Trash.vue';
+import { closePopUpComponent, openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
+import Confirm from './popUps/Confirm.vue';
 
 
 const iconMap = reactive(new Map<string, string>);
@@ -82,6 +85,41 @@ function mouseDown(_mouseDownEvent: MouseEvent, musicList: string, mouseDownInde
   });
 }
 
+// 邮件菜单
+function onContextMenu(e: MouseEvent, name: string) {
+  e.preventDefault();
+  ContextMenu.showContextMenu({
+    x: e.x,
+    y: e.y,
+    minWidth: 200,
+    items: [
+      {
+        label: "查看",
+        divided: true,
+        icon: h(SearchIcon, { style: "color: black; width: 1rem; height: 1rem;" }),
+        onClick: () => setContent(PlayListContents, { musicListName: name })
+      },
+      {
+        label: "删除歌单",
+        icon: h(TrashSvg, { style: "color: black; width: 1rem; height: 1rem;" }),
+        onClick: () => {
+          const popUpId = openPopUpComponent(Confirm, {
+            title: '删除歌单',
+            content: '确定删除这个歌单吗？',
+            confirm: async () => {
+              await playListStorage.deletePlayList(name);
+              closePopUpComponent(popUpId);
+            },
+            cancel: () => {
+              closePopUpComponent(popUpId);
+            }
+          })
+        }
+      }
+    ]
+  });
+}
+
 
 
 </script>
@@ -116,7 +154,7 @@ function mouseDown(_mouseDownEvent: MouseEvent, musicList: string, mouseDownInde
       :class="{ selected: contentDisplay === PlayListContents && contentData?.musicListName == name && !drag }"
       @click="setContent(PlayListContents, { musicListName: name })" @mousedown="mouseDown($event, name, index)"
       @mousemove="drag?.mouseMove($event, index)" @mouseup="drag?.mouseUp($event, index)"
-      @mouseleave="drag?.mouseLeave($event, index)">
+      @mouseleave="drag?.mouseLeave($event, index)" @contextmenu="onContextMenu($event, name)">
       <ImgDiv class="icon" :src="iconMap.get(name)"></ImgDiv>
       <div class="title">{{ name }}</div>
     </div>

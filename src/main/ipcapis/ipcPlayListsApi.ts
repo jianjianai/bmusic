@@ -148,6 +148,10 @@ ipcMain.handle('ipcPlayListsApi__deletePlaylist', async (_event, arg: string) =>
     const filePath = join(playListPath, thePlayList.fileName);
     playLists.splice(index, 1);
     unlinkSync(filePath);
+    if (thePlayList.iconFileName) {
+        const iconFilePath = join(playListPath, thePlayList.iconFileName);
+        unlinkSync(iconFilePath);
+    }
     return true;
 });
 // 读取播放列表图标
