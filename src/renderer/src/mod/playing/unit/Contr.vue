@@ -1,6 +1,6 @@
 <!-- 一个音乐播放控制组件，控制音乐播放暂停进度条，上一首下一首，播放模式，等.. -->
 <script lang="ts" setup>
-import { musicPlayer } from './playing'
+import { musicPlayer } from '../playing'
 import ControllerSVG from '@renderer/components/svg/Controller.vue'
 import PauseSVG from '@renderer/components/svg/Pause.vue'
 import PlaySVG from '@renderer/components/svg/Play.vue'
@@ -11,7 +11,7 @@ import SequentialPlaySvg from '@renderer/components/svg/SequentialPlay.vue'
 import ShufflePlaySvg from '@renderer/components/svg/ShufflePlay.vue'
 import { playList } from '@renderer/mod/playingList/playingList'
 import FavoriteButton from '@renderer/components/FavoriteButton.vue';
-import ControlLine from '@renderer/components/ControlLine.vue';
+import ControlLine from './ControlLine.vue';
 
 /** 将毫秒为时间的单位转换为 mm:ss 的形式 */
 function formatTime(time: number) {
