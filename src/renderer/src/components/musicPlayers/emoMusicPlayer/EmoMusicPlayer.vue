@@ -79,10 +79,10 @@ onMounted(() => {
 
 })
 
-
+musicPlayerLink.updateButtomWidth("6rem")
 </script>
 <template>
-    <div>
+    <div style="width: 100%;height: 100%;position: relative;">
         <audio :src="the_song" ref="audio"></audio>
         <ImgDiv class="main" v-if="musicPlayerLink.musicPlayerSize == 'buttom'" :class="{ playing: playing }"
             :src="musicPlayerLink.currentMusic?.iconUrl">
@@ -99,16 +99,14 @@ onMounted(() => {
     /* Add a black border */
     box-sizing: border-box;
     /* Ensure the border is included in the element's total width and height */
-    width: var(--button-player-height);
-    height: var(--button-player-height);
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
     animation: rotate 10s linear infinite;
     animation-play-state: paused;
+    position: absolute;
+    left: 1.7rem;
+    top: calc(50% - 2rem);
 }
 
 .main img {
