@@ -8,22 +8,24 @@ import AddMusicCollectionSvg from '@renderer/svg/AddMusicCollection.vue';
 import FavoriteButton from './FavoriteButton.vue';
 import PlayerInfoTag from './PlayerInfoTag.vue';
 import ImgDiv from './ImgDiv.vue';
-import { ref, type CSSProperties, type Component } from 'vue';
+import { computed, h, reactive, ref, type CSSProperties, type Component } from 'vue';
 import { openPopUpComponent } from '@renderer/states/popUpComponent/popUpComponent';
 import AddToPlayList from '../popUps/AddToPlayList.vue';
+import ContextMenu, { type MenuItem } from '@imengyu/vue3-context-menu'
 
+type CustomButton = {
+    icon: Component,
+    title?: string,
+    style?: false | null | string | CSSProperties,
+    onClick?: (index: number) => void
+}
 const props = defineProps<{
     // 音乐列表
     list: Music[],
     // 播放音乐是否将播放列表替换为当前列表
     replacePlayList?: boolean,
     // 自定义按钮
-    customButtons?: {
-        icon: Component,
-        title?: string,
-        style?: false | null | string | CSSProperties,
-        onClick?: (index: number) => void
-    }[],
+    customButtons?: CustomButton[],
     // 是否可拖动排序
     dragSort?: boolean,
     // 当音乐顺序被拖拽改变时
@@ -45,6 +47,59 @@ function chickMusicIcon(music: Music, index: number) {
     } else {
         musicPlayer.setCurrentMusic(music);
     }
+}
+
+// 右键菜单
+function rightClick(event: MouseEvent, music: Music, index: number) {
+    event.preventDefault();
+    const payButton = computed<CustomButton>(() => {
+        if (compareMusic(musicPlayer.currentMusic, music) && musicPlayer.playing) {
+            return {
+                icon: PauseSvg,
+                title: '暂停',
+                onClick: () => {
+                    musicPlayer.requestPause();
+                }
+            }
+        }
+        return {
+            icon: PlaySvg,
+            title: '播放',
+            onClick: () => {
+                chickMusicIcon(music, index);
+            }
+        }
+    });
+    const addToListButton: CustomButton & { divided?: boolean } = {
+        icon: AddMusicCollectionSvg,
+        title: '收藏到歌单',
+        divided: true,
+        onClick: () => {
+            openPopUpComponent(AddToPlayList, { music: music })
+        }
+    }
+    const buttons = computed<(CustomButton & { divided?: boolean })[]>(() => {
+        return [payButton.value, addToListButton, ...(props.customButtons || [])];
+    });
+    ContextMenu.showContextMenu(reactive({
+        x: event.x,
+        y: event.y,
+        minWidth: 200,
+        items: computed<MenuItem[]>(() => {
+            let button: MenuItem[] = [];
+            if (props.customButtons) {
+                for (const cbutton of buttons.value) {
+                    button.push({
+                        label: cbutton.title,
+                        icon: h(cbutton.icon, { style: ['width: 1rem; height: 1rem;', cbutton.style] }),
+                        onClick: () => cbutton.onClick?.(index),
+                        divided: cbutton.divided
+                    });
+                }
+            }
+            return button;
+        }),
+    }));
 }
 
 
@@ -124,7 +179,7 @@ function mouseDown(_mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: nu
         <div class="line line-content" :class="{ playing: compareMusic(musicPlayer.currentMusic, music) }"
             v-for="music, index of props.list" @mousedown="mouseDown($event, music, index)"
             @mouseup="drag?.mouseUp($event, index)" @mousemove="drag?.mouseMove($event, index)"
-            @mouseleave="drag?.mouseLeave($event, index)">
+            @mouseleave="drag?.mouseLeave($event, index)" @contextmenu="rightClick($event, music, index)">
             <!-- 序号 -->
             <div class="index">{{ index }}</div>
             <!-- 音乐信息 -->
@@ -157,7 +212,8 @@ function mouseDown(_mouseDownEvent: MouseEvent, music: Music, mouseDownIndex: nu
                         v-for="button of props.customButtons">
                         <component :is="button.icon" :style="['width: 100%; height: 100%;', button.style]" />
                     </div>
-                    <div class="button-grep-button" title="收藏到歌单" @click="openPopUpComponent(AddToPlayList,{music:music})">
+                    <div class="button-grep-button" title="收藏到歌单"
+                        @click="openPopUpComponent(AddToPlayList, { music: music })">
                         <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
                     </div>
                 </div>

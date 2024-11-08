@@ -72,15 +72,16 @@ export const playListStorage = readonly({
         const item = value.splice(from, 1)[0];
         value.splice(to, 0, item);
         await savePlayListIndex(value);
-        playLists.value = value;
+        playLists.value = await loadPlayList();
     },
     /** 读取播放列表图标 */
     async readPlayListIconUrl(name: string) {
-        return ipcPlayListsApi.readPlaylistIconUrl(name);
+        return await ipcPlayListsApi.readPlaylistIconUrl(name);
     },
     /** 保存播放列表图标 */
     async savePlayListIconUrl(name: string, data: Uint8Array) {
-        return ipcPlayListsApi.savePlaylistIcon(name, data);
+        await ipcPlayListsApi.savePlaylistIcon(name, data);
+        playLists.value = await loadPlayList();
     },
     /** 按照指定列表顺序重新排序，列表中不存在的歌单排最前面，列表存在但歌单中不存在的则不管 */
     async sortPlayList(nameList: string[]) {
@@ -89,7 +90,7 @@ export const playListStorage = readonly({
         const noList = value.filter(n => !newList.includes(n));
         const newindex = [...noList, ...newList];
         await savePlayListIndex(newindex);
-        playLists.value = newindex;
+        playLists.value = await loadPlayList();
     },
 });
 
