@@ -4,6 +4,7 @@ import { type MusicPlayerLink } from '../musicPlayers';
 import { EmoMusicData, paresEmoMusicData } from './emoMusic';
 import { song_url_v1, SoundQualityType } from "./emoApi";
 import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
+import colorthief from 'colorthief';
 
 const props = defineProps<{
     musicPlayerLink: MusicPlayerLink,
@@ -21,10 +22,8 @@ song_url_v1({ id: musicData.value.id, level: SoundQualityType.standard }).then((
     the_song.value = songs;
 });
 
-// musicPlayerLink.updateDuration(20000);
-
-
 const playing = ref(true);
+const the_url = ref<HTMLImageElement | null>(null);
 
 // 播放
 musicPlayerLink.onRequestPlay(() => {
@@ -47,6 +46,9 @@ musicPlayerLink.onRequestCurrentTime((currentTime: number) => {
     audio.value!.currentTime = currentTime / 1000;
 });
 
+const c1 = ref("");
+const c2 = ref("");
+// const c3 = ref("");
 
 const audio = ref<HTMLAudioElement | null>(null);
 onMounted(() => {
@@ -77,16 +79,23 @@ onMounted(() => {
     });
     audio.value!.volume = musicPlayerLink.volume;
 
+    // 实现背景色的渐变
+    const colorThief = new colorthief();
+    const colors = colorThief.getPalette(the_url.value,2);
+    const [c11, c22] = colors!.map((c) => `rgb(${c[0]},${c[1]},${c[2]})`) // 解构出三组rgb
+    c1.value = c11;
+    c2.value = c22;
 })
 
-musicPlayerLink.updateButtomWidth("6rem")
+
+
 </script>
 <template>
-    <div style="width: 100%;height: 100%;position: relative;">
+    <div class="all">
         <audio :src="the_song" ref="audio"></audio>
-        <ImgDiv class="main" v-if="musicPlayerLink.musicPlayerSize == 'buttom'" :class="{ playing: playing }"
-            :src="musicPlayerLink.currentMusic?.iconUrl">
-        </ImgDiv>
+        <img class="main" v-if="musicPlayerLink.musicPlayerSize == 'buttom'" :class="{ playing: playing }"
+            :src="musicPlayerLink.currentMusic?.iconUrl" ref="the_url">
+        </img>
         <div v-else-if="musicPlayerLink.musicPlayerSize == 'max'" class="max-paper">
             放大状态
         </div>
@@ -94,6 +103,10 @@ musicPlayerLink.updateButtomWidth("6rem")
 
 </template>
 <style scoped>
+.all{
+    width: 100%;
+    height: 100%;
+}
 .main {
     border: 10px solid black;
     /* Add a black border */
@@ -129,11 +142,10 @@ musicPlayerLink.updateButtomWidth("6rem")
         transform: rotate(360deg);
     }
 }
-
 .max-paper {
     width: 100%;
     height: 100%;
-    background-color: #bf1212;
+    background: linear-gradient(to bottom, v-bind("c1"), v-bind("c2")); ;
     display: flex;
     align-items: center;
     justify-content: center;
