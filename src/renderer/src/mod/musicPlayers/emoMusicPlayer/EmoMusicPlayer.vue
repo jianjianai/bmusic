@@ -25,6 +25,12 @@ song_url_v1({ id: musicData.value.id, level: SoundQualityType.standard }).then((
 const playing = ref(true);
 const the_url = ref<HTMLImageElement | null>(null);
 
+musicPlayerLink.updateContrMaxDisplay({
+    type: 'fixe',
+    progressShow: 'top',
+    isShwoNusicName: false,
+});
+
 // 播放
 musicPlayerLink.onRequestPlay(() => {
     console.log('play');

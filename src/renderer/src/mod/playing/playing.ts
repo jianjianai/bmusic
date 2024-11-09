@@ -51,6 +51,26 @@ export type CssLength = `${number}${'px' | 'rem'}` | `var(${string})`;
 /** 播放器缩小状态下的宽度 */
 export const musicPlayerButtomWidth = ref<CssLength>('var(--button-player-height)');
 
+/**播放控制器放大状态显示方式 */
+export type MusicPlayerContrMaxDisplay = {
+  /** relative显示在下方  none不显示 fixe浮动在下方*/
+  type: 'relative' | 'none' | 'fixe',
+  /** 进度条位置 上面或中间或不显示 */
+  progressShow: 'top' | 'center' | 'none',
+  /** 是否显示音乐名称 */
+  isShwoNusicName: boolean,
+};
+/** 获取播放控制器放大状态默认值 */
+export function getMusicPlayerContrMaxDisplayDefault(): MusicPlayerContrMaxDisplay {
+  return {
+    type: 'relative',
+    progressShow: 'center',
+    isShwoNusicName: true,
+  }
+}
+/** 播放控制器放大状态显示方式 */
+export const musicPlayerContrMaxDisplay = ref<MusicPlayerContrMaxDisplay>(getMusicPlayerContrMaxDisplayDefault());
+
 /** 是否播放完毕 */
 const ended = ref(false);
 
@@ -136,6 +156,8 @@ export const musicPlayerLink = readonly({
   musicButtomWidth: musicPlayerButtomWidth,
   /** 当前音乐数据 */
   currentMusicData: computed(() => currentMusic.value!.playerData),
+  /** 播放控制器放大状态显示方式 */
+  musicPlayerContrMaxDisplay: musicPlayerContrMaxDisplay,
   /** 更新播放器左下角自定义按钮 */
   updatePlayerLeftCustomButtons(buttons: PlayerCustomButton[] | Reactive<PlayerCustomButton[]>) {
     playerLeftCustomButtons.value = buttons;
@@ -151,6 +173,10 @@ export const musicPlayerLink = readonly({
   /** 更新播放器缩小状态下的宽度 */
   updateButtomWidth(width: CssLength) {
     musicPlayerButtomWidth.value = width;
+  },
+  /** 更新播放控制器放大状态显示方式 */
+  updateContrMaxDisplay(display: MusicPlayerContrMaxDisplay) {
+    musicPlayerContrMaxDisplay.value = display;
   },
 });
 
@@ -193,6 +219,7 @@ export const musicPlayer = readonly({
     playerRightCustomButtons.value = [];
     topBarCustomButtons.value = [];
     musicPlayerButtomWidth.value = 'var(--button-player-height)';
+    musicPlayerContrMaxDisplay.value = getMusicPlayerContrMaxDisplayDefault();
     // 设置音乐
     currentMusic.value = music;
   },

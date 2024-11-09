@@ -13,6 +13,11 @@ import { playList } from '@renderer/mod/playingList/playingList'
 import FavoriteButton from '@renderer/components/FavoriteButton.vue';
 import ControlLine from './ControlLine.vue';
 
+const props = defineProps<{
+    /** 隐藏进度条 */
+    hideControlLine?: boolean,
+}>();
+
 /** 将毫秒为时间的单位转换为 mm:ss 的形式 */
 function formatTime(time: number) {
     const min = Math.floor(time / 60000);
@@ -22,7 +27,8 @@ function formatTime(time: number) {
 
 </script>
 <template>
-    <div class="control-main">
+    <div class="control-main" :class="{ 'hide-control-line': props.hideControlLine }">
+        <!-- 控制按钮 -->
         <div class="control-top">
             <!-- 添加到我喜欢的按钮 -->
             <FavoriteButton :music="musicPlayer.currentMusic!" class="likeed-button" title="喜欢" />
@@ -64,20 +70,22 @@ function formatTime(time: number) {
             </div>
         </div>
         <!-- 进度条 -->
-        <div class="control-line">
-            <!-- 左边的时间 -->
-            <div class="line-current">{{ formatTime(musicPlayer.currentTime) }}</div>
-            <ControlLine class="line-inner" :currentTime="musicPlayer.currentTime" :duration="musicPlayer.duration"
-                :requestCurrentTime="musicPlayer.requestCurrentTime"></ControlLine>
-            <!-- 右边的时间 -->
-            <div class="line-duration">{{ formatTime(musicPlayer.duration) }}</div>
-        </div>
+        <Transition name="control-line">
+            <div class="control-line" v-if="!props.hideControlLine">
+                <!-- 左边的时间 -->
+                <div class="line-current">{{ formatTime(musicPlayer.currentTime) }}</div>
+                <ControlLine class="line-inner"></ControlLine>
+                <!-- 右边的时间 -->
+                <div class="line-duration">{{ formatTime(musicPlayer.duration) }}</div>
+            </div>
+        </Transition>
     </div>
 </template>
 <style scoped>
-.line-inner{
+.line-inner {
     margin: 0 0.5rem;
     width: 20rem;
+    height: 0.25rem;
 }
 
 .play-mode-btn {
@@ -181,20 +189,42 @@ function formatTime(time: number) {
 .control-line {
     display: flex;
     align-items: center;
+    margin-top: 3rem;
+    height: 1rem;
+}
+
+.control-line-enter-active,
+.control-line-leave-active {
+    transition: all 0.25s;
+}
+
+.control-line-enter-from,
+.control-line-leave-to {
+    opacity: 0;
+    transform: translateY(100%);
 }
 
 .control-top {
-    flex: 1;
     display: flex;
     align-items: center;
     gap: 1rem;
+    justify-content: center;
+    position: absolute;
+    width: 15rem;
+    height: 3rem;
+    left: calc(50% - 7.5rem);
+    top: calc(50% - 1.5rem - 0.5rem);
+    transition: top 0.25s;
+}
+
+.control-main.hide-control-line .control-top {
+    top: calc(50% - 1.5rem);
 }
 
 .control-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    position: relative;
     user-select: none;
+    display: flex;
+    align-items: center;
 }
 </style>

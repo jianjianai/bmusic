@@ -5,34 +5,40 @@ import { musicPlayer, musicPlayerButtomWidth, musicPlayerSize, playerLeftCustomB
 import AddToPlayList from '@renderer/mod/popUp/popUps/AddToPlayList.vue';
 import AddMusicCollectionSvg from '@renderer/components/svg/AddMusicCollection.vue';
 
+const props = defineProps<{
+    /** 隐藏音乐名称 */
+    hideMusicName?: boolean,
+}>();
+
 </script>
 <template>
     <div class="left-control" :class="musicPlayerSize">
         <div class="player-music-info">
-            <div class="music-info"
-                :title="(musicPlayer.currentMusic!.musicName || '未知') + ' - ' + (musicPlayer.currentMusic!.musicAuthor || '未知歌手')">
-                <span class="music-name">{{ musicPlayer.currentMusic!.musicName || "未知" }}</span>
-                <span class="music-line"> - </span>
-                <span class="music-singer">{{ musicPlayer.currentMusic!.musicAuthor || "未知歌手" }}</span>
-            </div>
-            <div class="user-button-greap">
-                <!-- 收藏到歌单 -->
-                <div class="user-button" title="收藏到歌单"
-                    @click="openPopUpComponent(AddToPlayList, { music: musicPlayer.currentMusic! })">
-                    <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+            <TransitionGroup name="music-info-list">
+                <div :key="1" class="music-info" v-if="!props.hideMusicName"
+                    :title="(musicPlayer.currentMusic!.musicName || '未知') + ' - ' + (musicPlayer.currentMusic!.musicAuthor || '未知歌手')">
+                    <span class="music-name">{{ musicPlayer.currentMusic!.musicName || "未知" }}</span>
+                    <span class="music-line"> - </span>
+                    <span class="music-singer">{{ musicPlayer.currentMusic!.musicAuthor || "未知歌手" }}</span>
                 </div>
-                <!-- 左下角按钮自定义按钮 -->
-                <div class="user-button" v-for="button of playerLeftCustomButtons" :title="button.title"
-                    @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)">
-                    <component :is="button.icon" style="width: 100%; height: 100%;"
-                        :style="['width: 100%; height: 100%;', button.style]" />
+                <div :key="2" class="user-button-greap" :class="{ 'hide-music-name': hideMusicName }">
+                    <!-- 收藏到歌单 -->
+                    <div class="user-button" title="收藏到歌单"
+                        @click="openPopUpComponent(AddToPlayList, { music: musicPlayer.currentMusic! })">
+                        <AddMusicCollectionSvg style="width: 100%; height: 100%;" />
+                    </div>
+                    <!-- 左下角按钮自定义按钮 -->
+                    <div class="user-button" v-for="button of playerLeftCustomButtons" :title="button.title"
+                        @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)">
+                        <component :is="button.icon" style="width: 100%; height: 100%;"
+                            :style="['width: 100%; height: 100%;', button.style]" />
+                    </div>
                 </div>
-            </div>
+            </TransitionGroup>
         </div>
     </div>
 </template>
 <style scoped>
-
 .left-control.buttom::before {
     /* width: 9rem; */
     width: v-bind("musicPlayerButtomWidth");
@@ -90,6 +96,11 @@ import AddMusicCollectionSvg from '@renderer/components/svg/AddMusicCollection.v
     display: flex;
     gap: 0.8rem;
     align-items: center;
+    transition: gap 0.25s;
+}
+
+.user-button-greap.hide-music-name {
+    gap: 1rem;
 }
 
 .user-button {
@@ -97,5 +108,30 @@ import AddMusicCollectionSvg from '@renderer/components/svg/AddMusicCollection.v
     height: 1.2rem;
     color: var(--color-music-player-user-button);
     cursor: pointer;
+    transition: width 0.25s, height 0.25s;
+}
+
+.user-button-greap.hide-music-name .user-button {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* 对移动中的元素应用的过渡 */
+.music-info-list-move,
+.music-info-list-enter-active,
+.music-info-list-leave-active {
+    transition: all 0.25s ease;
+}
+
+.music-info-list-enter-from,
+.music-info-list-leave-to {
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.music-info-list-leave-active {
+    position: absolute;
 }
 </style>

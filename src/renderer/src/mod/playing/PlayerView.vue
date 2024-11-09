@@ -1,6 +1,6 @@
 <!-- 播放器主体 -->
 <script lang="ts" setup>
-import { musicPlayer, musicPlayerSize, topBarCustomButtons,musicPlayerButtomWidth } from '@renderer/mod/playing/playing';
+import { musicPlayer, musicPlayerSize, topBarCustomButtons,musicPlayerButtomWidth, musicPlayerContrMaxDisplay } from '@renderer/mod/playing/playing';
 import DownSvg from '@renderer/components/svg/Down.vue';
 import MusicPlayers from '@renderer/mod/musicPlayers/MusicPlayers.vue';
 import { ref, watch } from 'vue';
@@ -13,7 +13,7 @@ watch(musicPlayerSize, () => {
 
 </script>
 <template>
-    <div class="player" :class="[musicPlayerSize, { 'transit-open': transitOpen }]" @transitionend="transitOpen = false">
+    <div class="player" :class="[musicPlayerSize, { 'transit-open': transitOpen },musicPlayerContrMaxDisplay.type]" @transitionend="transitOpen = false" >
         <MusicPlayers></MusicPlayers>
         <!-- 缩小状态遮罩 -->
         <div class="player-min-mask" @click="() => { musicPlayerSize = 'max' }" v-if="musicPlayerSize === 'buttom'"
@@ -101,6 +101,14 @@ watch(musicPlayerSize, () => {
     /* transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13); */
 }
 
+/* 播放控制器在 fixe 和 none 时直接全屏 */
+.player.max.fixe,
+.player.max.none{
+    width: 100vw;
+    bottom: 0;
+    height: 100vh;
+}
+
 .player.transit-open {
     transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(0, 1.1, 0, 1.13);
 }
@@ -112,6 +120,7 @@ watch(musicPlayerSize, () => {
     /* width: 9rem; */
     width: v-bind("musicPlayerButtomWidth");
     height: var(--button-player-height);
+    z-index: 1;
     /* transition: width 0.25s ease-in-out, height 0.25s ease-in-out, bottom 0.5s cubic-bezier(1, -0.37, 0, 1.38); */
 }
 
