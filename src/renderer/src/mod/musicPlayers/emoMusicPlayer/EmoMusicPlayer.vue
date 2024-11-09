@@ -3,7 +3,7 @@ import { computed, onMounted, ref, Ref } from 'vue';
 import { type MusicPlayerLink } from '../musicPlayers';
 import { EmoMusicData, paresEmoMusicData } from './emoMusic';
 import { song_url_v1, SoundQualityType } from "./emoApi";
-import ImgDiv from '@renderer/components/allSmall/ImgDiv.vue';
+import ImgDiv from '@renderer/components/ImgDiv.vue';
 import colorthief from 'colorthief';
 
 const props = defineProps<{
