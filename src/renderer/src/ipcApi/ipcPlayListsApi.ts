@@ -1,17 +1,6 @@
-const electron = window.electron;
+export const electron = window.electron;
 
-export const ipcBilibiliApi = {
-    /** 获取Bilibili音乐播放器的Preload js文件路径 */
-    getPreloadJsFilePath_BilibiliMusicPlayer(): Promise<string> {
-        return electron.ipcRenderer.invoke('ipcBilibiliApi__getPreloadJsFilePath_BilibiliMusicPlayer');
-    },
-    /** 获取Bilibili音乐搜索的Preload js文件路径 */
-    getPreloadJsFilePath_BilibiliMusicSearch(): Promise<string> {
-        return electron.ipcRenderer.invoke('ipcBilibiliApi__getPreloadJsFilePath_BilibiliMusicSearch');
-    }
-}
-
-type PlayList = {
+export type PlayList = {
     /** 歌单名称 */
     name: string,
     /** 歌单排序 */
@@ -53,7 +42,4 @@ export const ipcPlayListsApi = {
     savePlaylistIcon(name: string, data: Uint8Array): Promise<boolean> {
         return electron.ipcRenderer.invoke('ipcPlayListsApi__savePlaylistIcon', { name, data });
     },
-}
-
-// @ts-ignore TODO: 调试方便，到时候删除 fix this
-window.ipcPlayListsApi = ipcPlayListsApi;
+};

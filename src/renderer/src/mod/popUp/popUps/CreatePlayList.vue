@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MusicPlayListOnLoc, playListStorage, useMusicPlayList } from '@renderer/mod/playListStorage';
+import { MusicPlayListOnLoc, playListStorage, useMusicPlayList } from '@renderer/storage/playListStorage';
 import { ref, watch } from 'vue';
 import { putNotification } from '@renderer/mod/notification/notification';
 import UniversalButton from '@renderer/components/UniversalButton.vue';

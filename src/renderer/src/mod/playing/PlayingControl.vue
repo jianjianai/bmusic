@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import ContrBetween from './unit/ContrBetween.vue';
-import { musicPlayer, playerRightCustomButtons } from './playing';
-import PlayListLineSvg from '@renderer/components/svg/PlayListLine.vue';
-import { playListOpen } from '@renderer/mod/playingList/playingList';
-import VolumeButton from './unit/volumeButton.vue';
 import ContrLeft from './unit/ContrLeft.vue';
+import ContrRight from './unit/ContrRight.vue';
 
 </script>
 <template>
@@ -14,41 +11,10 @@ import ContrLeft from './unit/ContrLeft.vue';
         <!-- 中间播放控制器 -->
         <ContrBetween class="player-control-grep" />
         <!-- 右边 -->
-        <div class="right-control player-control-grep">
-            <!-- 播放列表 -->
-            <div class="right-button" @click="playListOpen = !playListOpen" title="播放列表">
-                <PlayListLineSvg style="width: 100%;height: 100%;" />
-            </div>
-            <!-- 音量按钮 -->
-            <VolumeButton class="right-button" />
-            <!-- 右下角自定义按钮 -->
-            <div class="right-button" v-for="button of playerRightCustomButtons"
-                @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)" :title="button.title">
-                <component :is="button.icon" :style="['width: 100%; height: 100%;', button.style]" />
-            </div>
-        </div>
+        <ContrRight class="right-control player-control-grep" />
     </div>
 </template>
 <style scoped>
-.right-button:hover {
-    color: var(--color-music-player-right-button-hover);
-}
-
-.right-button {
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--color-music-player-right-button);
-    cursor: pointer;
-}
-
-.right-control {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 1rem;
-    padding-right: 1.5rem;
-}
-
 .left-control,
 .right-control {
     flex: 1;

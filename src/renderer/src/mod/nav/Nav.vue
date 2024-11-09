@@ -3,7 +3,7 @@ import { setContent, contentDisplay, contentData } from '@renderer/mod/content/c
 import SearchIcon from '@renderer/components/svg/Search.vue'
 import Recommend from '../content/contents/Recommend.vue';
 import { h, reactive, ref, watch } from 'vue';
-import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/mod/playListStorage';
+import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/storage/playListStorage';
 import PlayListContents from '../content/contents/PlayListContents.vue';
 import IcFavoriteSvg from '@renderer/components/svg/IcFavorite.vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';

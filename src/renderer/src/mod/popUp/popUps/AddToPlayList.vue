@@ -1,6 +1,6 @@
 <!-- 将音乐添加到歌单列表 -->
 <script lang="ts" setup>
-import { playListStorage, useMusicPlayList } from '@renderer/mod/playListStorage';
+import { playListStorage, useMusicPlayList } from '@renderer/storage/playListStorage';
 import { reactive, ref, watch } from 'vue';
 import CloseSvg from '@renderer/components/svg/Close.vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';

@@ -33,7 +33,7 @@ import AddMusicCollectionSvg from '@renderer/components/svg/AddMusicCollection.v
 </template>
 <style scoped>
 
-.left-control.buttom .left-control::before {
+.left-control.buttom::before {
     /* width: 9rem; */
     width: v-bind("musicPlayerButtomWidth");
 }

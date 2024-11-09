@@ -1,6 +1,6 @@
-import { ipcPlayListsApi } from "@renderer/ipcAPI"
+import { ipcPlayListsApi } from "@renderer/ipcApi/ipcPlayListsApi";
 import { computed, onUnmounted, reactive, readonly, Ref, ref, watch } from "vue";
-import { musicKey, type Music } from "./playing/playing";
+import { musicKey, type Music } from "../mod/playing/playing";
 
 /** 加载播放列表 */
 async function loadPlayList(): Promise<string[]> {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { musicPlayers, type MusicSearchComponent } from '@renderer/musicPlayers/musicPlayers';
+import { musicPlayers, type MusicSearchComponent } from '@renderer/mod/musicPlayers/musicPlayers';
 
 const props = defineProps<{ keyword: string }>();
 const searchPlayers = computed(() => {

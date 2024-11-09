@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MYLIKEED_PLAYLIST_NAME, playListStorage, useMusicPlayList } from '@renderer/mod/playListStorage';
+import { MYLIKEED_PLAYLIST_NAME, playListStorage, useMusicPlayList } from '@renderer/storage/playListStorage';
 import { ref, shallowRef, toRef, watch } from 'vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';
 import { putNotification } from '@renderer/mod/notification/notification';

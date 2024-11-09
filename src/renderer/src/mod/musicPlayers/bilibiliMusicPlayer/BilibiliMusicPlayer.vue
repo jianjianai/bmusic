@@ -6,7 +6,7 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/components/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/components/svg/MousePointer.vue';
 import CopyOutlineSvg from '@renderer/components/svg/CopyOutline.vue';
-import { ipcBilibiliApi } from '@renderer/ipcAPI';
+import { ipcBilibiliApi } from "@renderer/ipcApi/ipcBilibiliApi";
 import { MusicPlayerLink } from '../musicPlayers';
 import { BilibiliMusicData, paresBilibiliMusicData } from './bilibiliMusic';
 import { putNotification } from '@renderer/mod/notification/notification';

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useMusicPlayList } from '@renderer/mod/playListStorage';
+import { useMusicPlayList } from '@renderer/storage/playListStorage';
 import { computed, ref, toRef, watch } from 'vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';
 import UniversalInput from '@renderer/components/UniversalInput.vue';
 import { setContent } from '@renderer/mod/content/content';
 import PlayListContents from './PlayListContents.vue';
 import UniversalButton from '@renderer/components/UniversalButton.vue';
-import MusicEditers from '@renderer/musicPlayers/MusicEditers.vue';
-import { getMusicPlayerInfo } from '@renderer/musicPlayers/musicPlayers';
+import MusicEditers from '@renderer/mod/musicPlayers/MusicEditers.vue';
+import { getMusicPlayerInfo } from '@renderer/mod/musicPlayers/musicPlayers';
 import { musicKey } from '@renderer/mod/playing/playing';
 import { openPopUpComponent } from '@renderer/mod/popUp/popUp';
 import CropperImg from '@renderer/mod/popUp/popUps/CropperImg.vue';

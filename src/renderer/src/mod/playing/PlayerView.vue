@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import { musicPlayer, musicPlayerSize, topBarCustomButtons,musicPlayerButtomWidth } from '@renderer/mod/playing/playing';
 import DownSvg from '@renderer/components/svg/Down.vue';
-import MusicPlayers from '@renderer/musicPlayers/MusicPlayers.vue';
+import MusicPlayers from '@renderer/mod/musicPlayers/MusicPlayers.vue';
 import { ref, watch } from 'vue';
 
 /** 过渡动画仅改变状态时开启 */

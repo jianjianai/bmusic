@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import IcFavoriteBorderSvg from '@renderer/components/svg/IcFavoriteBorder.vue';
 import IcFavoriteSvg from '@renderer/components/svg/IcFavorite.vue';
-import { useLikeedPlayList } from '@renderer/mod/playListStorage';
+import { useLikeedPlayList } from '@renderer/storage/playListStorage';
 import { Music } from '@renderer/mod/playing/playing';
 const likeedPlayList = useLikeedPlayList();
 const props = defineProps<{

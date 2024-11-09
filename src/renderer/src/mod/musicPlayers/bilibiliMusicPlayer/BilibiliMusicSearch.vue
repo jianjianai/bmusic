@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MusicList from '@renderer/components/MusicList.vue';
-import { ipcBilibiliApi } from '@renderer/ipcAPI';
+import { ipcBilibiliApi } from "@renderer/ipcApi/ipcBilibiliApi";
 import { type Music } from '@renderer/mod/playing/playing';
 import LoadingSvg from '@renderer/components/svg/Loading.vue';
 import { type WebviewTag } from 'electron';

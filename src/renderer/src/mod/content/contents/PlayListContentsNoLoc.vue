@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type MusicPlayListOnLoc } from '@renderer/mod/playListStorage';
+import { type MusicPlayListOnLoc } from '@renderer/storage/playListStorage';
 import PlaySvg from '@renderer/components/svg/Play.vue';
 import SearchSvg from '@renderer/components/svg/Search.vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { setContent } from '@renderer/mod/content/content';
-import { useMusicPlayList } from '@renderer/mod/playListStorage';
+import { useMusicPlayList } from '@renderer/storage/playListStorage';
 import { toRef } from 'vue';
 import PlaySvg from '@renderer/components/svg/Play.vue';
 import SearchSvg from '@renderer/components/svg/Search.vue';

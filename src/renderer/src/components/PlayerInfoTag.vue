@@ -1,7 +1,7 @@
 <!-- 播放器显示小标签 -->
 <script setup lang="ts">
 import { computed } from 'vue';
-import { getMusicPlayerInfo } from '../musicPlayers/musicPlayers';
+import { getMusicPlayerInfo } from '../mod/musicPlayers/musicPlayers';
 
 const props = defineProps<{ playerName: string }>();
 const info = computed(() => getMusicPlayerInfo(props.playerName));
