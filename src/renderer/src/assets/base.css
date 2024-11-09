@@ -107,6 +107,9 @@ body {
   /* 上一首和下一首按钮颜色 */
   --color-contr-prev-next-btn: var(--color-primary-button-small);
   --color-contr-prev-next-btn-hover: var(--color-primary-button-small-hover);
+  /* 播放顺序按钮颜色 */
+  --color-contr-play-mode-btn : var(--color-primary-button-small);
+  --color-contr-play-mode-btn-hover : var(--color-primary-button-small-hover);
 
   /* 播放器放大状态顶部功能按钮颜色 */
   --color-contr-top-btn-border: #c0c0c050;

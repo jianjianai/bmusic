@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import Nav from './components/Nav.vue'
-import Content from './components/Content.vue'
-import MusicPlayer from './components/MusicPlayer.vue';
-import PlayList from './components/PlayList.vue';
-import { musicPlayer, musicPlayerSize } from './states/musicPlayerStates';
-import Notification from './states/notification/Notification.vue';
-
-
-import TopBar from './components/TopBar.vue';
-import PopUpComponent from './states/popUpComponent/PopUpComponent.vue';
+import Nav from './mod/nav/Nav.vue';
+import Content from './mod/content/Content.vue';
+import { musicPlayer, musicPlayerSize } from './mod/playing/playing';
+import PlayingList from './mod/playingList/PlayingList.vue';
+import Notification from './mod/notification/Notification.vue';
+import Playing from './mod/playing/Playing.vue';
+import TopBar from './mod/topBar/TopBar.vue';
+import PopUp from './mod/popUp/PopUp.vue';
 
 </script>
 
@@ -21,12 +19,12 @@ import PopUpComponent from './states/popUpComponent/PopUpComponent.vue';
       <TopBar v-if="musicPlayerSize == 'buttom'" />
     </div>
     <!-- 下方播放器主体 -->
-    <MusicPlayer v-if="musicPlayer.currentMusic" class="main-music-player" />
+    <Playing v-if="musicPlayer.currentMusic" class="main-music-player" />
     <!-- 右侧播放列表 -->
-    <PlayList />
+    <PlayingList />
 
-    <!-- 下面全是弹出组件 -->
-    <PopUpComponent />
+    <!-- 弹出组件 -->
+    <PopUp />
 
     <!-- 消息弹出框 -->
     <Notification />
