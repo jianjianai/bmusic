@@ -1,20 +1,13 @@
 <!-- 进度条组件 -->
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { musicPlayer } from '../playing';
 
-const props = defineProps<{
-    /** 当前音乐播放到的时间 */
-    currentTime: number,
-    /** 音乐总时长 */
-    duration: number,
-    /** 请求更新当前时间 */
-    requestCurrentTime: (time: number) => void,
-}>();
 
 /**当前音乐播放到的百分比 0~1 之间的数字用于显示 仅当拖动进度条时用于预览显示 */
 const dragCurrentPercentage = ref(0.2);
 /** 真实播放进度百分比 */
-const currentPercentage = computed(() => props.currentTime / Math.max(1, props.duration));
+const currentPercentage = computed(() => musicPlayer.currentTime / Math.max(1, musicPlayer.duration));
 const lineCilckEl = ref();
 /** 拖动进度条 */
 const isMosueDown = ref(false);
@@ -25,7 +18,7 @@ const shwoCurrentPercentage = computed(() => isMosueDown.value ? dragCurrentPerc
  * 计算出应该跳转到的时间并更新
  * */
 function updateCurrentTime() {
-    props.requestCurrentTime(props.duration * dragCurrentPercentage.value);
+    musicPlayer.requestCurrentTime(musicPlayer.duration * dragCurrentPercentage.value);
 }
 
 function mosueDown(event: MouseEvent) {
@@ -76,9 +69,9 @@ function mosueDown(event: MouseEvent) {
     left: v-bind("`${shwoCurrentPercentage * 100}%`");
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 0.8rem;
+    aspect-ratio: 1;
+    height: 250%;
+    border-radius: 50%;
     background-color: var(--color-contr-line-btn-bg);
     box-shadow: 0rem 0.1rem 0.3rem var(--color-contr-line-btn-shadow)
 }
@@ -113,7 +106,7 @@ function mosueDown(event: MouseEvent) {
 
 .line-box {
     width: 100%;
-    height: 0.25rem;
+    height: 100%;
     position: relative;
 }
 </style>
