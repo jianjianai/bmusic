@@ -118,11 +118,20 @@ const currentIndex = computed(() => {
     return parsedLyrics.value.length - 1;
 });
 
+// 滚动条和歌词高亮的适配
 const scrollToCurrentLyric = () => {
     const currentLyricElement = document.querySelector('.li_son.color_or_fontsize');
     if (currentLyricElement) {
         currentLyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+};
+
+// 歌词点击事件
+const updateCurrentTime = (time: number) => {
+    musicPlayerLink.updateCurrentTime(time * 1000);
+    audio.value!.currentTime = time;
+    // 立马滚动到当前歌词
+
 };
 
 watch(currentIndex, () => {
@@ -155,7 +164,8 @@ watch(currentIndex, () => {
                     <div id="song-context" class="div_dad">
                         <ul class="ul_dad">
                             <li v-for="text, index of parsedLyrics" class="li_son"
-                                :class="{ 'color_or_fontsize': currentIndex == index }">
+                                :class="{ 'color_or_fontsize': currentIndex == index }"
+                                @click="updateCurrentTime(text.time)">
                                 {{ text.text }}
                             </li>
                         </ul>
@@ -167,6 +177,11 @@ watch(currentIndex, () => {
 
 </template>
 <style scoped>
+
+.song_left{
+    width: 60%;
+}
+
 .li_son.color_or_fontsize {
     color: white;
     font-size: 1.5rem;
@@ -179,13 +194,20 @@ watch(currentIndex, () => {
     color: gray;
 }
 
+.li_son:hover {
+    color: white;
+    cursor: pointer;
+}
+
 .div_dad {
     overflow: scroll;
     height: 25rem;
     scrollbar-width: none;
+    margin-top: 20px;
 }
 
 .ul_dad {
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -200,11 +222,14 @@ watch(currentIndex, () => {
     color: gray;
     margin-top: 0.7rem;
     font-size: 0.9rem;
+    justify-content: center;
 }
 
 .song_name {
     color: rgb(236, 236, 236);
     font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
 }
 
 .big-left {
