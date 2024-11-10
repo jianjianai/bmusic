@@ -221,8 +221,6 @@ watch(currentIndex, () => {
 }
 
 .main.max {
-
-.main.max {
     width: 20rem;
     height: 20rem;
     left: 5rem;
