@@ -25,7 +25,7 @@ song_url_v1({ id: musicData.value.id, level: SoundQualityType.standard }).then((
 const playing = ref(true);
 const the_url = ref<HTMLImageElement | null>(null);
 const audio = ref<HTMLAudioElement | null>(null);
-const ul = ref<HTMLUListElement | null>(null);
+// const ul = ref<HTMLUListElement | null>(null);
 // const container = ref<HTMLDivElement | null>(null);
 
 // 播放
@@ -45,16 +45,17 @@ musicPlayerLink.onRequestVolume((volume: number) => {
 // 播放当前位置
 musicPlayerLink.onRequestCurrentTime((currentTime: number) => {
     // findIndex();
-    console.log(findIndex());
+    // console.log(findIndex());
     audio.value!.currentTime = currentTime / 1000;
 });
 
 const c1 = ref("");
 const c2 = ref("");
 
-
+const currentTime = ref(0);
 onMounted(() => {
     audio.value!.addEventListener('timeupdate', () => {
+        currentTime.value = audio.value!.currentTime;
         musicPlayerLink.updateCurrentTime(audio.value!.currentTime * 1000);
     });
     audio.value!.addEventListener('ended', () => {
@@ -86,79 +87,41 @@ onMounted(() => {
     const [c11, c22] = colors!.map((c) => `rgb(${c[0]},${c[1]},${c[2]})`) // 解构出三组rgb
     c1.value = c11;
     c2.value = c22;
+    scrollToCurrentLyric();
 })
 
 // 左下框的宽度
 musicPlayerLink.updateButtomWidth("5.5rem");
 
+
+//-----------------------------------歌词-----------------------------------
 // 获取歌词
 const parsedLyrics = ref<ReturnType<typeof parseYrc>>([]);
 lyric({ id: musicData.value.id }).then((res) => {
     parsedLyrics.value = parseYrc(res.body.lrc.lyric);
     console.log(parsedLyrics.value);
 });
-
-
-// findIndex
-function findIndex() {
-    let currentTime = audio.value!.currentTime;
+const currentIndex = computed(() => {
     for (let i = 0; i < parsedLyrics.value.length; i++) {
-        if (parsedLyrics.value[i].time > currentTime) {
+        if (parsedLyrics.value[i].time > currentTime.value) {
             return i - 1;
         }
     }
     // 歌词的最后一句
     return parsedLyrics.value.length - 1;
-}
+});
 
-// 创建li元素
-function createLiElement() {
-    const flag = document.createDocumentFragment();
-    for (let i = 0; i < parsedLyrics.value.length; i++) {
-        const li = document.createElement('li');
-        li.textContent = parsedLyrics.value[i].text;
-        console.log(li.textContent);
-        flag.appendChild(li);
+const scrollToCurrentLyric = () => {
+    const currentLyricElement = document.querySelector('.li_son.color_or_fontsize');
+    if (currentLyricElement) {
+        currentLyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    ul.value!.appendChild(flag);
-}
+};
 
-watch(() => musicPlayerLink.musicPlayerSize, () => {
-    if (musicPlayerLink.musicPlayerSize == 'max') {
-        nextTick(() => {
-            createLiElement();
-        })
-    }
-})
+watch(currentIndex, () => {
+    scrollToCurrentLyric();
+});
 
-const container = document.getElementById('song-context');
-const containerHeight = container?.clientHeight;
-const liHeight = ul.value?.children[0].clientHeight;
-const maxOffset = ul.value && containerHeight ? ul.value.clientHeight - containerHeight : 0;
-
-// offset
-function setOffset() {
-    const index = findIndex();
-
-    // 正常情况下的偏移量
-    let offset = liHeight! * index + liHeight! / 2 - containerHeight! / 2;
-
-    // 最小offset
-    if (offset < 0) offset = 0;
-
-    // 最大offset
-    if (offset > maxOffset) offset = maxOffset;
-
-    ul.value!.style.transform = `translateY(-${offset}px)`;
-
-    //消除之前的active
-    const li = ul.value!.querySelector('.active');
-    if (li) li.classList.remove('active');
-
-    ul.value!.children[index].classList.add('active');
-}
-
-audio.value?.addEventListener('timeupdate', setOffset);
 </script>
 <template>
     <div class="all">
@@ -182,8 +145,12 @@ audio.value?.addEventListener('timeupdate', setOffset);
                             </div>
                         </div>
                     </div>
-                    <div id="song-context">
-                        <ul ref="ul">
+                    <div id="song-context" class="div_dad">
+                        <ul class="ul_dad">
+                            <li v-for="text, index of parsedLyrics" class="li_son"
+                                :class="{ 'color_or_fontsize': currentIndex == index }">
+                                {{ text.text }}
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -193,6 +160,32 @@ audio.value?.addEventListener('timeupdate', setOffset);
 
 </template>
 <style scoped>
+.li_son.color_or_fontsize {
+    color: white;
+    font-size: 1.5rem;
+    transition: color 0.3s, font-size 0.3s;
+}
+
+.li_son {
+    font-size: 1rem;
+    transition: color 0.3s, font-size 0.3s;
+    color: gray;
+}
+
+.div_dad {
+    overflow: scroll;
+    height: 25rem;
+    scrollbar-width: none;
+}
+
+.ul_dad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    gap: 1rem;
+}
+
 .song_infor {
     font-weight: bold;
     display: flex;
