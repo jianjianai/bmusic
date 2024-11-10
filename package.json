@@ -23,9 +23,10 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@imengyu/vue3-context-menu": "^1.4.3",
+    "@lrc-player/parse": "^1.0.0",
+    "NeteaseCloudMusicApi": "^4.24.0",
     "colorthief": "^2.6.0",
     "electron-updater": "^6.1.7",
-    "NeteaseCloudMusicApi": "^4.24.0",
     "vue-cropper": "^1.1.4"
   },
   "devDependencies": {

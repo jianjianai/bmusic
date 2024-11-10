@@ -14,12 +14,13 @@ cloudsearch({ keywords: props.keyword, limit: 40 }).then((res) => {
     let musicList: Music[] = [];
     let songs = res.body.result.songs;
     for (let i = 0; i < songs.length; i++) {
+        console.log(songs[i]);
         musicList.push({
             iconUrl: songs[i].al.picUrl,
             musicName: songs[i].name,
             musicAuthor: songs[i].ar[0].name,
             playerName: "EmoMusic",
-            playerData: paresEmoMusicDataToString({id:songs[i].id}),
+            playerData: paresEmoMusicDataToString({id:songs[i].id,album:songs[i].al.name}),
         });
     }
     searchResult.value = musicList;

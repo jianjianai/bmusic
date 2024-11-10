@@ -1,5 +1,6 @@
 export type EmoMusicData = {
     id: string|number;
+    album: string;
 }
 
 export function paresEmoMusicData(data: string): EmoMusicData {
