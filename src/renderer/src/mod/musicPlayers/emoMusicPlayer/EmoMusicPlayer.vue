@@ -29,6 +29,7 @@ musicPlayerLink.updateContrMaxDisplay({
     type: 'fixe',
     progressShow: 'top',
     isShwoNusicName: false,
+    extraClass: 'emo-music-player-max-extra',
 });
 
 // 播放
@@ -111,7 +112,7 @@ musicPlayerLink.updateButtomWidth("5.5rem");
 
 </template>
 <style scoped>
-.big-left{
+.big-left {
     height: 100%;
     padding-left: 29rem;
     white-space: nowrap;
@@ -121,7 +122,8 @@ musicPlayerLink.updateButtomWidth("5.5rem");
     width: 100%;
     height: 100%;
 }
-.main.max{
+
+.main.max {
     width: 20rem;
     height: 20rem;
     left: 5rem;
@@ -168,5 +170,36 @@ musicPlayerLink.updateButtomWidth("5.5rem");
     /* display: flex;
     align-items: center;
     justify-content: center; */
+}
+</style>
+<style>
+.emo-music-player-max-extra {
+    --color-primary-button-small: #ffffff7f;
+    --color-primary-button-small-hover: #ffffffa6;
+
+    /* 播放器左下角按钮颜色 */
+    --color-music-player-user-button: var(--color-primary-button-small);
+    --color-music-player-user-button-hover: var(--color-primary-button-small-hover);
+
+    /* 播放器右下角按钮颜色 */
+    --color-music-player-right-button: var(--color-primary-button-small);
+    --color-music-player-right-button-hover: var(--color-primary-button-small-hover);
+
+    /* 播放器暂停播放按钮颜色 */
+    --color-contr-play-btn: #ffffff18;
+    --color-contr-play-btn-hover: #ffffff3b;
+    /* 中间文字颜色 */
+    --color-contr-play-btn-text: #ffffff;
+    /* 上一首和下一首按钮颜色 */
+    --color-contr-prev-next-btn: var(--color-primary-button-small);
+    --color-contr-prev-next-btn-hover: var(--color-primary-button-small-hover);
+    /* 播放顺序按钮颜色 */
+    --color-contr-play-mode-btn: var(--color-primary-button-small);
+    --color-contr-play-mode-btn-hover: var(--color-primary-button-small-hover);
+    /* 全部的喜欢按钮 */
+    --color-pay-list-favorite-icon: var(--color-primary-button-small);
+    --color-pay-list-favorite-icon-hover: var(--color-primary-button-small-hover);
+    --color-pay-list-favorite-icon-liked: var(--color-primary);
+    --color-pay-list-favorite-icon-liked-hover: var(--color-primary2);
 }
 </style>

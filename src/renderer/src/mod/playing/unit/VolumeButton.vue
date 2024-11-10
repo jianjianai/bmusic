@@ -144,6 +144,7 @@ function mosueDown(event: MouseEvent) {
     align-items: center;
     cursor: pointer;
     display: none;
+    z-index: 99;
 }
 
 .volume {

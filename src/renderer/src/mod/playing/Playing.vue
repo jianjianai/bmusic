@@ -5,7 +5,7 @@ import PlayingControl from './PlayingControl.vue';
 
 </script>
 <template>
-    <div class="music-player">
+    <div class="music-player" :class="musicPlayerSize == 'max' && musicPlayerContrMaxDisplay.extraClass">
         <!-- 播放器主体 -->
         <MusicPlayerView />
         <!-- 下方控制栏 -->

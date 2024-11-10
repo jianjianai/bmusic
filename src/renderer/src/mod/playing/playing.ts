@@ -59,6 +59,8 @@ export type MusicPlayerContrMaxDisplay = {
   progressShow: 'top' | 'center' | 'none',
   /** 是否显示音乐名称 */
   isShwoNusicName: boolean,
+  /** 额外的class,可用额外的class盖颜色变量，或者一些样式，但是只建议覆盖颜色，(注意!!名称尽量复杂，避免意外的样式覆盖) */
+  extraClass?: any,
 };
 /** 获取播放控制器放大状态默认值 */
 export function getMusicPlayerContrMaxDisplayDefault(): MusicPlayerContrMaxDisplay {
