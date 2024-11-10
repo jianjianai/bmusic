@@ -5,6 +5,17 @@ import { musicPlayer, playerRightCustomButtons } from '../playing';
 import PlayListLineSvg from '@renderer/components/svg/PlayListLine.vue';
 import VolumeButton from './VolumeButton.vue';
 
+const props = defineProps<{
+    /** 是否显示时间 */
+    showTime?: boolean,
+}>();
+
+/** 将毫秒为时间的单位转换为 mm:ss 的形式 */
+function formatTime(time: number) {
+    const min = Math.floor(time / 60000);
+    const sec = Math.floor(time / 1000) % 60;
+    return `${min}:${sec < 10 ? '0' + sec : sec}`;
+}
 </script>
 <template>
     <div class="right-control">
@@ -19,9 +30,31 @@ import VolumeButton from './VolumeButton.vue';
             @click="button.onClick?.($event, musicPlayer.currentMusic!.playerData)" :title="button.title">
             <component :is="button.icon" :style="['width: 100%; height: 100%;', button.style]" />
         </div>
+        <!-- 进度条显示在上方则显示时间 -->
+        <Transition name="time">
+            <div class="time" v-if="props.showTime">
+                {{ formatTime(musicPlayer.currentTime) }} / {{ formatTime(musicPlayer.duration) }}
+            </div>
+        </Transition>
     </div>
 </template>
 <style scoped>
+.time {
+    color: var(--color-music-player-right-time);
+    font-size: 0.8rem;
+}
+
+.time-enter-active,
+.time-leave-active {
+    transition: all 0.25s;
+}
+
+.time-enter-from,
+.time-leave-to {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
 .right-button:hover {
     color: var(--color-music-player-right-button-hover);
 }

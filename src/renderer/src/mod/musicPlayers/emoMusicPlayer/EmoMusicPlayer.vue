@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, Ref, watch } from 'vue';
+import { computed, onMounted, ref, Ref, watch } from 'vue';
 import { type MusicPlayerLink } from '../musicPlayers';
 import { EmoMusicData, paresEmoMusicData } from './emoMusic';
 import { song_url_v1, SoundQualityType, lyric } from "./emoApi";
 import colorthief from 'colorthief';
 import { parseYrc } from '@lrc-player/parse';
-import Lyrics from './Lyrics.vue';
 
 const props = defineProps<{
     musicPlayerLink: MusicPlayerLink,
@@ -177,8 +176,7 @@ watch(currentIndex, () => {
 
 </template>
 <style scoped>
-
-.song_left{
+.song_left {
     width: 60%;
 }
 
@@ -323,5 +321,8 @@ watch(currentIndex, () => {
     --color-pay-list-favorite-icon-hover: var(--color-primary-button-small-hover);
     --color-pay-list-favorite-icon-liked: var(--color-primary);
     --color-pay-list-favorite-icon-liked-hover: var(--color-primary2);
+
+    /* 进度条显示在上方时，右边显示的时间 */
+    --color-music-player-right-time: var(--color-primary-button-small);
 }
 </style>

@@ -15,7 +15,7 @@ import ContrRight from './unit/ContrRight.vue';
         <ContrBetween class="player-control-grep"
             :hideControlLine="musicPlayerSize == 'max' && musicPlayerContrMaxDisplay.progressShow != 'center'" />
         <!-- 右边 -->
-        <ContrRight class="right-control player-control-grep" />
+        <ContrRight class="right-control player-control-grep" :showTime="musicPlayerSize == 'max' && musicPlayerContrMaxDisplay.progressShow == 'top'" />
         <!-- 显示在上面的进度条 -->
         <Transition name="top-control-line">
             <ControlLine class="top-control-line"
@@ -71,7 +71,7 @@ import ContrRight from './unit/ContrRight.vue';
     position: fixed;
     bottom: 0;
     width: 100vw;
-    background-color: unset;
+    background-color: var(--color-music-player-bg-fixe);
     z-index: 2;
 }
 </style>

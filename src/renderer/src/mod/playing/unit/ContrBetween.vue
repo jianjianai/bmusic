@@ -226,5 +226,6 @@ function formatTime(time: number) {
     user-select: none;
     display: flex;
     align-items: center;
+    min-width: 20rem;
 }
 </style>
