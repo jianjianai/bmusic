@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { WebviewTag } from 'electron';
 import { computed, h, markRaw, onMounted, onUnmounted, reactive, Ref, ref, toRef, watch } from 'vue';
-import { MusicPlayerContrMaxDisplay, musicPlayerSize, PlayerCustomButton } from '@renderer/mod/playing/playing';
+import type { MusicPlayerContrMaxDisplay, PlayerCustomButton } from '@renderer/mod/playing/playing';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/components/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/components/svg/MousePointer.vue';
@@ -17,6 +17,7 @@ const props = defineProps<{
   musicPlayerLink: MusicPlayerLink,
 }>();
 const musicPlayerLink = props.musicPlayerLink;
+const musicPlayerSize = toRef(() => musicPlayerLink.musicPlayerSize);
 
 // 播放器数据
 const musicData: Ref<BilibiliMusicData> = computed(() => paresBilibiliMusicData(musicPlayerLink.currentMusicData));
@@ -36,7 +37,7 @@ function copyLink() {
 // 播放器交互逻辑 
 const iframeRef = ref<WebviewTag | null>(null);
 
-musicPlayerLink.updateButtomWidth('9rem');
+musicPlayerLink.updateButtomWidth('6.5rem');
 musicPlayerLink.onRequestPlay(() => {
   iframeRef.value?.send("play");
 });
@@ -194,7 +195,7 @@ function onContextMenu(e: MouseEvent) {
 }
 
 
-const musicPlayerShow = ref(true);
+const musicPlayerShow = ref(false);
 // 控制播放器样式
 const musicPlayerContrMaxDisplay = computed<MusicPlayerContrMaxDisplay>(() => {
   let res: MusicPlayerContrMaxDisplay = {
@@ -244,7 +245,27 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <div class="b-player" :class="{ 'manual-control': !isNotManualControl }">
+  <div class="b-player" :class="[{ 'manual-control': !isNotManualControl }, musicPlayerSize]">
+    <!-- b站的两根棍子 -->
+    <div v-if="musicPlayerSize == 'buttom'" style="
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: calc(100% - 1.1rem);
+      margin: 0 0 0 0.8rem;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      z-index: -1;
+      gap: 2rem;">
+      <div
+        style="height: 2rem;width: 0.3rem;background-color: #fb7299;border-radius: 0.5rem;transform: rotate(-35deg);">
+      </div>
+      <div style="height: 2rem;width: 0.3rem;background-color: #fb7299;border-radius: 0.5rem;transform: rotate(35deg);">
+      </div>
+    </div>
+    <!-- 播放器 -->
     <webview v-if="bilibiliMusicPlayer__filePath" ref="iframeRef" class="b-iframe" :src="bilibiliUrl"
       :preload="bilibiliMusicPlayer__filePath" allowpopups nodeintegration></webview>
     <!-- 放大状态遮罩 -->
@@ -254,6 +275,21 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
+/* 如果是缩小状态则显示小电视 */
+.b-player.buttom {
+  background-color: unset;
+}
+
+.b-player.buttom .b-iframe {
+  border: 0.3rem solid #fb7299;
+  border-radius: 0.5rem;
+  width: calc(100% - 1.1rem);
+  height: calc(100% - 1.9rem);
+  margin: 0.8rem 0rem 0.2rem 0.5rem;
+  overflow: hidden;
+  background-color: rgb(0, 0, 0);
+}
+
 /** 如果手动控制则把上方无法点击区域空出来 */
 .b-player.manual-control {
   padding-top: var(--top-bar-height);
@@ -277,6 +313,7 @@ onUnmounted(() => {
 .b-player {
   position: relative;
   background-color: black;
+  overflow: hidden;
 }
 
 .b-iframe,
