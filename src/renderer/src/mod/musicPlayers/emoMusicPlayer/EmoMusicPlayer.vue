@@ -184,8 +184,7 @@ watch(currentIndex, () => {
 
 </template>
 <style scoped>
-
-.song_left{
+.song_left {
     width: 60%;
 }
 
@@ -333,5 +332,8 @@ watch(currentIndex, () => {
     --color-pay-list-favorite-icon-hover: var(--color-primary-button-small-hover);
     --color-pay-list-favorite-icon-liked: var(--color-primary);
     --color-pay-list-favorite-icon-liked-hover: var(--color-primary2);
+
+    /* 进度条显示在上方时，右边显示的时间 */
+    --color-music-player-right-time: var(--color-primary-button-small);
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { search, lyric, cloudsearch } from './emoApi'
+import { cloudsearch } from './emoApi'
 import { Music } from '@renderer/mod/playing/playing';
 import { paresEmoMusicDataToString } from './emoMusic';
 import MusicList from '@renderer/components/MusicList.vue';
