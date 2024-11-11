@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, Ref, watch } from 'vue';
+import { computed, onMounted, ref, Ref, watch } from 'vue';
 import { type MusicPlayerLink } from '../musicPlayers';
 import { EmoMusicData, paresEmoMusicData } from './emoMusic';
 import { song_url_v1, SoundQualityType, lyric } from "./emoApi";
 import colorthief from 'colorthief';
 import { parseYrc } from '@lrc-player/parse';
-import Lyrics from './Lyrics.vue';
 
 const props = defineProps<{
     musicPlayerLink: MusicPlayerLink,
@@ -25,8 +24,6 @@ song_url_v1({ id: musicData.value.id, level: SoundQualityType.standard }).then((
 const playing = ref(true);
 const the_url = ref<HTMLImageElement | null>(null);
 const audio = ref<HTMLAudioElement | null>(null);
-// const ul = ref<HTMLUListElement | null>(null);
-// const container = ref<HTMLDivElement | null>(null);
 
 musicPlayerLink.updateContrMaxDisplay({
     type: 'fixe',
@@ -122,17 +119,27 @@ const currentIndex = computed(() => {
 const scrollToCurrentLyric = () => {
     const currentLyricElement = document.querySelector('.li_son.color_or_fontsize');
     if (currentLyricElement) {
-        currentLyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = document.querySelector('.div_dad');
+        if (container) {
+            const containerHeight = container.clientHeight;
+            const elementOffsetTop = (currentLyricElement as HTMLElement).offsetTop;
+            container.scrollTo({
+                top: elementOffsetTop - containerHeight / 1.75,
+                behavior: 'smooth'
+            });
+        }
     }
 };
 
 // 歌词点击事件
 const updateCurrentTime = (time: number) => {
-    musicPlayerLink.updateCurrentTime(time * 1000);
-    audio.value!.currentTime = time;
-    // 立马滚动到当前歌词
-
-};
+      musicPlayerLink.updateCurrentTime(time * 1000);
+      if (audio.value) {
+        audio.value.currentTime = time;
+      }
+      // 立马滚动到当前歌词
+      scrollToCurrentLyric();
+    };
 
 watch(currentIndex, () => {
     scrollToCurrentLyric();
@@ -186,6 +193,9 @@ watch(currentIndex, () => {
     color: white;
     font-size: 1.5rem;
     transition: color 0.3s, font-size 0.3s;
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
 }
 
 .li_son {
