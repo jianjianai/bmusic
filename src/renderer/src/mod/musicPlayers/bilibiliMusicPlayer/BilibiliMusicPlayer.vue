@@ -249,8 +249,12 @@ const musicPlayerTopBarDisplay = computed<MusicPlayerTopBarDisplay>(() => {
     type: 'fixe',
     extraClass: 'bili-bili-music-player-top-extra',
   }
+  if(!isNotManualControl.value){
+    return res;
+  }
   if (!musicPlayerShow.value) {
     res.type = 'none';
+    return res;
   }
   return res;
 });
