@@ -73,6 +73,24 @@ export function getMusicPlayerContrMaxDisplayDefault(): MusicPlayerContrMaxDispl
 /** 播放控制器放大状态显示方式 */
 export const musicPlayerContrMaxDisplay = ref<MusicPlayerContrMaxDisplay>(getMusicPlayerContrMaxDisplayDefault());
 
+
+/** 播放器标题栏显示方式 */
+export type MusicPlayerTopBarDisplay = {
+  /** none不显示 fixe浮动在上方*/
+  type: 'none' | 'fixe',
+  /** 额外的class,可用额外的class盖颜色变量，或者一些样式，但是只建议覆盖颜色，(注意!!名称尽量复杂，避免意外的样式覆盖) */
+  extraClass?: any,
+};
+/** 获取播放器标题栏显示方式默认值 */
+export function getMusicPlayerTopBarDisplayDefault(): MusicPlayerTopBarDisplay {
+  return {
+    type: 'fixe',
+  }
+}
+/** 播放器标题栏显示方式 */
+export const musicPlayerTopBarDisplay = ref<MusicPlayerTopBarDisplay>(getMusicPlayerTopBarDisplayDefault());
+
+
 /** 是否播放完毕 */
 const ended = ref(false);
 
@@ -180,6 +198,10 @@ export const musicPlayerLink = readonly({
   updateContrMaxDisplay(display: MusicPlayerContrMaxDisplay) {
     musicPlayerContrMaxDisplay.value = display;
   },
+  /** 更新播放标题栏显示方式 */
+  updateTopBarDisplay(display: MusicPlayerTopBarDisplay) {
+    musicPlayerTopBarDisplay.value = display;
+  }
 });
 
 
@@ -222,6 +244,7 @@ export const musicPlayer = readonly({
     topBarCustomButtons.value = [];
     musicPlayerButtomWidth.value = 'var(--button-player-height)';
     musicPlayerContrMaxDisplay.value = getMusicPlayerContrMaxDisplayDefault();
+    musicPlayerTopBarDisplay.value = getMusicPlayerTopBarDisplayDefault();
     // 设置音乐
     currentMusic.value = music;
   },

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { WebviewTag } from 'electron';
 import { computed, h, markRaw, onMounted, onUnmounted, reactive, Ref, ref, toRef, watch } from 'vue';
-import type { MusicPlayerContrMaxDisplay, PlayerCustomButton } from '@renderer/mod/playing/playing';
+import type { MusicPlayerContrMaxDisplay, MusicPlayerTopBarDisplay, PlayerCustomButton } from '@renderer/mod/playing/playing';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import BxlDevToSvg from '@renderer/components/svg/BxlDevTo.vue';
 import MousePointerSvg from '@renderer/components/svg/MousePointer.vue';
@@ -196,6 +196,25 @@ function onContextMenu(e: MouseEvent) {
 
 
 const musicPlayerShow = ref(false);
+// 鼠标移动就显示，不移动就隐藏
+let mosueMoveTimer: ReturnType<typeof setTimeout> | undefined;
+const mosueMove = () => {
+  musicPlayerShow.value = true;
+  clearTimeout(mosueMoveTimer);
+  mosueMoveTimer = setTimeout(() => {
+    musicPlayerShow.value = false;
+  }, 2000);
+}
+onMounted(() => {
+  window.addEventListener('mousemove', mosueMove);
+  window.addEventListener('mousedown', mosueMove);
+});
+onUnmounted(() => {
+  window.removeEventListener('mousemove', mosueMove);
+  window.removeEventListener('mousedown', mosueMove);
+  clearTimeout(mosueMoveTimer);
+});
+
 // 控制播放器样式
 const musicPlayerContrMaxDisplay = computed<MusicPlayerContrMaxDisplay>(() => {
   let res: MusicPlayerContrMaxDisplay = {
@@ -223,24 +242,23 @@ musicPlayerLink.updateContrMaxDisplay(reactive({
   isShwoNusicName: toRef(() => musicPlayerContrMaxDisplay.value.isShwoNusicName) as any,
   extraClass: toRef(() => musicPlayerContrMaxDisplay.value.extraClass) as any,
 }));
-// 鼠标移动就显示，不移动就隐藏
-let mosueMoveTimer: ReturnType<typeof setTimeout> | undefined;
-const mosueMove = () => {
-  musicPlayerShow.value = true;
-  clearTimeout(mosueMoveTimer);
-  mosueMoveTimer = setTimeout(() => {
-    musicPlayerShow.value = false;
-  }, 2000);
-}
-onMounted(() => {
-  window.addEventListener('mousemove', mosueMove);
-  window.addEventListener('mousedown', mosueMove);
+
+// topBar 样式
+const musicPlayerTopBarDisplay = computed<MusicPlayerTopBarDisplay>(() => {
+  let res: MusicPlayerTopBarDisplay = {
+    type: 'fixe',
+    extraClass: 'bili-bili-music-player-top-extra',
+  }
+  if (!musicPlayerShow.value) {
+    res.type = 'none';
+  }
+  return res;
 });
-onUnmounted(() => {
-  window.removeEventListener('mousemove', mosueMove);
-  window.removeEventListener('mousedown', mosueMove);
-  clearTimeout(mosueMoveTimer);
-});
+musicPlayerLink.updateTopBarDisplay(reactive({
+  type: toRef(() => musicPlayerTopBarDisplay.value.type) as any,
+  extraClass: toRef(() => musicPlayerTopBarDisplay.value.extraClass) as any,
+}));
+
 
 
 </script>
@@ -367,5 +385,18 @@ onUnmounted(() => {
 
   /* 进度条显示在上方时，右边显示的时间 */
   --color-music-player-right-time: var(--color-primary-text2);
+}
+
+
+/* 顶部栏样式 */
+.bili-bili-music-player-top-extra::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 9rem;
+  background: linear-gradient(184deg, #FFFFFF 0%, #ffffff00 65%);
+  filter: blur(20px);
 }
 </style>
