@@ -48,7 +48,7 @@ window.addEventListener('load', async () => {
         const urlA = wrap.querySelector("a");
         const img = wrap.querySelector("a picture img") as HTMLImageElement;
         const titleH3 = wrap.querySelector("h3") as HTMLImageElement;
-        const authorSpan = wraps[0].querySelector("p a span") as HTMLImageElement;
+        const authorSpan = wrap.querySelector("p a span") as HTMLImageElement;
 
         const url = urlA?.href;
         if (!url) {
