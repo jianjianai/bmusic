@@ -75,10 +75,6 @@ body {
   /* 窗口颜色 */
   --color-window-bg: var(--color-primary-bg);
 
-  /** 底部播放器 */
-  --color-music-player-bg: var(--color-primary-bg);
-  --color-music-player-border: var(--color-primary-boder);
-
   /** 左侧导航栏 */
   --color-lav-bg: var(--color-primary-bg2);
   --color-nav-scrollbar-thumb: var(--color-primary-boder);
@@ -92,13 +88,19 @@ body {
   --color-nav-item-drag-bg: var(--color-lav-bg);
   --color-nav-item-drag-border-line: var(--color-primary-text2);
 
+  /** 底部播放器 */
+  --color-music-player-bg: var(--color-primary-bg);
+  --color-music-player-border: var(--color-primary-boder);
+  --color-music-player-bg-fixe: unset;
   /** 播放进度条 */
   --color-contr-line-bg: var(--color-primary-boder);
   --color-contr-line-current-bg: var(--color-primary);
   --color-contr-line-btn-bg: var(--color-primary-bg);
   --color-contr-line-btn-shadow: var(--color-primary-shadow);
-  /* 播放器进度条左右的小字 */
+  /* 播放器进度条左右的小字,当进度条显示在中间的时候两边的时间 */
   --color-contr-line-text: var(--color-primary-text2);
+  /* 进度条显示在上方时，右边显示的时间 */
+  --color-music-player-right-time: var(--color-primary-text2);
   /* 播放器暂停播放按钮颜色 */
   --color-contr-play-btn: var(--color-primary-button);
   --color-contr-play-btn-hover: var(--color-primary-button-hover);
@@ -107,6 +109,9 @@ body {
   /* 上一首和下一首按钮颜色 */
   --color-contr-prev-next-btn: var(--color-primary-button-small);
   --color-contr-prev-next-btn-hover: var(--color-primary-button-small-hover);
+  /* 播放顺序按钮颜色 */
+  --color-contr-play-mode-btn: var(--color-primary-button-small);
+  --color-contr-play-mode-btn-hover: var(--color-primary-button-small-hover);
 
   /* 播放器放大状态顶部功能按钮颜色 */
   --color-contr-top-btn-border: #c0c0c050;
