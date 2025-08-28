@@ -33,7 +33,8 @@ function playMusic(music: any) {
 // 播放整个列表
 function playAll() {
   if (musicList.value.length > 0) {
-    playList.setPlayList(musicList.value, 0);
+    playList.setList(musicList.value);
+    playList.setCurrentIndex(0);
   }
 }
 
