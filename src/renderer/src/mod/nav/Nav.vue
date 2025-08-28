@@ -5,7 +5,9 @@ import Recommend from '../content/contents/Recommend.vue';
 import { h, reactive, ref, watch } from 'vue';
 import { playListStorage, MYLIKEED_PLAYLIST_NAME } from '@renderer/storage/playListStorage';
 import PlayListContents from '../content/contents/PlayListContents.vue';
+import TopMusic from '../content/contents/TopMusic.vue';
 import IcFavoriteSvg from '@renderer/components/svg/IcFavorite.vue';
+import ChartSvg from '@renderer/components/svg/Chart.vue';
 import ImgDiv from '@renderer/components/ImgDiv.vue';
 import ContextMenu from '@imengyu/vue3-context-menu'
 import TrashSvg from '@renderer/components/svg/Trash.vue';
@@ -145,6 +147,13 @@ function onContextMenu(e: MouseEvent, name: string) {
       @click="setContent(PlayListContents, { musicListName: MYLIKEED_PLAYLIST_NAME })">
       <IcFavoriteSvg class="icon"></IcFavoriteSvg>
       <div class="title">我喜欢的</div>
+    </div>
+    <!-- 音乐统计 -->
+    <div class="nav-item"
+      :class="{ selected: contentDisplay === TopMusic }"
+      @click="setContent(TopMusic, {})">
+      <ChartSvg class="icon"></ChartSvg>
+      <div class="title">音乐统计</div>
     </div>
 
     <!-- 分割线 -->

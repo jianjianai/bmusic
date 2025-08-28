@@ -1,4 +1,5 @@
 import { type Component, computed, type CSSProperties, type Reactive, readonly, type Ref, ref } from 'vue'
+import { musicStatsStorage } from '@renderer/storage/musicStatsStorage'
 
 
 export type Music = {
@@ -247,6 +248,8 @@ export const musicPlayer = readonly({
     musicPlayerTopBarDisplay.value = getMusicPlayerTopBarDisplayDefault();
     // 设置音乐
     currentMusic.value = music;
+    // 记录播放统计
+    musicStatsStorage.recordPlay(music);
   },
   /** 请求播放 */
   requestPlay() {
