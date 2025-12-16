@@ -27,7 +27,8 @@
     "NeteaseCloudMusicApi": "^4.24.0",
     "colorthief": "^2.6.0",
     "electron-updater": "^6.1.7",
-    "vue-cropper": "^1.1.4"
+    "vue-cropper": "^1.1.4",
+    "sql.js": "^1.10.3"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -41,5 +42,8 @@
     "vite": "^5.3.1",
     "vue": "^3.4.30",
     "vue-tsc": "^2.0.22"
-  }
+  },
+  "trustedDependencies": [
+    "electron"
+  ]
 }
