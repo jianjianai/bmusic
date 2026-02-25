@@ -1,6 +1,6 @@
 /** 处理播放列表 */
 import { computed, readonly, Ref, ref, watch } from "vue";
-import { Music, musicPlayer } from "../playing/playing";
+import { compareMusic, Music, musicPlayer } from "../playing/playing";
 
 export const playListOpen = ref(false);
 
@@ -19,7 +19,7 @@ const currentMusic = computed(() => list.value[currentIndex.value]);
 
 //如果播放器的当前音乐不是播放列表里的当前音乐，这设置当前index为-1
 watch(() => musicPlayer.currentMusic, () => {
-    if (musicPlayer.currentMusic !== currentMusic.value) {
+    if (!compareMusic(musicPlayer.currentMusic, currentMusic.value)) {
         currentIndex.value = -1;
     }
 });
@@ -35,10 +35,13 @@ watch([currentIndex, list], () => {
 
 // 如果音乐播放完毕则播放下一首
 watch(() => musicPlayer.ended, (ended) => {
+    // 如果是单曲循环则继续播放当前音乐
+    if (ended && playMode.value === "RepeatOne") {
+        musicPlayer.requestPlay();
+        return;
+    }
     if (ended && currentIndex.value >= 0) {
-        if (playMode.value === "RepeatOne") {
-            musicPlayer.requestPlay();
-        } else if (playMode.value === "RepeatAll") {
+        if (playMode.value === "RepeatAll") {
             currentIndex.value = (currentIndex.value + 1) % list.value.length;
             musicPlayer.requestPlay();
         } else if (playMode.value === "SequentialPlay") {
